@@ -9,14 +9,19 @@
 #include <QtWidgets/QWidget>
 
 class CustomQWidget : public QWidget {
-	Q_OBJECT
+Q_OBJECT
 public:
 	explicit CustomQWidget(QWidget* parent);
+	
 	~CustomQWidget() override;
 
 protected:
-	void paintEvent(QPaintEvent *event) override;
-
+	void paintEvent(QPaintEvent* event) override;
+	
+	void mouseMoveEvent(QMouseEvent* event) override;
+	
+	void mouseReleaseEvent(QMouseEvent* event) override;
+	
 };
 
 
