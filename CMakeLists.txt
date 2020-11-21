@@ -13,6 +13,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(LIBS GLEW GL)
 
+include_directories(include)
+
 find_package(QT NAMES Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
@@ -21,6 +23,6 @@ add_executable(DrawerQtPainter
 		mainwindow.cpp
 		mainwindow.h
 		mainwindow.ui
-		)
+		customqwidget.cpp customqwidget.h)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets ${LIBS})
