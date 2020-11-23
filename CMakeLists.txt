@@ -11,7 +11,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(LIBS GLEW GL)
 
 include_directories(include)
 
@@ -25,4 +24,4 @@ add_executable(DrawerQtPainter
 		mainwindow.ui
 		customqwidget.cpp customqwidget.h model.cpp model.h point.h color.h)
 
-target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets ${LIBS})
+target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
