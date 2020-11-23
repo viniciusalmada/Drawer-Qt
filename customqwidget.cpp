@@ -29,6 +29,7 @@ void CustomQWidget::paintEvent(QPaintEvent* event) {
 	qDebug("called");
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setViewport(0, 0, mW, mH);
 	painter.setWindow(mLeft, mBottom, mRight - mLeft, mTop - mBottom);
 	painter.setPen(Qt::red);
