@@ -16,7 +16,22 @@ public:
 	~CustomQWidget() override;
 
 protected:
+	int mW;
+	int mH;
+	double mLeft;
+	double mRight;
+	double mBottom;
+	double mTop;
+	bool mButtonPressed;
+	
+	QPoint mPt0;
+	QPoint mPt1;
+	
+	QPointF convertPtCoordsToUniverse(QPoint pt);
+	
 	void paintEvent(QPaintEvent* event) override;
+	
+	void mousePressEvent(QMouseEvent* event) override;
 	
 	void mouseMoveEvent(QMouseEvent* event) override;
 	
