@@ -19,10 +19,10 @@ void CustomQWidget::resizeEvent(QResizeEvent* event) {
 	this->mW = event->size().width();
 	this->mH = event->size().height();
 	
-	mLeft = 0.0;
-	mRight = (double) mW / 10.0;
-	mBottom = 0.0;
-	mTop = (double) mH / 10.0;
+	mWindowStart = 0.0;
+	mWindowWidth = mW / 10;
+	mWindowBottom = 0.0;
+	mWindowHeight = mH / 10;
 }
 
 void CustomQWidget::paintEvent(QPaintEvent* event) {
@@ -31,7 +31,7 @@ void CustomQWidget::paintEvent(QPaintEvent* event) {
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setViewport(0, 0, mW, mH);
-	painter.setWindow(mLeft, mBottom, mRight - mLeft, mTop - mBottom);
+	painter.setWindow(mWindowStart, mWindowBottom, mWindowWidth, mWindowHeight);
 	painter.setPen(Qt::red);
 	QPointF pt0U = convertPtCoordsToUniverse(mPt0);
 	QPointF pt1U = convertPtCoordsToUniverse(mPt1);
@@ -56,11 +56,11 @@ void CustomQWidget::mousePressEvent(QMouseEvent* event) {
 	mButtonPressed = true;
 }
 
-QPointF CustomQWidget::convertPtCoordsToUniverse(QPoint pt) {
-	double dx = mRight - mLeft;
-	double dy = mTop - mBottom;
-	double x = mLeft + dx / (double) width() * (double) pt.x();
-	double y = mBottom + dy / (double) height() * (double) pt.y();
+QPointF CustomQWidget::convertPtCoordsToUniverse(QPoint pt) const {
+	double mX = (double) pt.x() * (double) mWindowWidth / (double) mW;
+	double mY = (double) pt.y() * (double) mWindowHeight / (double) mH;
+	double x = mWindowStart + mX;
+	double y = mWindowBottom + mY;
 	return {x, y};
 }
 

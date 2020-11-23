@@ -18,16 +18,16 @@ public:
 protected:
 	int mW;
 	int mH;
-	double mLeft;
-	double mRight;
-	double mBottom;
-	double mTop;
+	int mWindowStart;
+	int mWindowWidth;
+	int mWindowBottom;
+	int mWindowHeight;
 	bool mButtonPressed;
 	
 	QPoint mPt0;
 	QPoint mPt1;
 	
-	QPointF convertPtCoordsToUniverse(QPoint pt);
+	QPointF convertPtCoordsToUniverse(QPoint pt) const;
 	
 	void resizeEvent(QResizeEvent* event) override;
 	
