@@ -41,7 +41,6 @@ void CustomQWidget::paintEvent(QPaintEvent* event) {
 
 void CustomQWidget::mouseMoveEvent(QMouseEvent* event) {
 	if (!mButtonPressed) return;
-	
 	mPt1 = event->pos();
 	update();
 }
