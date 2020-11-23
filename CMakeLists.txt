@@ -23,6 +23,6 @@ add_executable(DrawerQtPainter
 		mainwindow.cpp
 		mainwindow.h
 		mainwindow.ui
-		customqwidget.cpp customqwidget.h)
+		customqwidget.cpp customqwidget.h model.cpp model.h point.h color.h)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets ${LIBS})
