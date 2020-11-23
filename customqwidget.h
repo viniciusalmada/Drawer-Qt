@@ -29,6 +29,8 @@ protected:
 	
 	QPointF convertPtCoordsToUniverse(QPoint pt);
 	
+	void resizeEvent(QResizeEvent* event) override;
+	
 	void paintEvent(QPaintEvent* event) override;
 	
 	void mousePressEvent(QMouseEvent* event) override;
