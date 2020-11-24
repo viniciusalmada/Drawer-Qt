@@ -2,6 +2,7 @@
 #define DRAWERQTPAINTER_MODEL_H
 
 #include <vector>
+#include <QtCore/QRectF>
 #include "geom/curve.h"
 
 class Model {
@@ -12,11 +13,11 @@ public:
 	
 	std::vector<Curve*> curves() { return mCurves; }
 	
-	Box<int> boundingBox();
+	QRect boundingBox();
 	
 	void selectPick(QPointF pt, double tol, bool shiftKey = false);
 	
-	void selectFence(Box<double> box, bool shiftKey = false);
+	void selectFence(QRectF box, bool shiftKey = false);
 	
 	void insertCurve(Curve* curve);
 	

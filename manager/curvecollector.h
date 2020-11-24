@@ -33,7 +33,7 @@ public:
 	
 	QVector<QPointF> getPoints();
 	
-	Box<double> getBoundBox();
+	QRectF boundingBox();
 	
 	void reset();
 

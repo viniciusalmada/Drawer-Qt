@@ -1,4 +1,6 @@
 #include <geom/point.h>
+#include <QRectF>
+#include <utils/box.h>
 #include "manager/model.h"
 
 Model::Model() = default;
@@ -11,17 +13,16 @@ void Model::delAllCurves() {
 
 }
 
-Box<int> Model::boundingBox() {
+QRect Model::boundingBox() {
 	if (mCurves.empty())
 		return {0, 10, 0, 10};
 	
 	
-	Box<double> box = mCurves[0]->boundingBox();
+	QRectF box = mCurves[0]->boundingBox();
 	for (Curve* c : mCurves) {
-		Box<double> temp = c->boundingBox();
-		box.update(temp);
+		RectUtils::update(box, c->boundingBox());
 	}
-	return box.toInt();
+	return box.toRect();
 }
 
 void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
@@ -51,11 +52,11 @@ void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 	}
 }
 
-void Model::selectFence(Box<double> box, bool shiftKey) {
+void Model::selectFence(QRectF box, bool shiftKey) {
 	if (mCurves.empty()) return;
 	
 	bool inFence;
-	Box<double> tempBox{box};
+	QRectF tempBox{box};
 	for (Curve* curve : mCurves) {
 		tempBox = curve->boundingBox();
 		inFence = box.contains(tempBox);
