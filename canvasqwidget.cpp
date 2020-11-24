@@ -1,8 +1,8 @@
 #include <QtGui/QPainter>
 #include <QtGui/QResizeEvent>
-#include "customqwidget.h"
+#include "canvasqwidget.h"
 
-CustomQWidget::CustomQWidget(QWidget* parent) : QWidget(parent) {
+CanvasQWidget::CanvasQWidget(QWidget* parent) : QWidget(parent) {
 	mPt0.setX(0);
 	mPt0.setY(0);
 	mPt1.setX(0);
@@ -15,7 +15,7 @@ CustomQWidget::CustomQWidget(QWidget* parent) : QWidget(parent) {
 	setPalette(pal);
 }
 
-void CustomQWidget::resizeEvent(QResizeEvent* event) {
+void CanvasQWidget::resizeEvent(QResizeEvent* event) {
 	this->mW = event->size().width();
 	this->mH = event->size().height();
 	
@@ -25,7 +25,7 @@ void CustomQWidget::resizeEvent(QResizeEvent* event) {
 	mWindowHeight = mH / 10;
 }
 
-void CustomQWidget::paintEvent(QPaintEvent* event) {
+void CanvasQWidget::paintEvent(QPaintEvent* event) {
 	qDebug("called");
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
@@ -39,24 +39,24 @@ void CustomQWidget::paintEvent(QPaintEvent* event) {
 	painter.drawLine(pt0U, pt1U);
 }
 
-void CustomQWidget::mouseMoveEvent(QMouseEvent* event) {
+void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 	if (!mButtonPressed) return;
 	mPt1 = event->pos();
 	update();
 }
 
-void CustomQWidget::mouseReleaseEvent(QMouseEvent* event) {
+void CanvasQWidget::mouseReleaseEvent(QMouseEvent* event) {
 	mButtonPressed = false;
 	mPt1 = event->pos();
 	update();
 }
 
-void CustomQWidget::mousePressEvent(QMouseEvent* event) {
+void CanvasQWidget::mousePressEvent(QMouseEvent* event) {
 	mPt0 = mPt1 = event->pos();
 	mButtonPressed = true;
 }
 
-QPointF CustomQWidget::convertPtCoordsToUniverse(QPoint pt) const {
+QPointF CanvasQWidget::convertPtCoordsToUniverse(QPoint pt) const {
 	double mX = (double) pt.x() * (double) mWindowWidth / (double) mW;
 	double mY = (double) pt.y() * (double) mWindowHeight / (double) mH;
 	double x = mWindowStart + mX;
@@ -64,4 +64,4 @@ QPointF CustomQWidget::convertPtCoordsToUniverse(QPoint pt) const {
 	return {x, y};
 }
 
-CustomQWidget::~CustomQWidget() = default;
+CanvasQWidget::~CanvasQWidget() = default;

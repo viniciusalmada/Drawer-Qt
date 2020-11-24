@@ -1,19 +1,15 @@
-//
-// Created by vini on 11/20/20.
-//
-
-#ifndef DRAWERQTPAINTER_CUSTOMQWIDGET_H
-#define DRAWERQTPAINTER_CUSTOMQWIDGET_H
+#ifndef DRAWERQTPAINTER_CANVAS_QWIDGET_H
+#define DRAWERQTPAINTER_CANVAS_QWIDGET_H
 
 
 #include <QtWidgets/QWidget>
 
-class CustomQWidget : public QWidget {
+class CanvasQWidget : public QWidget {
 Q_OBJECT
 public:
-	explicit CustomQWidget(QWidget* parent);
+	explicit CanvasQWidget(QWidget* parent);
 	
-	~CustomQWidget() override;
+	~CanvasQWidget() override;
 
 protected:
 	int mW;
@@ -42,4 +38,4 @@ protected:
 };
 
 
-#endif //DRAWERQTPAINTER_CUSTOMQWIDGET_H
+#endif //DRAWERQTPAINTER_CANVASQWIDGET_H

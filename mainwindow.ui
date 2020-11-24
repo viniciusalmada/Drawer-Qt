@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="CustomQWidget" name="widget" native="true"/>
+     <widget class="CanvasQWidget" name="widget" native="true"/>
     </item>
    </layout>
   </widget>
@@ -127,9 +127,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CustomQWidget</class>
+   <class>CanvasQWidget</class>
    <extends>QWidget</extends>
-   <header>customqwidget.h</header>
+   <header>canvasqwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
