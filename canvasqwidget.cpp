@@ -17,20 +17,26 @@ void CanvasQWidget::resizeEvent(QResizeEvent* event) {
 	this->mH = event->size().height();
 	
 	if (mModel != nullptr && !mModel->isEmpty()) {
-		mWindowsBox = mModel->boundingBox();
+		mWindowsBox = RectUtils::RectF(mModel->boundingBox());
 		scaleWorldWindow(1.10);
 	} else {
+		mWindowsBox = RectUtils::RectF(-1.0, -1.0, 11, 11);
 		scaleWorldWindow(1.0);
 	}
 }
 
 void CanvasQWidget::paintEvent(QPaintEvent* event) {
 	QPainter painter(this);
+	painter.save();
 	painter.setRenderHint(QPainter::Antialiasing);
-	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setViewport(0, 0, mW, mH);
-	painter.setWindow(mWindowsBox.xMin, mWindowsBox.yMin, mWindowsBox.width(), mWindowsBox.height());
+	qreal rlw = mWindowsBox.getWidth() / (double) mW;
+	qreal bth = -mWindowsBox.getHeight() / (double) mH;
+	mTransform = QTransform{};
+	mTransform.setMatrix(rlw, 0, 0, 0, bth, 0, mWindowsBox.getLeft(), mWindowsBox.getTop(), 1);
+	mTransform = mTransform.inverted();
 	
+	painter.setWorldTransform(mTransform);
 	if (mModel != nullptr && !mModel->isEmpty()) {
 		makeDisplayModel(painter);
 	}
@@ -50,6 +56,7 @@ void CanvasQWidget::paintEvent(QPaintEvent* event) {
 		default:
 			break;
 	}
+	
 	painter.restore();
 }
 
@@ -80,10 +87,12 @@ void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 					}
 					
 					if (mModel != nullptr && !mModel->isEmpty()) {
-						double max = mWindowsBox.max();
+						double max = qMax(mWindowsBox.getWidth(), mWindowsBox.getHeight());
 						double pickTol = max * mPickTolFactor;
 						mModel->snapToCurve(pt1, pickTol);
 					}
+					mCollector.addTempPoint(pt1);
+					update();
 				}
 			}
 			break;
@@ -95,7 +104,62 @@ void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 void CanvasQWidget::mouseReleaseEvent(QMouseEvent* event) {
 	mButtonPressed = false;
 	mPt1 = event->pos();
-	update();
+	
+	QPointF pt1 = convertPtCoordsToUniverse(mPt1);
+	QPointF pt0 = convertPtCoordsToUniverse(mPt0);
+	
+	if (mCurrentAction == ActionType::SELECTION) {
+		if (mMouseButton == Qt::LeftButton) {
+			if (mModel != nullptr && !mModel->isEmpty()) {
+				if (PointUtils::dist(mPt0, mPt1) <= mMouseMoveTol) {
+					double max = qMax(mWindowsBox.getWidth(), mWindowsBox.getHeight());
+					double pickTol = max * mPickTolFactor;
+					mModel->selectPick(pt1, pickTol, mShiftKeyPressed);
+				} else {
+					QRectF r{pt0, pt1};
+					mModel->selectFence(r, mShiftKeyPressed);
+				}
+			}
+			update();
+		}
+		return;
+	}
+	
+	if (mCurrentAction == ActionType::COLLECTION) {
+		if (mMouseButton == Qt::LeftButton) {
+			if (PointUtils::dist(mPt0, mPt1) <= mMouseMoveTol) {
+				double max = qMax(mWindowsBox.getWidth(), mWindowsBox.getHeight());
+				double pickTol = max * mPickTolFactor;
+				if (mViewGrid) {
+					bool isSnapOn = mGrid.getSnapInfo();
+					if ((!mControlKeyPressed && isSnapOn) || (mControlKeyPressed && !isSnapOn))
+						mGrid.snapTo(pt1);
+				}
+				if (mModel != nullptr && !mModel->isEmpty()) {
+					mModel->snapToCurve(pt1, pickTol);
+				}
+				mCollector.insertPoint(pt1, pickTol);
+			}
+		}
+		
+		bool endCollection = false;
+		if (mMouseButton == Qt::LeftButton) {
+			if (mCollector.hasFinished())
+				endCollection = true;
+			else {
+				mCollector.reset();
+				update();
+			}
+		}
+		
+		if (endCollection) {
+			Curve* curve = mCollector.getCollectedCurve();
+			mModel->insertCurve(curve);
+			mCollector.finishCollection();
+			update();
+		}
+	}
+	
 }
 
 void CanvasQWidget::mousePressEvent(QMouseEvent* event) {
@@ -119,11 +183,7 @@ void CanvasQWidget::mousePressEvent(QMouseEvent* event) {
 }
 
 QPointF CanvasQWidget::convertPtCoordsToUniverse(QPointF pt) const {
-	double mX = (double) pt.x() * (double) mWindowsBox.width() / (double) mW;
-	double mY = (double) pt.y() * (double) mWindowsBox.height() / (double) mH;
-	double x = mWindowsBox.xMin + mX;
-	double y = mWindowsBox.yMin + mY;
-	return {x, y};
+	return mTransform.inverted().map(pt);
 }
 
 void CanvasQWidget::setModel(Model* model) {
@@ -178,7 +238,6 @@ void CanvasQWidget::delSelectedEntities() {
 }
 
 void CanvasQWidget::makeDisplayModel(QPainter& painter) {
-	painter.setPen(mPen);
 	std::vector<Curve*> curves = mModel->curves();
 	mPen.setWidthF(1.0);
 	for (Curve* c : curves) {
@@ -188,10 +247,12 @@ void CanvasQWidget::makeDisplayModel(QPainter& painter) {
 		else
 			mPen.setBrush(mCurveColor);
 		
+		painter.setPen(mPen);
 		painter.drawLines(pts);
 		
 		mPen.setWidthF(5.0);
 		mPen.setBrush(mVertexColor);
+		painter.setPen(mPen);
 		painter.drawPoint(pts.first());
 		painter.drawPoint(pts.last());
 	}
@@ -204,12 +265,9 @@ void CanvasQWidget::drawSelectionFence(QPainter& painter) {
 	if (mPt0 == mPt1)
 		return;
 	
-	if (mModel == nullptr || mModel->isEmpty())
-		return;
-	
-	painter.setPen(mPen);
-	mPen.setWidthF(1.0);
+	mPen.setWidthF(0.1);
 	mPen.setBrush(mSelectionColor);
+	painter.setPen(mPen);
 	QPointF pt0 = convertPtCoordsToUniverse(mPt0);
 	QPointF pt1 = convertPtCoordsToUniverse(mPt1);
 	QRectF fence{pt0, pt1};
@@ -221,9 +279,9 @@ void CanvasQWidget::drawCollectedCurve(QPainter& painter) {
 	if (!mCollector.isActive() || !mCollector.isCollecting())
 		return;
 	
-	painter.setPen(mPen);
 	mPen.setWidthF(0.5);
 	mPen.setBrush(mCollectingColor);
+	painter.setPen(mPen);
 	
 	QVector<QPointF> pts = mCollector.getDrawPoints();
 	painter.drawLines(pts);
@@ -239,20 +297,18 @@ void CanvasQWidget::scaleWorldWindow(double scaleFactor) {
 	double cx = mWindowsBox.centerX();
 	double cy = mWindowsBox.centerY();
 	
-	double sizeX = mWindowsBox.width() * scaleFactor;
-	double sizeY = mWindowsBox.height() * scaleFactor;
+	double sizeX = mWindowsBox.getWidth() * scaleFactor;
+	double sizeY = mWindowsBox.getHeight() * scaleFactor;
+	double wr = sizeY / sizeX;
 	
-	if (vpr < sizeY / sizeX) {
-		mWindowsBox.xMin = cx - (sizeY / vpr) / 2.0;
-		mWindowsBox.xMax = cx + (sizeY / vpr) / 2.0;
-		mWindowsBox.yMin = cy - (sizeY / 2.0);
-		mWindowsBox.yMax = cy + (sizeY / 2.0);
-	} else {
-		mWindowsBox.xMin = cx - sizeX / 2.0;
-		mWindowsBox.xMax = cx + sizeX / 2.0;
-		mWindowsBox.yMin = cy - (sizeX * vpr) / 2.0;
-		mWindowsBox.yMax = cy + (sizeX * vpr) / 2.0;
-	}
+	if (wr > vpr)
+		sizeX = sizeY / vpr;
+	else
+		sizeY = sizeX * vpr;
+	mWindowsBox.setLeft(cx - sizeX / 2.0);
+	mWindowsBox.setRight(cx + sizeX / 2.0);
+	mWindowsBox.setBot(cy - sizeY / 2.0);
+	mWindowsBox.setTop(cy + sizeY / 2.0);
 }
 
 void CanvasQWidget::makeDisplayGrid(QPainter& painter) {
@@ -260,24 +316,30 @@ void CanvasQWidget::makeDisplayGrid(QPainter& painter) {
 	double gX = gridSpace.first;
 	double gY = gridSpace.second;
 	mPen.setBrush(mGridColor);
-	mPen.setWidthF(1.5);
-	double x = -((int) (-mWindowsBox.xMin / gX) * gX) - gX;
-	while (x <= mWindowsBox.xMax) {
-		double y = -((int) (-mWindowsBox.yMin / gY) * gY) - gY;
-		while (y <= mWindowsBox.yMax) {
-			painter.drawPoint(QPointF{x, y});
-			y += gY;
+	mPen.setWidthF(.10);
+	painter.setPen(mPen);
+	int c = 0;
+	for (int i = 0; i <= (int) (mWindowsBox.getWidth() / gX); ++i) {
+		for (int j = 0; j <= (int) (mWindowsBox.getHeight() / gY); ++j) {
+			qreal x = mWindowsBox.getLeft() + gX * i;
+			qreal y = mWindowsBox.getBot() + gY * j;
+			painter.drawPoint(x, y);
+			c++;
 		}
-		x += gX;
 	}
+	
+	painter.drawLine(QPointF(-gX * 0.5, 0.0), QPointF(gX * 0.5, 0.0));
+	painter.drawLine(QPointF(0.0, -gY * 0.5), QPointF(0.0, gY * 0.5));
 }
 
 void CanvasQWidget::keyPressEvent(QKeyEvent* event) {
-	QWidget::keyPressEvent(event);
+	mShiftKeyPressed = (event->key() == Qt::Key_Shift);
+	mControlKeyPressed = (event->key() == Qt::Key_Control);
 }
 
 CanvasQWidget::~CanvasQWidget() = default;
 
 void CanvasQWidget::keyReleaseEvent(QKeyEvent* event) {
-	QWidget::keyReleaseEvent(event);
+	mShiftKeyPressed = false;
+	mControlKeyPressed = false;
 }

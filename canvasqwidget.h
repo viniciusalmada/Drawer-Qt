@@ -45,7 +45,7 @@ public:
 protected:
 	int mW = 0;
 	int mH = 0;
-	Box<int> mWindowsBox{0, 10, 0, 10};
+	RectUtils::RectF mWindowsBox{-1.0, -1.0, 11.0, 11.0};
 	bool mButtonPressed = false;
 	
 	QPointF mPt0{};
@@ -62,7 +62,7 @@ protected:
 	QBrush mSelectionColor = Qt::red;
 	QBrush mGridColor = Qt::black;
 	
-	bool mViewGrid = false;
+	bool mViewGrid = true;
 	
 	ActionType mCurrentAction = ActionType::SELECTION;
 	Qt::MouseButton mMouseButton = Qt::NoButton;
@@ -103,6 +103,7 @@ protected:
 	
 	void panWorldWindow(double panFacX, double panPacY);
 	
+	QTransform mTransform;
 };
 
 
