@@ -8,35 +8,33 @@ class Line : public Curve {
 public:
 	Line();
 	
-	Line(Point p0, Point p1);
+	Line(QPointF p0, QPointF p1);
 	
 	CurveType type() override { return CurveType::LINE; }
 	
-	void addPoint(Point p) override;
+	void addPoint(QPointF p) override;
 	
-	Point getPoint(double t) override;
+	QPointF getPoint(double t) override;
 	
-	vector<Point> getPoints() override;
-	
-	QVector<QPointF> getPointsF() override;
+	QVector<QPointF> getPoints() override;
 	
 	QVector<QPointF> getPointsToDraw() override;
 	
 	QVector<QPointF> getPointsToDraw(QPointF p) override;
 	
-	double closestPoint(Point& p) override;
+	double closestPoint(QPointF& p) override;
 	
 	bool isComplete() override { return mNumPts == 2; };
 	
 	Box<double> boundingBox() override;
 	
-	Point getPtStart() override { return mPt0; }
+	QPointF getPtStart() override { return mPt0; }
 	
-	Point getPtEnd() override { return mPt1; }
+	QPointF getPtEnd() override { return mPt1; }
 
 private:
-	Point mPt0;
-	Point mPt1;
+	QPointF mPt0;
+	QPointF mPt1;
 };
 
 

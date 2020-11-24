@@ -1,3 +1,4 @@
+#include <geom/point.h>
 #include "manager/model.h"
 
 Model::Model() = default;
@@ -10,9 +11,9 @@ void Model::delAllCurves() {
 
 }
 
-Box<double> Model::boundingBox() {
+Box<int> Model::boundingBox() {
 	if (mCurves.empty())
-		return {0.0, 10.0, 0.0, 10.0};
+		return {0, 10, 0, 10};
 	
 	
 	Box<double> box = mCurves[0]->boundingBox();
@@ -20,14 +21,14 @@ Box<double> Model::boundingBox() {
 		Box<double> temp = c->boundingBox();
 		box.update(temp);
 	}
-	return box;
+	return box.toInt();
 }
 
-void Model::selectPick(Point pt, double tol, bool shiftKey) {
+void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 	if (mCurves.empty())
 		return;
 	
-	Point pC{};
+	QPointF pC{};
 	Curve* target = nullptr;
 	double dist = tol;
 	for (Curve* curve : mCurves) {
@@ -85,18 +86,18 @@ void Model::delSelectedCurves() {
 	}
 }
 
-bool Model::snapToCurve(Point& pt, double tol) {
+bool Model::snapToCurve(QPointF& pt, double tol) {
 	if (mCurves.empty()) return false;
 	
-	Point pCurr{};
-	Point pClosest{};
+	QPointF pCurr{};
+	QPointF pClosest{};
 	double distMin = tol;
 	double dist;
 	Curve* targetCurve = nullptr;
 	for (Curve* curve: mCurves) {
 		pCurr = curve->getPtStart();
-		if (pt.dist(pCurr) < tol) {
-			dist = pt.dist(pCurr);
+		if (PointUtils::dist(pt, pCurr) < tol) {
+			dist = PointUtils::dist(pt, pCurr);
 			if (dist < distMin) {
 				pClosest = pCurr;
 				distMin = dist;
@@ -106,8 +107,8 @@ bool Model::snapToCurve(Point& pt, double tol) {
 		}
 		
 		pCurr = curve->getPtEnd();
-		if (pt.dist(pCurr) < tol) {
-			dist = pt.dist(pCurr);
+		if (PointUtils::dist(pt, pCurr) < tol) {
+			dist = PointUtils::dist(pt, pCurr);
 			if (dist < distMin) {
 				pClosest = pCurr;
 				distMin = dist;

@@ -25,13 +25,13 @@ public:
 	
 	bool hasFinished();
 	
-	bool insertPoint(Point pt, double tol);
+	bool insertPoint(QPointF pt, double tol);
 	
-	bool addTempPoint(Point pt);
+	bool addTempPoint(QPointF pt);
 	
-	vector<Point> getDrawPoints();
+	QVector<QPointF> getDrawPoints();
 	
-	vector<Point> getPoints();
+	QVector<QPointF> getPoints();
 	
 	Box<double> getBoundBox();
 	
@@ -40,8 +40,8 @@ public:
 private:
 	CurveType mCurveType = CurveType::LINE;
 	Curve* mCurve = nullptr;
-	Point mPrevPt{};
-	Point mTempPt{};
+	QPointF mPrevPt{};
+	QPointF mTempPt{};
 };
 
 #endif

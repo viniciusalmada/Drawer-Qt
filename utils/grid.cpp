@@ -24,12 +24,16 @@ pair<double, double> Grid::getGridSpace() {
 	return {mGridX, mGridY};
 }
 
-Point Grid::snapTo(const Point& pt) {
-	Point pivot = pt / Point{mGridX, mGridY};
-	pivot = pivot.trim() * Point{mGridX, mGridY};
-	Point p1 = pivot + Point{pivot.x + mGridX, pivot.y};
-	Point p2 = pivot + Point{pivot.x + mGridX, pivot.y + mGridY};
-	Point p3 = pivot + Point{pivot.x, pivot.y + mGridY};
+void Grid::snapTo(QPointF& pt) const {
+	QPointF pivotF{};
+	pivotF.rx() = pt.x() / mGridX;
+	pivotF.ry() = pt.y() / mGridY;
+	QPoint pivot = pivotF.toPoint();
+	pivot.rx() = (int) (pivot.rx() * mGridX);
+	pivot.ry() = (int) (pivot.ry() * mGridY);
+	QPoint p1 = pivot + QPoint{static_cast<int>(pivot.x() + mGridX), pivot.y()};
+	QPoint p2 = pivot + QPoint{static_cast<int>(pivot.x() + mGridX), static_cast<int>(pivot.y() + mGridY)};
+	QPoint p3 = pivot + QPoint{pivot.x(), static_cast<int>(pivot.y() + mGridY)};
 	
-	return pt.closestPoint({pivot, p1, p2, p3});
+	pt = PointUtils::closestPoint(pt, {pivot, p1, p2, p3});
 }

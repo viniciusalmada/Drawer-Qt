@@ -1,13 +1,8 @@
 #ifndef DRAWERQTPAINTER_CURVE_H
 #define DRAWERQTPAINTER_CURVE_H
 
-#include "point.h"
-
-#include <vector>
 #include <utils/box.h>
 #include <QtCore/QPointF>
-
-using std::vector;
 
 enum class CurveType {
 	LINE, QUAD_BEZIER, CUBIC_BEZIER
@@ -21,13 +16,11 @@ public:
 	
 	virtual CurveType type() = 0;
 	
-	virtual void addPoint(Point p) = 0;
+	virtual void addPoint(QPointF p) = 0;
 	
-	virtual Point getPoint(double t) = 0;
+	virtual QPointF getPoint(double t) = 0;
 	
-	virtual vector<Point> getPoints() = 0;
-	
-	virtual QVector<QPointF> getPointsF() = 0;
+	virtual QVector<QPointF> getPoints() = 0;
 	
 	virtual QVector<QPointF> getPointsToDraw() = 0;
 	
@@ -35,13 +28,13 @@ public:
 	
 	virtual bool isComplete() = 0;
 	
-	virtual double closestPoint(Point& p) = 0;
+	virtual double closestPoint(QPointF& p) = 0;
 	
 	virtual Box<double> boundingBox() = 0;
 	
-	virtual Point getPtStart() = 0;
+	virtual QPointF getPtStart() = 0;
 	
-	virtual Point getPtEnd() = 0;
+	virtual QPointF getPtEnd() = 0;
 	
 	int numberOfPoints() const { return mNumPts; }
 	

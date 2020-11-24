@@ -1,6 +1,8 @@
 
 #include <geom/line.h>
 #include "curvecollector.h"
+#include <QVector>
+#include <geom/point.h>
 
 CurveCollector::CurveCollector() = default;
 
@@ -40,9 +42,9 @@ bool CurveCollector::hasFinished() {
 	return isActive() && mCurve->isComplete();
 }
 
-bool CurveCollector::insertPoint(Point pt, double tol) {
+bool CurveCollector::insertPoint(QPointF pt, double tol) {
 	if (isCollecting()) {
-		if (pt.dist(mPrevPt) <= tol)
+		if (PointUtils::dist(pt, mPrevPt) <= tol)
 			return false;
 	}
 	
@@ -51,22 +53,22 @@ bool CurveCollector::insertPoint(Point pt, double tol) {
 	return true;
 }
 
-bool CurveCollector::addTempPoint(Point pt) {
+bool CurveCollector::addTempPoint(QPointF pt) {
 	mTempPt = pt;
 	return true;
 }
 
-vector<Point> CurveCollector::getDrawPoints() {
+QVector<QPointF> CurveCollector::getDrawPoints() {
 	return mCurve->getPointsToDraw(mTempPt);
 }
 
-vector<Point> CurveCollector::getPoints() {
+QVector<QPointF> CurveCollector::getPoints() {
 	return mCurve->getPoints();
 }
 
-Box CurveCollector::getBoundBox() {
+Box<double> CurveCollector::getBoundBox() {
 	if (mCurve != nullptr)
-		return Box{};
+		return Box<double>{};
 	
 	return mCurve->boundingBox();
 }

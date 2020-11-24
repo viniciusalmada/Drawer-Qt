@@ -1,6 +1,7 @@
 #ifndef DRAWERQTPAINTER_MODEL_H
 #define DRAWERQTPAINTER_MODEL_H
 
+#include <vector>
 #include "geom/curve.h"
 
 class Model {
@@ -9,11 +10,11 @@ public:
 	
 	~Model();
 	
-	vector<Curve*> curves() { return mCurves; }
+	std::vector<Curve*> curves() { return mCurves; }
 	
-	Box<double> boundingBox();
+	Box<int> boundingBox();
 	
-	void selectPick(Point pt, double tol, bool shiftKey = false);
+	void selectPick(QPointF pt, double tol, bool shiftKey = false);
 	
 	void selectFence(Box<double> box, bool shiftKey = false);
 	
@@ -23,12 +24,12 @@ public:
 	
 	void delSelectedCurves();
 	
-	bool snapToCurve(Point& pt, double tol);
+	bool snapToCurve(QPointF& pt, double tol);
 	
 	bool isEmpty();
 
 protected:
-	vector<Curve*> mCurves;
+	std::vector<Curve*> mCurves;
 	
 	void delAllCurves();
 };

@@ -1,13 +1,14 @@
 #include <QtCore/QVector>
 #include "line.h"
+#include "point.h"
 
 Line::Line() = default;
 
-Line::Line(Point p0, Point p1) : mPt0(p0), mPt1(p1) {
+Line::Line(QPointF p0, QPointF p1) : mPt0(p0), mPt1(p1) {
 
 }
 
-void Line::addPoint(Point p) {
+void Line::addPoint(QPointF p) {
 	if (mNumPts == 0)
 		mPt0 = p;
 	else if (mNumPts == 1)
@@ -15,7 +16,7 @@ void Line::addPoint(Point p) {
 	mNumPts++;
 }
 
-Point Line::getPoint(double t) {
+QPointF Line::getPoint(double t) {
 	if (t <= 0.0)
 		return mPt0;
 	else if (t >= 1.0)
@@ -24,45 +25,37 @@ Point Line::getPoint(double t) {
 		return mPt0 + (mPt1 - mPt0) * t;
 }
 
-vector<Point> Line::getPoints() {
+QVector<QPointF> Line::getPoints() {
 	if (mNumPts == 1)
-		return vector<Point>{mPt0};
+		return QVector<QPointF>{mPt0};
 	
-	return vector<Point>{mPt0, mPt1};
-}
-
-QVector<QPointF> Line::getPointsF() {
-	if (mNumPts == 1) {
-		return QVector<QPointF>{mPt0.toQF()};
-	}
-	
-	return {mPt0.toQF(), mPt1.toQF()};
+	return QVector<QPointF>{mPt0, mPt1};
 }
 
 QVector<QPointF> Line::getPointsToDraw() {
-	return {QPointF{mPt0.x, mPt0.y}, QPointF{mPt1.x, mPt1.y},};
+	return getPoints();
 }
 
 QVector<QPointF> Line::getPointsToDraw(QPointF p) {
 	if (mNumPts == 1) {
-		return {mPt0.toQF(), p};
+		return {mPt0, p};
 	}
-	return getPointsF();
+	return getPoints();
 }
 
-double Line::closestPoint(Point& p) {
-	double dot = ((mPt1 - mPt0).dot(p - mPt0));
-	double t = dot / (mPt1 - mPt0).norm();
-	Point closest = getPoint(t);
-	double dist = closest.dist(p);
+double Line::closestPoint(QPointF& p) {
+	double dot = QPointF::dotProduct(mPt1 - mPt0, p - mPt0);
+	double t = dot / PointUtils::norm(mPt1 - mPt0);
+	QPointF closest = getPoint(t);
+	double dist = PointUtils::dist(closest, p);
 	p = closest;
 	return dist;
 }
 
 Box<double> Line::boundingBox() {
-	double xMin = (mPt0.x < mPt1.x) ? mPt0.x : mPt1.x;
-	double xMax = (mPt0.x > mPt1.x) ? mPt0.x : mPt1.x;
-	double yMin = (mPt0.y < mPt1.y) ? mPt0.y : mPt1.y;
-	double yMax = (mPt0.y > mPt1.y) ? mPt0.y : mPt1.y;
+	double xMin = (mPt0.x() < mPt1.x()) ? mPt0.x() : mPt1.x();
+	double xMax = (mPt0.x() > mPt1.x()) ? mPt0.x() : mPt1.x();
+	double yMin = (mPt0.y() < mPt1.y()) ? mPt0.y() : mPt1.y();
+	double yMax = (mPt0.y() > mPt1.y()) ? mPt0.y() : mPt1.y();
 	return {xMin, xMax, yMin, yMax};
 }

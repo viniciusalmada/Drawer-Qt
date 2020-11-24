@@ -5,60 +5,31 @@
 #include <vector>
 #include <QPointF>
 
-struct Point {
-	double x = 0.0;
-	double y = 0.0;
+struct PointUtils {
 	
-	Point operator+(const Point& p) const {
-		return {x + p.x, y + p.y};
+	static double dot(const QPointF& p1, const QPointF& p2) {
+		return p1.x() * p2.x() + p1.y() * p2.y();
 	}
 	
-	Point operator-(const Point& p) const {
-		return {x - p.x, y - p.y};
+	static double dist(QPointF p1, QPointF p2) {
+		return sqrt((p1.x() - p2.x()) * (p1.x() - p2.x()) +
+		            (p1.y() - p2.y()) * (p1.y() - p2.y()));
 	}
 	
-	Point operator*(const double& d) const {
-		return {x * d, y * d};
-	}
-	
-	Point operator*(const Point& pt) const {
-		return {x * pt.x, y * pt.y};
-	}
-	
-	Point operator/(const Point& p) const {
-		return {x / p.x, y / p.y};
-	}
-	
-	double dot(const Point& p) const {
-		return x * p.x + y * p.y;
-	}
-	
-	double norm() const {
-		return sqrt(x * x + y * y);
-	}
-	
-	double dist(Point& p) const {
-		return sqrt((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y));
-	}
-	
-	Point trim() const {
-		return {static_cast<double>((int) x), static_cast<double>((int) y)};
-	}
-	
-	Point closestPoint(std::vector<Point> pts) const {
-		double d = dist(pts[0]);
-		Point p = pts[0];
-		for (Point pt : pts) {
-			if (dist(pt) < d) {
-				d = dist(pt);
-				p = pt;
+	static QPointF closestPoint(QPointF pt, std::vector<QPointF> pts) {
+		QPointF pf = QPointF{pts[0]};
+		double d = dist(pt, pf);
+		for (QPointF& p : pts) {
+			if (dist(pt, QPointF{p}) < d) {
+				d = dist(pt, QPointF{p});
+				pf = p;
 			}
 		}
-		return p;
+		return pf.toPoint();
 	}
 	
-	QPointF toQF() const {
-		return QPointF{x, y};
+	static double norm(const QPointF& pt) {
+		return sqrt(pt.x() * pt.x() + pt.y() * pt.y());
 	}
 };
 

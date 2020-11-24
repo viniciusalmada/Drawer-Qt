@@ -18,7 +18,7 @@ public:
 	
 	pair<double, double> getGridSpace();
 	
-	Point snapTo(const Point& pt);
+	void snapTo(QPointF& pt) const;
 
 protected:
 	bool mIsSnapOn = false;
