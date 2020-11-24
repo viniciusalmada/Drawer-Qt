@@ -20,7 +20,7 @@ class Line : public Curve {
 	
 	double closestPoint(Point& p) override;
 	
-	void getBoundBox(double& xMin, double& xMax, double& yMin, double& yMax) override;
+	Box boundingBox() override;
 	
 	Point getPtStart() override { return mPt0; }
 	

@@ -51,9 +51,10 @@ double Line::closestPoint(Point& p) {
 	return dist;
 }
 
-void Line::getBoundBox(double& xMin, double& xMax, double& yMin, double& yMax) {
-	xMin = (mPt0.x < mPt1.x) ? mPt0.x : mPt1.x;
-	xMax = (mPt0.x > mPt1.x) ? mPt0.x : mPt1.x;
-	yMin = (mPt0.y < mPt1.y) ? mPt0.y : mPt1.y;
-	yMax = (mPt0.y > mPt1.y) ? mPt0.y : mPt1.y;
+Box Line::boundingBox() {
+	double xMin = (mPt0.x < mPt1.x) ? mPt0.x : mPt1.x;
+	double xMax = (mPt0.x > mPt1.x) ? mPt0.x : mPt1.x;
+	double yMin = (mPt0.y < mPt1.y) ? mPt0.y : mPt1.y;
+	double yMax = (mPt0.y > mPt1.y) ? mPt0.y : mPt1.y;
+	return {xMin, xMax, yMin, yMax};
 }
