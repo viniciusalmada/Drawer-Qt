@@ -33,11 +33,9 @@ public:
 	
 	vector<Point> getPoints();
 	
-	Box getBoundBox();
+	Box<double> getBoundBox();
 	
 	void reset();
-	
-	void kill();
 
 private:
 	CurveType mCurveType = CurveType::LINE;

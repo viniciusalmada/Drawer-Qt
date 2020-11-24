@@ -34,7 +34,7 @@ public:
 	
 	virtual double closestPoint(Point& p) = 0;
 	
-	virtual Box boundingBox() = 0;
+	virtual Box<double> boundingBox() = 0;
 	
 	virtual Point getPtStart() = 0;
 	

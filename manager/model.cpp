@@ -10,14 +10,14 @@ void Model::delAllCurves() {
 
 }
 
-Box Model::boundingBox() {
+Box<double> Model::boundingBox() {
 	if (mCurves.empty())
 		return {0.0, 10.0, 0.0, 10.0};
 	
 	
-	Box box = mCurves[0]->boundingBox();
+	Box<double> box = mCurves[0]->boundingBox();
 	for (Curve* c : mCurves) {
-		Box temp = c->boundingBox();
+		Box<double> temp = c->boundingBox();
 		box.update(temp);
 	}
 	return box;
@@ -50,11 +50,11 @@ void Model::selectPick(Point pt, double tol, bool shiftKey) {
 	}
 }
 
-void Model::selectFence(Box box, bool shiftKey) {
+void Model::selectFence(Box<double> box, bool shiftKey) {
 	if (mCurves.empty()) return;
 	
 	bool inFence;
-	Box tempBox{box};
+	Box<double> tempBox{box};
 	for (Curve* curve : mCurves) {
 		tempBox = curve->boundingBox();
 		inFence = box.contains(tempBox);
@@ -130,6 +130,10 @@ bool Model::snapToCurve(Point& pt, double tol) {
 	
 	pt = pClosest;
 	return true;
+}
+
+bool Model::isEmpty() {
+	return mCurves.empty();
 }
 
 

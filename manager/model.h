@@ -11,11 +11,11 @@ public:
 	
 	vector<Curve*> curves() { return mCurves; }
 	
-	Box boundingBox();
+	Box<double> boundingBox();
 	
 	void selectPick(Point pt, double tol, bool shiftKey = false);
 	
-	void selectFence(Box box, bool shiftKey = false);
+	void selectFence(Box<double> box, bool shiftKey = false);
 	
 	void insertCurve(Curve* curve);
 	
@@ -24,6 +24,8 @@ public:
 	void delSelectedCurves();
 	
 	bool snapToCurve(Point& pt, double tol);
+	
+	bool isEmpty();
 
 protected:
 	vector<Curve*> mCurves;
