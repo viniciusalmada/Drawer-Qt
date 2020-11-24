@@ -1,8 +1,8 @@
 #ifndef DRAWERQTPAINTER_CURVE_H
 #define DRAWERQTPAINTER_CURVE_H
 
-#include <utils/box.h>
 #include <QtCore/QPointF>
+#include <QtCore/QRectF>
 
 enum class CurveType {
 	LINE, QUAD_BEZIER, CUBIC_BEZIER
@@ -30,7 +30,7 @@ public:
 	
 	virtual double closestPoint(QPointF& p) = 0;
 	
-	virtual Box<double> boundingBox() = 0;
+	virtual QRectF boundingBox() = 0;
 	
 	virtual QPointF getPtStart() = 0;
 	

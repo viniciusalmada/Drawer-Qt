@@ -26,7 +26,7 @@ public:
 	
 	bool isComplete() override { return mNumPts == 2; };
 	
-	Box<double> boundingBox() override;
+	QRectF boundingBox() override;
 	
 	QPointF getPtStart() override { return mPt0; }
 	

@@ -1,4 +1,5 @@
 #include <QtCore/QVector>
+#include <QtCore/QRectF>
 #include "line.h"
 #include "point.h"
 
@@ -52,10 +53,10 @@ double Line::closestPoint(QPointF& p) {
 	return dist;
 }
 
-Box<double> Line::boundingBox() {
+QRectF Line::boundingBox() {
 	double xMin = (mPt0.x() < mPt1.x()) ? mPt0.x() : mPt1.x();
 	double xMax = (mPt0.x() > mPt1.x()) ? mPt0.x() : mPt1.x();
 	double yMin = (mPt0.y() < mPt1.y()) ? mPt0.y() : mPt1.y();
 	double yMax = (mPt0.y() > mPt1.y()) ? mPt0.y() : mPt1.y();
-	return {xMin, xMax, yMin, yMax};
+	return {xMin, yMax, xMax - xMin, yMax - yMin};
 }
