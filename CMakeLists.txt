@@ -22,6 +22,13 @@ add_executable(DrawerQtPainter
 		mainwindow.cpp
 		mainwindow.h
 		mainwindow.ui
-		canvasqwidget.cpp canvasqwidget.h manager/model.cpp manager/model.h geom/point.h geom/curve.h geom/curve.cpp geom/line.cpp geom/line.h utils/box.h utils/grid.cpp utils/grid.h manager/curvecollector.cpp manager/curvecollector.h)
+		canvasqwidget.cpp canvasqwidget.h
+		manager/model.cpp manager/model.h
+		geom/point.h
+		geom/curve.h geom/curve.cpp
+		geom/line.cpp geom/line.h
+		utils/box.h
+		utils/grid.cpp utils/grid.h
+		manager/curvecollector.cpp manager/curvecollector.h)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
