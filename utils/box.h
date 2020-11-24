@@ -3,64 +3,91 @@
 
 #include <cmath>
 
-template<typename T>
-struct Box {
-	Box() = default;
+namespace RectUtils {
 	
-	T xMin = NAN;
-	T xMax = NAN;
-	T yMin = NAN;
-	T yMax = NAN;
-	
-	void update(Box& box) {
-		xMin = xMin < box.xMin ? box.xMin : xMin;
-		xMax = xMax > box.xMax ? box.xMax : xMax;
-		yMin = yMin < box.yMin ? box.yMin : yMin;
-		yMax = yMax > box.yMax ? box.yMax : yMax;
+	static void update(QRectF& main, const QRectF& box) {
+		main.setLeft(main.left() < box.left() ? box.left() : main.left());
+		main.setRight(main.right() > box.right() ? box.right() : main.right());
+		main.setBottom(main.bottom() < box.bottom() ? box.bottom() : main.bottom());
+		main.setTop(main.top() > box.top() ? box.top() : main.top());
 	}
 	
-	bool contains(Box& box) const {
-		return box.xMin > xMin &&
-		       box.xMax < xMax &&
-		       box.yMin > yMin &&
-		       box.yMax < yMax;
-	}
-	
-	bool isValid() const {
-		return xMin == NAN ||
-		       xMax == NAN ||
-		       yMin == NAN ||
-		       yMax == NAN;
-	}
-	
-	Box<int> toInt() {
-		return Box<int>{
-				(int) xMin,
-				(int) xMax,
-				(int) yMin,
-				(int) yMax
-		};
-	}
-	
-	int width() const {
-		return xMax - xMin;
-	}
-	
-	int height() const {
-		return yMax - yMin;
-	}
-	
-	double centerX() const {
-		return xMin + width() / 2.0;
-	}
-	
-	double centerY() const {
-		return yMin + height() / 2.0;
-	}
-	
-	double max() const {
-		return width() > height() ? width() : height();
-	}
+	class RectF {
+		qreal left;
+		qreal right;
+		qreal bot;
+		qreal top;
+	public:
+		RectF(double xp, double yp, double w, double h) {
+			this->left = xp;
+			this->right = xp + w;
+			this->bot = yp;
+			this->top = yp + h;
+		}
+		
+		explicit RectF(QRect rect) {
+			this->left = rect.left() < rect.right() ? rect.left() : rect.right();
+			this->right = rect.left() > rect.right() ? rect.left() : rect.right();
+			this->bot = rect.bottom() < rect.top() ? rect.bottom() : rect.top();
+			this->top = rect.bottom() > rect.top() ? rect.bottom() : rect.top();
+		}
+		
+		qreal getLeft() const {
+			return left;
+		}
+		
+		qreal getRight() const {
+			return right;
+		}
+		
+		qreal getBot() const {
+			return bot;
+		}
+		
+		qreal getTop() const {
+			return top;
+		}
+		
+		qreal getWidth() const {
+			return right - left;
+		}
+		
+		qreal getHeight() const {
+			return top - bot;
+		}
+		
+		qreal centerX() const {
+			return left + (right - left) / 2.0;
+		}
+		
+		qreal centerY() const {
+			return bot + (top - bot) / 2.0;
+		}
+		
+		void setLeft(double d) {
+			left = d;
+		}
+		
+		void setBot(double d) {
+			bot = d;
+		}
+		
+		void setRight(double d) {
+			right = d;
+		}
+		
+		void setTop(double d) {
+			top = d;
+		}
+		
+		double maxX() const {
+			return right;
+		}
+		
+		double maxY() const {
+			return top;
+		}
+	};
 };
 
 #endif
