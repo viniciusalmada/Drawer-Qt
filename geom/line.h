@@ -18,15 +18,17 @@ public:
 	
 	vector<Point> getPoints() override;
 	
-	vector<Point> getPointsToDraw() override;
+	QVector<QPointF> getPointsF() override;
 	
-	vector<Point> getPointsToDraw(Point p) override;
+	QVector<QPointF> getPointsToDraw() override;
+	
+	QVector<QPointF> getPointsToDraw(QPointF p) override;
 	
 	double closestPoint(Point& p) override;
 	
 	bool isComplete() override { return mNumPts == 2; };
 	
-	Box boundingBox() override;
+	Box<double> boundingBox() override;
 	
 	Point getPtStart() override { return mPt0; }
 	

@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <utils/box.h>
+#include <QtCore/QPointF>
 
 using std::vector;
 
@@ -26,9 +27,11 @@ public:
 	
 	virtual vector<Point> getPoints() = 0;
 	
-	virtual vector<Point> getPointsToDraw() = 0;
+	virtual QVector<QPointF> getPointsF() = 0;
 	
-	virtual vector<Point> getPointsToDraw(Point p) = 0;
+	virtual QVector<QPointF> getPointsToDraw() = 0;
+	
+	virtual QVector<QPointF> getPointsToDraw(QPointF p) = 0;
 	
 	virtual bool isComplete() = 0;
 	

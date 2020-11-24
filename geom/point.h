@@ -1,9 +1,9 @@
 #ifndef DRAWERQTPAINTER_POINT_H
 #define DRAWERQTPAINTER_POINT_H
 
-
 #include <cmath>
 #include <vector>
+#include <QPointF>
 
 struct Point {
 	double x = 0.0;
@@ -55,6 +55,10 @@ struct Point {
 			}
 		}
 		return p;
+	}
+	
+	QPointF toQF() const {
+		return QPointF{x, y};
 	}
 };
 

@@ -1,3 +1,4 @@
+#include <QtCore/QVector>
 #include "line.h"
 
 Line::Line() = default;
@@ -30,14 +31,23 @@ vector<Point> Line::getPoints() {
 	return vector<Point>{mPt0, mPt1};
 }
 
-vector<Point> Line::getPointsToDraw() {
-	return getPoints();
+QVector<QPointF> Line::getPointsF() {
+	if (mNumPts == 1) {
+		return QVector<QPointF>{mPt0.toQF()};
+	}
+	
+	return {mPt0.toQF(), mPt1.toQF()};
 }
 
-vector<Point> Line::getPointsToDraw(Point p) {
-	if (mNumPts == 1)
-		return vector<Point>{mPt0, p};
-	return getPoints();
+QVector<QPointF> Line::getPointsToDraw() {
+	return {QPointF{mPt0.x, mPt0.y}, QPointF{mPt1.x, mPt1.y},};
+}
+
+QVector<QPointF> Line::getPointsToDraw(QPointF p) {
+	if (mNumPts == 1) {
+		return {mPt0.toQF(), p};
+	}
+	return getPointsF();
 }
 
 double Line::closestPoint(Point& p) {
@@ -49,7 +59,7 @@ double Line::closestPoint(Point& p) {
 	return dist;
 }
 
-Box Line::boundingBox() {
+Box<double> Line::boundingBox() {
 	double xMin = (mPt0.x < mPt1.x) ? mPt0.x : mPt1.x;
 	double xMax = (mPt0.x > mPt1.x) ? mPt0.x : mPt1.x;
 	double yMin = (mPt0.y < mPt1.y) ? mPt0.y : mPt1.y;
