@@ -10,6 +10,12 @@
     <height>413</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>400</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -55,6 +61,7 @@
    <addaction name="actionZoomIn"/>
    <addaction name="actionZoomOut"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSelect">
    <property name="checkable">
     <bool>true</bool>
@@ -114,6 +121,17 @@
    </property>
   </action>
   <action name="actionZoomOut">
+   <property name="text">
+    <string>Zoom-</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionZoomOut_2">
    <property name="text">
     <string>Zoom-</string>
    </property>
