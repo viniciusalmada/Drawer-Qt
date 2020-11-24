@@ -6,8 +6,8 @@
 #include <vector>
 
 struct Point {
-	double x;
-	double y;
+	double x = 0.0;
+	double y = 0.0;
 	
 	Point operator+(const Point& p) const {
 		return {x + p.x, y + p.y};

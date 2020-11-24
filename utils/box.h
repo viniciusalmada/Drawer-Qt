@@ -2,6 +2,8 @@
 #define DRAWERQTPAINTER_BOX_H
 
 struct Box {
+	Box() = default;
+	
 	Box(double xmi, double xma, double ymi, double yma) {
 		xMin = xmi;
 		xMax = xma;
@@ -9,10 +11,10 @@ struct Box {
 		yMax = yma;
 	}
 	
-	double xMin;
-	double xMax;
-	double yMin;
-	double yMax;
+	double xMin = NAN;
+	double xMax = NAN;
+	double yMin = NAN;
+	double yMax = NAN;
 	
 	void update(Box& box) {
 		xMin = xMin < box.xMin ? box.xMin : xMin;
@@ -26,6 +28,13 @@ struct Box {
 		       box.xMax < xMax &&
 		       box.yMin > yMin &&
 		       box.yMax < yMax;
+	}
+	
+	bool isValid() const {
+		return xMin == NAN ||
+		       xMax == NAN ||
+		       yMin == NAN ||
+		       yMax == NAN;
 	}
 };
 
