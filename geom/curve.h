@@ -8,12 +8,12 @@
 
 using std::vector;
 
+enum class CurveType {
+	LINE, QUAD_BEZIER, CUBIC_BEZIER
+};
+
 class Curve {
 public:
-	enum CurveType {
-		LINE, QUAD_BEZIER, CUBIC_BEZIER
-	};
-	
 	Curve();
 	
 	virtual ~Curve();

@@ -6,7 +6,7 @@
 class Line : public Curve {
 	Line(Point p0, Point p1);
 	
-	CurveType type() override { return LINE; }
+	CurveType type() override { return CurveType::LINE; }
 	
 	void addPoint(Point p) override;
 	

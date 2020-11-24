@@ -1,7 +1,3 @@
-//
-// Created by vini on 11/23/20.
-//
-
 #include "line.h"
 
 Line::Line(Point p0, Point p1) : mPt0(p0), mPt1(p1) {
