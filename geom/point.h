@@ -3,6 +3,7 @@
 
 
 #include <cmath>
+#include <vector>
 
 struct Point {
 	double x;
@@ -20,6 +21,14 @@ struct Point {
 		return {x * d, y * d};
 	}
 	
+	Point operator*(const Point& pt) const {
+		return {x * pt.x, y * pt.y};
+	}
+	
+	Point operator/(const Point& p) const {
+		return {x / p.x, y / p.y};
+	}
+	
 	double dot(const Point& p) const {
 		return x * p.x + y * p.y;
 	}
@@ -30,6 +39,22 @@ struct Point {
 	
 	double dist(Point& p) const {
 		return sqrt((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y));
+	}
+	
+	Point trim() const {
+		return {static_cast<double>((int) x), static_cast<double>((int) y)};
+	}
+	
+	Point closestPoint(std::vector<Point> pts) const {
+		double d = dist(pts[0]);
+		Point p = pts[0];
+		for (Point pt : pts) {
+			if (dist(pt) < d) {
+				d = dist(pt);
+				p = pt;
+			}
+		}
+		return p;
 	}
 };
 
