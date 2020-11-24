@@ -1,5 +1,7 @@
 #include "line.h"
 
+Line::Line() = default;
+
 Line::Line(Point p0, Point p1) : mPt0(p0), mPt1(p1) {
 
 }

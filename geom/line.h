@@ -4,6 +4,10 @@
 #include "curve.h"
 
 class Line : public Curve {
+
+public:
+	Line();
+	
 	Line(Point p0, Point p1);
 	
 	CurveType type() override { return CurveType::LINE; }
