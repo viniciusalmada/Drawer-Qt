@@ -24,6 +24,8 @@ public:
 	
 	double closestPoint(Point& p) override;
 	
+	bool isComplete() override { return mNumPts == 2; };
+	
 	Box boundingBox() override;
 	
 	Point getPtStart() override { return mPt0; }

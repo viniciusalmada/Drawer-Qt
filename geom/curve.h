@@ -30,6 +30,8 @@ public:
 	
 	virtual vector<Point> getPointsToDraw(Point p) = 0;
 	
+	virtual bool isComplete() = 0;
+	
 	virtual double closestPoint(Point& p) = 0;
 	
 	virtual Box boundingBox() = 0;
@@ -38,7 +40,7 @@ public:
 	
 	virtual Point getPtEnd() = 0;
 	
-	int getNumberOfPoints() const { return mNumPts; }
+	int numberOfPoints() const { return mNumPts; }
 	
 	void selected(bool select) { mSelected = select; }
 	
