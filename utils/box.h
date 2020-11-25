@@ -25,11 +25,25 @@ namespace RectUtils {
 			this->top = yp + h;
 		}
 		
-		explicit RectF(QRectF rect) {
+		explicit RectF(QRectF rect = QRectF{}) {
 			this->left = rect.left() < rect.right() ? rect.left() : rect.right();
 			this->right = rect.left() > rect.right() ? rect.left() : rect.right();
 			this->bot = rect.bottom() < rect.top() ? rect.bottom() : rect.top();
 			this->top = rect.bottom() > rect.top() ? rect.bottom() : rect.top();
+		}
+		
+		void update(const RectF& box) {
+			setLeft(left < box.left ? box.left : left);
+			setRight(right > box.right ? box.right : right);
+			setBot(bot < box.bot ? box.bot : bot);
+			setTop(top > box.top ? box.top : top);
+		}
+		
+		bool contains(const RectF& box) const {
+			return box.left >= left &&
+			       box.right <= right &&
+			       box.bot >= bot &&
+			       box.top <= top;
 		}
 		
 		qreal getLeft() const {

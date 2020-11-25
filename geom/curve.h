@@ -3,6 +3,7 @@
 
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
+#include <utils/box.h>
 
 enum class CurveType {
 	LINE, QUAD_BEZIER, CUBIC_BEZIER
@@ -30,7 +31,7 @@ public:
 	
 	virtual double closestPoint(QPointF& p) = 0;
 	
-	virtual QRectF boundingBox() = 0;
+	virtual RectUtils::RectF boundingBox() = 0;
 	
 	virtual QPointF getPtStart() = 0;
 	

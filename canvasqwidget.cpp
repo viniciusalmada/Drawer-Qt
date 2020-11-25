@@ -127,7 +127,7 @@ void CanvasQWidget::mouseReleaseEvent(QMouseEvent* event) {
 					double pickTol = max * mPickTolFactor;
 					mModel->selectPick(pt1, pickTol, mShiftKeyPressed);
 				} else {
-					QRectF r{pt0, pt1};
+					RectUtils::RectF r{QRectF{pt0, pt1}};
 					mModel->selectFence(r, mShiftKeyPressed);
 				}
 			}
@@ -349,7 +349,7 @@ void CanvasQWidget::fitWorldToViewport() {
 	if (mModel == nullptr)
 		return;
 	
-	mWindowsBox = RectUtils::RectF(mModel->boundingBox());
+	mWindowsBox = mModel->boundingBox();
 	scaleWorldWindow(1.10);
 	update();
 }

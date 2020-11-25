@@ -53,7 +53,7 @@ double Line::closestPoint(QPointF& p) {
 	return dist;
 }
 
-QRectF Line::boundingBox() {
+RectUtils::RectF Line::boundingBox() {
 	double xMin = (mPt0.x() < mPt1.x()) ? mPt0.x() : mPt1.x();
 	double xMax = (mPt0.x() > mPt1.x()) ? mPt0.x() : mPt1.x();
 	double yMin = (mPt0.y() < mPt1.y()) ? mPt0.y() : mPt1.y();

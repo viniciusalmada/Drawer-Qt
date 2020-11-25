@@ -13,14 +13,14 @@ void Model::delAllCurves() {
 
 }
 
-QRectF Model::boundingBox() {
+RectUtils::RectF Model::boundingBox() {
 	if (mCurves.empty())
 		return {0, 10, 0, 10};
 	
 	
-	QRectF box = mCurves[0]->boundingBox();
+	RectUtils::RectF box = mCurves[0]->boundingBox();
 	for (Curve* c : mCurves) {
-		RectUtils::update(box, c->boundingBox());
+		box.update(c->boundingBox());
 	}
 	return box;
 }
@@ -52,11 +52,11 @@ void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 	}
 }
 
-void Model::selectFence(QRectF box, bool shiftKey) {
+void Model::selectFence(RectUtils::RectF box, bool shiftKey) {
 	if (mCurves.empty()) return;
 	
 	bool inFence;
-	QRectF tempBox{box};
+	RectUtils::RectF tempBox{box};
 	for (Curve* curve : mCurves) {
 		tempBox = curve->boundingBox();
 		inFence = box.contains(tempBox);

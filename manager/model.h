@@ -13,11 +13,11 @@ public:
 	
 	std::vector<Curve*> curves() { return mCurves; }
 	
-	QRectF boundingBox();
+	RectUtils::RectF boundingBox();
 	
 	void selectPick(QPointF pt, double tol, bool shiftKey = false);
 	
-	void selectFence(QRectF box, bool shiftKey = false);
+	void selectFence(RectUtils::RectF box, bool shiftKey = false);
 	
 	void insertCurve(Curve* curve);
 	

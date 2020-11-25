@@ -66,9 +66,9 @@ QVector<QPointF> CurveCollector::getPoints() {
 	return mCurve->getPoints();
 }
 
-QRectF CurveCollector::boundingBox() {
+RectUtils::RectF CurveCollector::boundingBox() {
 	if (mCurve != nullptr)
-		return QRectF{};
+		return RectUtils::RectF{};
 	
 	return mCurve->boundingBox();
 }
