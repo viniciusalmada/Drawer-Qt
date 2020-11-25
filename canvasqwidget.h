@@ -52,7 +52,7 @@ protected:
 	QPointF mPt1{};
 	
 	Model* mModel = nullptr;
-	CurveCollector mCollector{};
+	CurveCollector* mCollector;
 	Grid mGrid{};
 	
 	QBrush mBackgroundColor = Qt::white;

@@ -5,7 +5,12 @@
 
 class CurveCollector {
 public:
-	CurveCollector();
+	
+	CurveCollector(CurveCollector& other) = delete;
+	
+	void operator=(const CurveCollector&) = delete;
+	
+	static CurveCollector* getInstance();
 	
 	virtual ~CurveCollector();
 	
@@ -38,6 +43,10 @@ public:
 	void reset();
 
 private:
+	CurveCollector();
+	
+	static CurveCollector* collector;
+	
 	CurveType mCurveType = CurveType::LINE;
 	Curve* mCurve = nullptr;
 	QPointF mPrevPt{};

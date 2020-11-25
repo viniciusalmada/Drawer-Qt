@@ -3,6 +3,8 @@
 #include "canvasqwidget.h"
 
 CanvasQWidget::CanvasQWidget(QWidget* parent) : QWidget(parent) {
+	mCollector = CurveCollector::getInstance();
+	
 	QWidget::setMouseTracking(true);
 	QWidget::setFocusPolicy(Qt::ClickFocus);
 	
@@ -76,7 +78,7 @@ void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 				if (PointUtils::dist(mPt0, mPt1) <= mMouseMoveTol)
 					break;
 				
-				if (mCollector.isCollecting()) {
+				if (mCollector->isCollecting()) {
 					QPointF pt1 = convertPtCoordsToUniverse(mPt1);
 					if (mViewGrid) {
 						bool isSnap = mGrid.getSnapInfo();
@@ -91,7 +93,7 @@ void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 						double pickTol = max * mPickTolFactor;
 						mModel->snapToCurve(pt1, pickTol);
 					}
-					mCollector.addTempPoint(pt1);
+					mCollector->addTempPoint(pt1);
 					update();
 				}
 			}
@@ -138,24 +140,20 @@ void CanvasQWidget::mouseReleaseEvent(QMouseEvent* event) {
 				if (mModel != nullptr && !mModel->isEmpty()) {
 					mModel->snapToCurve(pt1, pickTol);
 				}
-				mCollector.insertPoint(pt1, pickTol);
+				mCollector->insertPoint(pt1, pickTol);
 			}
 		}
 		
 		bool endCollection = false;
 		if (mMouseButton == Qt::LeftButton) {
-			if (mCollector.hasFinished())
+			if (mCollector->hasFinished())
 				endCollection = true;
-			else {
-				mCollector.reset();
-				update();
-			}
 		}
 		
 		if (endCollection) {
-			Curve* curve = mCollector.getCollectedCurve();
+			Curve* curve = mCollector->getCollectedCurve();
 			mModel->insertCurve(curve);
-			mCollector.finishCollection();
+			mCollector->finishCollection();
 			update();
 		}
 	}
@@ -174,9 +172,9 @@ void CanvasQWidget::mousePressEvent(QMouseEvent* event) {
 		case ActionType::SELECTION:
 			break;
 		case ActionType::COLLECTION:
-			if (!mCollector.isActive()) {
+			if (!mCollector->isActive()) {
 				if (mMouseButton == Qt::LeftButton)
-					mCollector.startCollection();
+					mCollector->startCollection();
 			}
 			break;
 	}
@@ -202,17 +200,17 @@ void CanvasQWidget::setMouseAction(ActionType action) {
 	
 	mCurrentAction = action;
 	if (action == ActionType::SELECTION)
-		mCollector.reset();
+		mCollector->reset();
 	
 	update();
 }
 
 void CanvasQWidget::setCurveType(CurveType type) {
-	if (mCurrentAction == ActionType::COLLECTION && mCollector.getCurveType() == type)
+	if (mCurrentAction == ActionType::COLLECTION && mCollector->getCurveType() == type)
 		return;
 	
-	mCollector.reset();
-	mCollector.setCurveType(type);
+	mCollector->reset();
+	mCollector->setCurveType(type);
 	update();
 }
 
@@ -276,18 +274,17 @@ void CanvasQWidget::drawSelectionFence(QPainter& painter) {
 }
 
 void CanvasQWidget::drawCollectedCurve(QPainter& painter) {
-	if (!mCollector.isActive() || !mCollector.isCollecting())
+	if (!mCollector->isActive() || !mCollector->isCollecting())
 		return;
 	
 	mPen.setWidthF(0.5);
 	mPen.setBrush(mCollectingColor);
 	painter.setPen(mPen);
 	
-	QVector<QPointF> pts = mCollector.getDrawPoints();
+	QVector<QPointF> pts = mCollector->getDrawPoints();
 	painter.drawLines(pts);
 	
-	mPen.setWidthF(5.0);
-	QVector<QPointF> ctrlPts = mCollector.getPoints();
+	QVector<QPointF> ctrlPts = mCollector->getPoints();
 	painter.drawPoints(ctrlPts);
 }
 
@@ -316,7 +313,6 @@ void CanvasQWidget::makeDisplayGrid(QPainter& painter) {
 	double gX = gridSpace.first;
 	double gY = gridSpace.second;
 	mPen.setBrush(mGridColor);
-	mPen.setWidthF(.10);
 	painter.setPen(mPen);
 	int c = 0;
 	for (int i = 0; i <= (int) (mWindowsBox.getWidth() / gX); ++i) {

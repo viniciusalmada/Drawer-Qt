@@ -78,6 +78,14 @@ void CurveCollector::reset() {
 	mCurve = nullptr;
 }
 
+CurveCollector* CurveCollector::collector = nullptr;
+
+CurveCollector* CurveCollector::getInstance() {
+	if (collector == nullptr)
+		collector = new CurveCollector();
+	return collector;
+}
+
 
 
 
