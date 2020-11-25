@@ -158,6 +158,9 @@ void CanvasQWidget::mouseReleaseEvent(QMouseEvent* event) {
 		if (mMouseButton == Qt::LeftButton) {
 			if (mCollector->hasFinished())
 				endCollection = true;
+		} else if (mMouseButton == Qt::RightButton) {
+			mCollector->reset();
+			update();
 		}
 		
 		if (endCollection) {
