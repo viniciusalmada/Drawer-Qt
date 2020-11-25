@@ -25,7 +25,7 @@ namespace RectUtils {
 			this->top = yp + h;
 		}
 		
-		explicit RectF(QRect rect) {
+		explicit RectF(QRectF rect) {
 			this->left = rect.left() < rect.right() ? rect.left() : rect.right();
 			this->right = rect.left() > rect.right() ? rect.left() : rect.right();
 			this->bot = rect.bottom() < rect.top() ? rect.bottom() : rect.top();

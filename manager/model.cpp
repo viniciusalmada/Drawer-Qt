@@ -13,7 +13,7 @@ void Model::delAllCurves() {
 
 }
 
-QRect Model::boundingBox() {
+QRectF Model::boundingBox() {
 	if (mCurves.empty())
 		return {0, 10, 0, 10};
 	
@@ -22,7 +22,7 @@ QRect Model::boundingBox() {
 	for (Curve* c : mCurves) {
 		RectUtils::update(box, c->boundingBox());
 	}
-	return box.toRect();
+	return box;
 }
 
 void Model::selectPick(QPointF pt, double tol, bool shiftKey) {

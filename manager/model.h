@@ -13,7 +13,7 @@ public:
 	
 	std::vector<Curve*> curves() { return mCurves; }
 	
-	QRect boundingBox();
+	QRectF boundingBox();
 	
 	void selectPick(QPointF pt, double tol, bool shiftKey = false);
 	
