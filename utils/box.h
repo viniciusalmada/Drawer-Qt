@@ -33,10 +33,18 @@ namespace RectUtils {
 		}
 		
 		void update(const RectF& box) {
-			setLeft(left < box.left ? box.left : left);
-			setRight(right > box.right ? box.right : right);
-			setBot(bot < box.bot ? box.bot : bot);
-			setTop(top > box.top ? box.top : top);
+			if (box.left < left)
+				setLeft(box.left);
+			
+			if (box.right > right)
+				setRight(box.right);
+			
+			if (box.bot < bot)
+				setBot(box.bot);
+			
+			if (box.top > top)
+				setTop(box.top);
+			
 		}
 		
 		bool contains(const RectF& box) const {
