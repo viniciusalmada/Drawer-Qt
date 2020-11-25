@@ -27,15 +27,24 @@ void CanvasQWidget::resizeEvent(QResizeEvent* event) {
 	}
 }
 
+/**
+ * The transformation matrix follows:
+ * x' = m11 * x + m21 * y + m31
+ * y' = m12 * x + m22 * y + m32
+ */
 void CanvasQWidget::paintEvent(QPaintEvent* event) {
 	QPainter painter(this);
 	painter.save();
 	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.setViewport(0, 0, mW, mH);
 	qreal rlw = mWindowsBox.getWidth() / (double) mW;
 	qreal bth = -mWindowsBox.getHeight() / (double) mH;
 	mTransform = QTransform{};
-	mTransform.setMatrix(rlw, 0, 0, 0, bth, 0, mWindowsBox.getLeft(), mWindowsBox.getTop(), 1);
+	mTransform.setMatrix(
+			rlw, 0, 0,
+			0, bth, 0,
+			mWindowsBox.getLeft(), mWindowsBox.getTop(), 1);
 	mTransform = mTransform.inverted();
 	
 	painter.setWorldTransform(mTransform);
