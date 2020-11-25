@@ -344,3 +344,22 @@ void CanvasQWidget::keyReleaseEvent(QKeyEvent* event) {
 	mShiftKeyPressed = false;
 	mControlKeyPressed = false;
 }
+
+void CanvasQWidget::fitWorldToViewport() {
+	if (mModel == nullptr)
+		return;
+	
+	mWindowsBox = RectUtils::RectF(mModel->boundingBox());
+	scaleWorldWindow(1.10);
+	update();
+}
+
+void CanvasQWidget::zoomIn() {
+	scaleWorldWindow(0.90);
+	update();
+}
+
+void CanvasQWidget::zoomOut() {
+	scaleWorldWindow(1.10);
+	update();
+}
