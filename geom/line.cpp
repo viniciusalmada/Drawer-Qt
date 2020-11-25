@@ -58,5 +58,5 @@ RectUtils::RectF Line::boundingBox() {
 	double xMax = (mPt0.x() > mPt1.x()) ? mPt0.x() : mPt1.x();
 	double yMin = (mPt0.y() < mPt1.y()) ? mPt0.y() : mPt1.y();
 	double yMax = (mPt0.y() > mPt1.y()) ? mPt0.y() : mPt1.y();
-	return {xMin, yMax, xMax - xMin, yMax - yMin};
+	return {xMin, yMin, xMax - xMin, yMax - yMin};
 }
