@@ -73,7 +73,7 @@ protected:
 	bool mShiftKeyPressed = false;
 	bool mControlKeyPressed = false;
 	
-	QPen mPen{mCurveColor, 0.10};
+	QPen mPen{mCurveColor, 0.0};
 	
 	void resizeEvent(QResizeEvent* event) override;
 	

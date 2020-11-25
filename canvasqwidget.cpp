@@ -312,6 +312,9 @@ void CanvasQWidget::scaleWorldWindow(double scaleFactor) {
 	mWindowsBox.setRight(cx + sizeX / 2.0);
 	mWindowsBox.setBot(cy - sizeY / 2.0);
 	mWindowsBox.setTop(cy + sizeY / 2.0);
+	
+	qreal penSize = qMin(mWindowsBox.getWidth(), mWindowsBox.getHeight()) * 0.01;
+	mPen.setWidthF(penSize);
 }
 
 void CanvasQWidget::makeDisplayGrid(QPainter& painter) {
