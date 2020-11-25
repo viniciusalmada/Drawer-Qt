@@ -32,7 +32,7 @@ public:
 	void setGridSnapData(bool viewGrid, bool isSnapOn,
 	                     double dx, double dy);
 	
-	bool getGridSnapInfo(double* dx, double* dy);
+	bool getGridSnapInfo(double& dx, double& dy);
 	
 	void delSelectedEntities();
 	

@@ -220,10 +220,10 @@ void CanvasQWidget::setGridSnapData(bool viewGrid, bool isSnapOn, double dx, dou
 	update();
 }
 
-bool CanvasQWidget::getGridSnapInfo(double* dx, double* dy) {
+bool CanvasQWidget::getGridSnapInfo(double& dx, double& dy) {
 	auto space = mGrid.getGridSpace();
-	*dx = space.first;
-	*dy = space.second;
+	dx = space.first;
+	dy = space.second;
 	return mGrid.getSnapInfo();
 }
 
