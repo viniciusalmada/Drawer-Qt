@@ -1,5 +1,6 @@
 #include <QtGui/QPainter>
 #include <QtGui/QResizeEvent>
+#include <utils/geomutils.h>
 #include "canvasqwidget.h"
 
 CanvasQWidget::CanvasQWidget(QWidget* parent) : QWidget(parent) {
@@ -176,8 +177,6 @@ void CanvasQWidget::mousePressEvent(QMouseEvent* event) {
 	mMouseButton = event->button();
 	switch (mCurrentAction) {
 		
-		case ActionType::UNDEF:
-			break;
 		case ActionType::SELECTION:
 			break;
 		case ActionType::COLLECTION:
@@ -185,6 +184,8 @@ void CanvasQWidget::mousePressEvent(QMouseEvent* event) {
 				if (mMouseButton == Qt::LeftButton)
 					mCollector->startCollection();
 			}
+			break;
+		case ActionType::UNDEF:
 			break;
 	}
 }
@@ -320,13 +321,14 @@ void CanvasQWidget::makeDisplayGrid(QPainter& painter) {
 	mPen.setBrush(mGridColor);
 	painter.setPen(mPen);
 	int c = 0;
-	for (int i = 0; i <= (int) (mWindowsBox.getWidth() / gX); ++i) {
-		for (int j = 0; j <= (int) (mWindowsBox.getHeight() / gY); ++j) {
-			qreal x = mWindowsBox.getLeft() + gX * i;
-			qreal y = mWindowsBox.getBot() + gY * j;
-			painter.drawPoint(x, y);
-			c++;
+	qreal x = GeomUtils::ceil2(mWindowsBox.getLeft(), gX);
+	while (x <= mWindowsBox.getRight()) {
+		qreal y = GeomUtils::ceil2(mWindowsBox.getBot(), gY);
+		while (y <= mWindowsBox.getTop()) {
+			painter.drawPoint(QPointF{x, y});
+			y += gY;
 		}
+		x += gX;
 	}
 	
 	painter.drawLine(QPointF(-gX * 0.5, 0.0), QPointF(gX * 0.5, 0.0));
@@ -346,7 +348,7 @@ void CanvasQWidget::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void CanvasQWidget::fitWorldToViewport() {
-	if (mModel == nullptr)
+	if (mModel == nullptr || mModel->isEmpty())
 		return;
 	
 	mWindowsBox = mModel->boundingBox();

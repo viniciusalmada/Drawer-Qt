@@ -41,12 +41,12 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow() {
 	delete ui;
-	delete mStatusBarWidget;
 	delete mSnapBox;
 	delete mLabelGridX;
 	delete mEditGridX;
 	delete mLabelGridY;
 	delete mEditGridY;
+	delete mStatusBarWidget;
 }
 
 void MainWindow::onActionSelectCallback() {
