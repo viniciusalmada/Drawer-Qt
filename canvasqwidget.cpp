@@ -237,7 +237,6 @@ void CanvasQWidget::delSelectedEntities() {
 
 void CanvasQWidget::makeDisplayModel(QPainter& painter) {
 	std::vector<Curve*> curves = mModel->curves();
-	mPen.setWidthF(1.0);
 	for (Curve* c : curves) {
 		QVector<QPointF> pts = c->getPointsToDraw();
 		if (c->isSelected())
@@ -248,7 +247,6 @@ void CanvasQWidget::makeDisplayModel(QPainter& painter) {
 		painter.setPen(mPen);
 		painter.drawLines(pts);
 		
-		mPen.setWidthF(5.0);
 		mPen.setBrush(mVertexColor);
 		painter.setPen(mPen);
 		painter.drawPoint(pts.first());
@@ -263,7 +261,6 @@ void CanvasQWidget::drawSelectionFence(QPainter& painter) {
 	if (mPt0 == mPt1)
 		return;
 	
-	mPen.setWidthF(0.1);
 	mPen.setBrush(mSelectionColor);
 	painter.setPen(mPen);
 	QPointF pt0 = convertPtCoordsToUniverse(mPt0);
@@ -277,7 +274,6 @@ void CanvasQWidget::drawCollectedCurve(QPainter& painter) {
 	if (!mCollector->isActive() || !mCollector->isCollecting())
 		return;
 	
-	mPen.setWidthF(0.5);
 	mPen.setBrush(mCollectingColor);
 	painter.setPen(mPen);
 	
