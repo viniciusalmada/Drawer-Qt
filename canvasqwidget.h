@@ -1,5 +1,5 @@
-#ifndef DRAWERQTPAINTER_CANVAS_QWIDGET_H
-#define DRAWERQTPAINTER_CANVAS_QWIDGET_H
+#ifndef CANVAS_QWIDGET_H
+#define CANVAS_QWIDGET_H
 
 #include <QtWidgets/QWidget>
 #include <QPen>
@@ -107,4 +107,4 @@ protected:
 };
 
 
-#endif //DRAWERQTPAINTER_CANVASQWIDGET_H
+#endif //CANVAS_QWIDGET_H
