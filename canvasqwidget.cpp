@@ -86,7 +86,7 @@ void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 		case ActionType::COLLECTION:
 			if (mMouseButton == Qt::LeftButton && !mButtonPressed) {
 				if (PointUtils::dist(mPt0, mPt1) <= mMouseMoveTol)
-					break;
+					return;
 				
 				if (mCollector->isCollecting()) {
 					QPointF pt1 = convertPtCoordsToUniverse(mPt1);
