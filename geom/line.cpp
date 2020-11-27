@@ -46,7 +46,7 @@ QVector<QPointF> Line::getPointsToDraw(QPointF p) {
 
 double Line::closestPoint(QPointF& p) {
 	double dot = QPointF::dotProduct(mPt1 - mPt0, p - mPt0);
-	double t = dot / PointUtils::norm(mPt1 - mPt0);
+	double t = dot / pow(PointUtils::norm(mPt1 - mPt0), 2);
 	QPointF closest = getPoint(t);
 	double dist = PointUtils::dist(closest, p);
 	p = closest;
