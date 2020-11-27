@@ -1,5 +1,5 @@
-#ifndef GEOMUTILS_H
-#define GEOMUTILS_H
+#ifndef GEOM_UTILS_H
+#define GEOM_UTILS_H
 
 #include <cmath>
 
