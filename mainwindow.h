@@ -24,15 +24,16 @@ private:
 	Model* mModel;
 	
 	QWidget* mStatusBarWidget;
+	QCheckBox* mGridBox;
 	QCheckBox* mSnapBox;
 	QLabel* mLabelGridX;
-	QLineEdit* mEditGridX;
 	QLabel* mLabelGridY;
+	QLineEdit* mEditGridX;
 	QLineEdit* mEditGridY;
 	
 	void onActionSelectCallback();
 	
-	void onActionGridCallback();
+	void onActionGridBoxCallback(int state);
 	
 	void onActionLineCallback();
 	
