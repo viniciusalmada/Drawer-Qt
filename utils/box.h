@@ -1,5 +1,5 @@
-#ifndef DRAWERQTPAINTER_BOX_H
-#define DRAWERQTPAINTER_BOX_H
+#ifndef BOX_H
+#define BOX_H
 
 #include <cmath>
 
@@ -100,14 +100,6 @@ namespace RectUtils {
 		
 		void setTop(double d) {
 			top = d;
-		}
-		
-		double maxX() const {
-			return right;
-		}
-		
-		double maxY() const {
-			return top;
 		}
 	};
 };
