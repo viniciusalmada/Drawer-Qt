@@ -6,7 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if (UNIX)
     set(CMAKE_PREFIX_PATH /opt/qt/5.12.10/gcc_64)
 elseif (WIN32)
-    set(CMAKE_PREFIX_PATH C:\\Qt\\Qt5.12.10\\5.12.10\\mingw73_64)
+    set(CMAKE_PREFIX_PATH C:\\Qt\\Qt5.4.0\\5.4\\mscv2013_opengl)
 endif ()
 
 set(CMAKE_AUTOUIC ON)
