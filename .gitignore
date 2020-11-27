@@ -573,3 +573,4 @@ MigrationBackup/
 # End of https://www.toptal.com/developers/gitignore/api/clion,c++,qt,qtcreator
 .idea/.name
 .idea/deployment.xml
+.idea/codeStyles/codeStyleConfig.xml
