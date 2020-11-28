@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::onActionZoomOutCallback);
 	
 	connect(mGridBox, &QCheckBox::stateChanged, this, &MainWindow::onActionGridBoxCallback);
+	
+	mEditGridX->setText(QString().setNum(1.0));
+	mEditGridY->setText(QString().setNum(1.0));
 }
 
 MainWindow::~MainWindow() {
