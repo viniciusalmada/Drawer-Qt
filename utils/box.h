@@ -5,13 +5,6 @@
 
 namespace RectUtils {
 	
-	static void update(QRectF& main, const QRectF& box) {
-		main.setLeft(main.left() < box.left() ? box.left() : main.left());
-		main.setRight(main.right() > box.right() ? box.right() : main.right());
-		main.setBottom(main.bottom() < box.bottom() ? box.bottom() : main.bottom());
-		main.setTop(main.top() > box.top() ? box.top() : main.top());
-	}
-	
 	class RectF {
 		qreal left;
 		qreal right;
