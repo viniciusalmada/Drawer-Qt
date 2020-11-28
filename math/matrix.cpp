@@ -31,3 +31,53 @@ Matrix Matrix::operator*(Matrix& other) const {
 	}
 	return res;
 }
+
+Matrix Matrix::operator*(const double& other) const {
+	Matrix copy{*this};
+	for (int i = 0; i < copy.mNumRows; ++i) {
+		for (int j = 0; j < copy.mNumColumns; ++j) {
+			copy[{i, j}] *= other;
+		}
+	}
+	return copy;
+}
+
+Matrix Matrix::operator+(Matrix& other) const {
+	Matrix copy{*this};
+	for (int i = 0; i < copy.mNumRows; ++i) {
+		for (int j = 0; j < copy.mNumColumns; ++j) {
+			copy[{i, j}] += other[{i, j}];
+		}
+	}
+	return copy;
+}
+
+Matrix Matrix::operator-(Matrix& other) const {
+	Matrix copy{*this};
+	for (int i = 0; i < copy.mNumRows; ++i) {
+		for (int j = 0; j < copy.mNumColumns; ++j) {
+			copy[{i, j}] -= other[{i, j}];
+		}
+	}
+	return copy;
+}
+
+Matrix Matrix::operator-() const {
+	Matrix copy{*this};
+	for (int i = 0; i < copy.mNumRows; ++i) {
+		for (int j = 0; j < copy.mNumColumns; ++j) {
+			copy[{i, j}] = -copy[{i, j}];
+		}
+	}
+	return copy;
+}
+
+Matrix Matrix::transpose() {
+	Matrix t{mNumColumns, mNumRows};
+	for (int i = 0; i < mNumRows; ++i) {
+		for (int j = 0; j < mNumColumns; ++j) {
+			t[{j, i}] = this->operator[]({i, j});
+		}
+	}
+	return t;
+}

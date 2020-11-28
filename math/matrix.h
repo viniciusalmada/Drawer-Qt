@@ -21,13 +21,13 @@ public:
 	
 	Matrix operator*(const double& other) const;
 	
-	Matrix operator+(const Matrix& other) const;
+	Matrix operator+(Matrix& other) const;
 	
-	Matrix operator-(const Matrix& other) const;
+	Matrix operator-(Matrix& other) const;
 	
 	Matrix operator-() const;
 	
-	Matrix transpose() const;
+	Matrix transpose();
 	
 	static Matrix solveLinearSystem(const Matrix& a, const Matrix& b);
 	
