@@ -96,32 +96,10 @@ bool Model::snapToCurve(QPointF& pt, double tol) {
 	double dist;
 	Curve* targetCurve = nullptr;
 	for (Curve* curve: mCurves) {
-		pCurr = curve->getPtStart();
-		if (PointUtils::dist(pt, pCurr) < tol) {
-			dist = PointUtils::dist(pt, pCurr);
-			if (dist < distMin) {
-				pClosest = pCurr;
-				distMin = dist;
-				targetCurve = curve;
-			}
-			continue;
-		}
-		
-		pCurr = curve->getPtEnd();
-		if (PointUtils::dist(pt, pCurr) < tol) {
-			dist = PointUtils::dist(pt, pCurr);
-			if (dist < distMin) {
-				pClosest = pCurr;
-				distMin = dist;
-				targetCurve = curve;
-			}
-			continue;
-		}
-		
 		pCurr = pt;
 		dist = curve->closestPoint(pCurr);
 		if (dist < distMin) {
-			pClosest = pt;
+			pClosest = pCurr;
 			distMin = dist;
 			targetCurve = curve;
 		}
