@@ -2,6 +2,9 @@
 #define DRAWER_MATRIX_H
 
 #include <vector>
+#include <functional>
+
+class LUDecomposition;
 
 class Matrix {
 	std::vector<double> mData;
@@ -9,6 +12,9 @@ class Matrix {
 	int mNumColumns;
 
 public:
+	
+	typedef std::function<void(int&, int&, double)> MatrixElem;
+	
 	Matrix(int r, int c);
 	
 	explicit Matrix(int dim);
@@ -29,8 +35,32 @@ public:
 	
 	Matrix transpose();
 	
-	static Matrix solveLinearSystem(const Matrix& a, const Matrix& b);
+	Matrix setOneAtZerosOnDiagonal();
 	
+	void forEach(const MatrixElem& block);
+	
+	int rows() const;
+	
+	int columns() const;
+	
+	static Matrix solveLinearSystem(Matrix& a, Matrix& b);
+	
+	static double sumLD(Matrix l, Matrix d, int& i);
+	
+	static double sumUX(Matrix u, Matrix x, int i);
+};
+
+class LUDecomposition {
+
+public:
+	explicit LUDecomposition(Matrix& matrix);
+	
+	Matrix l;
+	Matrix u;
+private:
+	static double sumL(Matrix& l, Matrix& u, int& r, int& c);
+	
+	static double sumU(Matrix& l, Matrix& u, int& r, int& c);
 };
 
 #endif

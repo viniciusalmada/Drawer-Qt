@@ -81,3 +81,114 @@ Matrix Matrix::transpose() {
 	}
 	return t;
 }
+
+Matrix Matrix::setOneAtZerosOnDiagonal() {
+	Matrix copy{*this};
+	for (int i = 0; i < mNumRows; ++i) {
+		for (int j = 0; j < mNumColumns; ++j) {
+			if (i == j && mData[i * mNumColumns + j] == 0.0)
+				copy[{i, j}] = 1.0;
+		}
+	}
+	return copy;
+}
+
+int Matrix::rows() const {
+	return mNumRows;
+}
+
+int Matrix::columns() const {
+	return mNumColumns;
+}
+
+void Matrix::forEach(const Matrix::MatrixElem& block) {
+	int r = 0;
+	int c = 0;
+	while (r < mNumRows) {
+		while (c < mNumColumns) {
+			block(r, c, this->operator[]({r, c}));
+			c++;
+		}
+		c = 0;
+		r++;
+	}
+	
+}
+
+Matrix Matrix::solveLinearSystem(Matrix& a, Matrix& b) {
+	LUDecomposition lu(a);
+	Matrix d(a.rows(), 1);
+	d.forEach([&](int& r, int&, double) {
+		double valD = b[{r, 0}] - sumLD(lu.l, d, r);
+		d[{r, 0}] = valD;
+	});
+	
+	Matrix x{a.rows(), 1};
+	x.forEach([&](int& r, int&, double) {
+		int i = x.rows() - r - 1;
+		double valX = d[{i, 0}] / lu.l[{i, i}] - sumUX(lu.u, x, i);
+		x[{i, 0}] = valX;
+	});
+	
+	return x;
+}
+
+double Matrix::sumLD(Matrix l, Matrix d, int& i) {
+	if (i < 1) return 0.0;
+	
+	double res = 0.0;
+	for (int n = 0; n < i; ++n) {
+		res += l[{i, n}] * d[{n, 0}];
+	}
+	return res;
+}
+
+double Matrix::sumUX(Matrix u, Matrix x, int i) {
+	int j = x.rows();
+	
+	if (i >= j - 1) return 0.0;
+	double res = 0.0;
+	for (int n = i + 1; n < j; n++)
+		res += u[{i, n}] * x[{n, 0}] / u[{i, i}];
+	
+	return res;
+}
+
+LUDecomposition::LUDecomposition(Matrix& matrix) :
+		l(Matrix(matrix.rows(), matrix.columns())),
+		u(Matrix(matrix.rows(), matrix.columns())) {
+	
+	l.setOneAtZerosOnDiagonal();
+	
+	matrix.forEach([&](int& i, int& j, double value) {
+		if (i <= j) {
+			const double valU = value - sumU(l, u, i, j);
+			u[{i, j}] = valU;
+		} else {
+			const double valL = value / u[{j, j}] - sumL(l, u, i, j);
+			l[{i, j}] = valL;
+		}
+	});
+}
+
+double LUDecomposition::sumL(Matrix& l, Matrix& u, int& r, int& c) {
+	if (c < 1) return 0.0;
+	
+	double res = 0.0;
+	
+	for (int n = 0; n < c; n++)
+		res += l[{r, n}] * u[{n, c}] / u[{c, c}];
+	
+	return res;
+}
+
+double LUDecomposition::sumU(Matrix& l, Matrix& u, int& r, int& c) {
+	if (r < 1) return 0.0;
+	
+	double res = 0.0;
+	
+	for (int n = 0; n < c; n++)
+		res += l[{r, n}] * u[{n, c}];
+	
+	return res;
+}
