@@ -31,6 +31,8 @@ private:
 	QLineEdit* mEditGridX;
 	QLineEdit* mEditGridY;
 	
+	QLabel* mLabelCoords;
+	
 	void onActionSelectCallback();
 	
 	void onActionGridBoxCallback(int state);

@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget* parent)
 	mLabelGridY = new QLabel("Grix Y: ");
 	mEditGridY = new QLineEdit();
 	
+	mLabelCoords = new QLabel("asdasd");
+	ui->widget->setLabelCoordinates(mLabelCoords);
+	
 	auto* layout = new QHBoxLayout(mStatusBarWidget);
 	layout->addWidget(mGridBox);
 	layout->addWidget(mSnapBox);
@@ -24,6 +27,8 @@ MainWindow::MainWindow(QWidget* parent)
 	layout->addWidget(mEditGridX);
 	layout->addWidget(mLabelGridY);
 	layout->addWidget(mEditGridY);
+	layout->addSpacing(100);
+	layout->addWidget(mLabelCoords);
 	ui->statusBar->addWidget(mStatusBarWidget);
 	
 	ui->actionSelect->setChecked(true);
@@ -57,6 +62,7 @@ MainWindow::~MainWindow() {
 	delete mEditGridX;
 	delete mLabelGridY;
 	delete mEditGridY;
+	delete mLabelCoords;
 	delete mStatusBarWidget;
 }
 

@@ -75,6 +75,8 @@ void CanvasQWidget::paintEvent(QPaintEvent* event) {
 void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 	mPt1 = event->pos();
 	
+	showCoordinates();
+	
 	switch (mCurrentAction) {
 		
 		default:
@@ -370,4 +372,14 @@ void CanvasQWidget::zoomIn() {
 void CanvasQWidget::zoomOut() {
 	scaleWorldWindow(1.10);
 	update();
+}
+
+void CanvasQWidget::showCoordinates() {
+	if (mLabelCoordinates == nullptr)
+		return;
+	
+	QString str;
+	QPointF pt = convertPtCoordsToUniverse(mPt1);
+	str.sprintf("(%1.3f,\t%1.3f)", pt.x(), pt.y());
+	mLabelCoordinates->setText(str);
 }

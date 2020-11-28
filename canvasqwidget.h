@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QPen>
+#include <QtWidgets/QLabel>
 #include "manager/model.h"
 #include "manager/curvecollector.h"
 #include "utils/grid.h"
@@ -22,6 +23,8 @@ public:
 	void setModel(Model* model);
 	
 	Model* getModel() { return mModel; };
+	
+	void setLabelCoordinates(QLabel* label) { this->mLabelCoordinates = label; }
 	
 	void resetModelDisplay();
 	
@@ -75,6 +78,8 @@ protected:
 	
 	QPen mPen{mCurveColor, 0.0};
 	
+	QLabel* mLabelCoordinates = nullptr;
+	
 	void resizeEvent(QResizeEvent* event) override;
 	
 	void paintEvent(QPaintEvent* event) override;
@@ -104,6 +109,8 @@ protected:
 	void panWorldWindow(double panFacX, double panPacY);
 	
 	QTransform mTransform;
+	
+	void showCoordinates();
 };
 
 
