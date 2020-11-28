@@ -62,7 +62,7 @@ protected:
 	QBrush mSelectionColor = Qt::red;
 	QBrush mGridColor = Qt::black;
 	
-	bool mViewGrid = true;
+	bool mViewGrid = false;
 	
 	ActionType mCurrentAction = ActionType::SELECTION;
 	Qt::MouseButton mMouseButton = Qt::NoButton;
