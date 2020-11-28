@@ -10,7 +10,7 @@ CanvasQWidget::CanvasQWidget(QWidget* parent) : QWidget(parent) {
 	QWidget::setFocusPolicy(Qt::ClickFocus);
 	
 	QPalette pal = palette();
-	pal.setColor(QPalette::Background, Qt::white);
+	pal.setColor(QPalette::Background, mBackgroundColor.color());
 	setAutoFillBackground(true);
 	setPalette(pal);
 }
