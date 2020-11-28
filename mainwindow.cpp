@@ -62,25 +62,21 @@ void MainWindow::onActionSelectCallback() {
 
 void MainWindow::onActionGridBoxCallback(int state) {
 	
-	if (state == Qt::CheckState::Checked) {
-		double dx = 0.0;
-		double dy = 0.0;
-		bool isSnapOn = ui->widget->getGridSnapInfo(dx, dy);
-		
-		QString sdx;
-		sdx.setNum(dx);
-		mEditGridX->clear();
-		mEditGridX->insert(sdx);
-		
-		QString sdy;
-		sdy.setNum(dy);
-		mEditGridY->clear();
-		mEditGridY->insert(sdy);
-		
-		mSnapBox->setChecked(isSnapOn);
-		
-		
+	bool gridState = state == Qt::CheckState::Checked;
+	bool isSnapOn = mSnapBox->isChecked();
+	bool ok;
+	double dx = mEditGridX->text().toDouble(&ok);
+	if (!ok) {
+		dx = 1.0;
+		mEditGridX->setText(QString().setNum(1.0));
 	}
+	double dy = mEditGridY->text().toDouble(&ok);
+	if (!ok) {
+		dy = 1.0;
+		mEditGridY->setText(QString().setNum(1.0));
+	}
+	
+	ui->widget->setGridSnapData(gridState, isSnapOn, dx, dy);
 }
 
 void MainWindow::onActionLineCallback() {
