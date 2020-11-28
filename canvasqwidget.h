@@ -110,7 +110,7 @@ protected:
 	
 	QTransform mTransform;
 	
-	void showCoordinates();
+	void showCoordinates(const QPointF& pt);
 };
 
 

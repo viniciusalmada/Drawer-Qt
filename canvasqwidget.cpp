@@ -75,7 +75,7 @@ void CanvasQWidget::paintEvent(QPaintEvent* event) {
 void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 	mPt1 = event->pos();
 	
-	showCoordinates();
+	showCoordinates(convertPtCoordsToUniverse(mPt1));
 	
 	switch (mCurrentAction) {
 		
@@ -105,6 +105,7 @@ void CanvasQWidget::mouseMoveEvent(QMouseEvent* event) {
 						double pickTol = max * mPickTolFactor;
 						mModel->snapToCurve(pt1, pickTol);
 					}
+					showCoordinates(pt1);
 					mCollector->addTempPoint(pt1);
 					update();
 				}
@@ -374,12 +375,11 @@ void CanvasQWidget::zoomOut() {
 	update();
 }
 
-void CanvasQWidget::showCoordinates() {
+void CanvasQWidget::showCoordinates(const QPointF& pt) {
 	if (mLabelCoordinates == nullptr)
 		return;
 	
 	QString str;
-	QPointF pt = convertPtCoordsToUniverse(mPt1);
 	str.sprintf("(%1.3f,\t%1.3f)", pt.x(), pt.y());
 	mLabelCoordinates->setText(str);
 }
