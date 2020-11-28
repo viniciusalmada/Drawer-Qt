@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::onActionZoomOutCallback);
 	
 	connect(mGridBox, &QCheckBox::stateChanged, this, &MainWindow::onActionGridBoxCallback);
+	connect(mSnapBox, &QCheckBox::stateChanged, this, &MainWindow::onActionSnapBoxCallback);
 	
 	mEditGridX->setText(QString().setNum(1.0));
 	mEditGridX->setFixedWidth(50);
@@ -93,7 +94,22 @@ void MainWindow::onActionGridBoxCallback(int state) {
 	mSnapBox->setEnabled(gridChecked);
 	mEditGridX->setEnabled(gridChecked);
 	mEditGridY->setEnabled(gridChecked);
-	
+}
+
+void MainWindow::onActionSnapBoxCallback(int state) {
+	bool snapChecked = state == Qt::CheckState::Checked;
+	bool ok;
+	double dx = mEditGridX->text().toDouble(&ok);
+	if (!ok) {
+		dx = 1.0;
+		mEditGridX->setText(QString().setNum(1.0));
+	}
+	double dy = mEditGridY->text().toDouble(&ok);
+	if (!ok) {
+		dy = 1.0;
+		mEditGridY->setText(QString().setNum(1.0));
+	}
+	ui->widget->setGridSnapData(mGridBox->isChecked(), snapChecked, dx, dy);
 }
 
 void MainWindow::onActionLineCallback() {

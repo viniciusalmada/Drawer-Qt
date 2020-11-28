@@ -37,6 +37,8 @@ private:
 	
 	void onActionGridBoxCallback(int state);
 	
+	void onActionSnapBoxCallback(int state);
+	
 	void onActionLineCallback();
 	
 	void onActionFitCallback();
