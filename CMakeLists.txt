@@ -33,6 +33,6 @@ add_executable(DrawerQtPainter
         geom/line.cpp geom/line.h
         utils/box.h
         utils/grid.cpp utils/grid.h
-        manager/curvecollector.cpp manager/curvecollector.h utils/geomutils.h math/matrix.cpp math/matrix.h)
+        manager/curvecollector.cpp manager/curvecollector.h utils/geomutils.h math/matrix.cpp math/matrix.h topo/vertex.cpp topo/vertex.h topo/halfedge.cpp topo/halfedge.h topo/edge.cpp topo/edge.h topo/face.cpp topo/face.h topo/loop.cpp topo/loop.h topo/euleroperators.cpp topo/euleroperators.h)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
