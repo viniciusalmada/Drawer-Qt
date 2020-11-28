@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget* parent)
 	
 	connect(mGridBox, &QCheckBox::stateChanged, this, &MainWindow::onActionGridBoxCallback);
 	connect(mSnapBox, &QCheckBox::stateChanged, this, &MainWindow::onActionSnapBoxCallback);
+	connect(mEditGridX, &QLineEdit::returnPressed, this, &MainWindow::onReturnPressedCallback);
+	connect(mEditGridY, &QLineEdit::returnPressed, this, &MainWindow::onReturnPressedCallback);
 	
 	mEditGridX->setText(QString().setNum(1.0));
 	mEditGridX->setFixedWidth(50);
@@ -111,6 +113,21 @@ void MainWindow::onActionSnapBoxCallback(int state) {
 	}
 	ui->widget->setGridSnapData(mGridBox->isChecked(), snapChecked, dx, dy);
 }
+
+void MainWindow::onReturnPressedCallback() {
+	bool ok;
+	double dx = mEditGridX->text().toDouble(&ok);
+	if (!ok) {
+		dx = 1.0;
+		mEditGridX->setText(QString().setNum(1.0));
+	}
+	double dy = mEditGridY->text().toDouble(&ok);
+	if (!ok) {
+		dy = 1.0;
+		mEditGridY->setText(QString().setNum(1.0));
+	}
+	ui->widget->setGridSnapData(mGridBox->isChecked(), mSnapBox->isChecked(), dx, dy);
+};
 
 void MainWindow::onActionLineCallback() {
 	ui->actionSelect->setChecked(false);

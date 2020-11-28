@@ -39,6 +39,8 @@ private:
 	
 	void onActionSnapBoxCallback(int state);
 	
+	void onReturnPressedCallback();
+	
 	void onActionLineCallback();
 	
 	void onActionFitCallback();
