@@ -154,6 +154,30 @@ double Matrix::sumUX(Matrix u, Matrix x, int i) {
 	return res;
 }
 
+double Matrix::determinant() {
+	Matrix u = LUDecomposition(*this).u;
+	double res = 1.0;
+	u.forEach([&](int& i, int& j, double val) {
+		if (i == j)
+			res *= val;
+	});
+	return res;
+}
+
+Matrix Matrix::inverse() {
+	Matrix invMat = Matrix(rows(), columns());
+	for (int i = 0; i < invMat.rows(); i++) {
+		Matrix b = Matrix(rows(), 1);
+		b[{i, 0}] = 1.0;
+		Matrix x = solveLinearSystem(*this, b);
+		invMat.forEach([&](int& m, int& n, double val) {
+			if (n == i)
+				invMat[{m, n}] = x[{m, 0}];
+		});
+	}
+	return invMat;
+}
+
 LUDecomposition::LUDecomposition(Matrix& matrix) :
 		l(Matrix(matrix.rows(), matrix.columns())),
 		u(Matrix(matrix.rows(), matrix.columns())) {

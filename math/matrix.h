@@ -37,6 +37,10 @@ public:
 	
 	Matrix setOneAtZerosOnDiagonal();
 	
+	double determinant();
+	
+	Matrix inverse();
+	
 	void forEach(const MatrixElem& block);
 	
 	int rows() const;
