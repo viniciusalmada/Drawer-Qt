@@ -17,21 +17,27 @@ public:
 	
 	Matrix(int r, int c);
 	
+	Matrix(int r, int c, std::vector<double> data);
+	
 	explicit Matrix(int dim);
 	
 	~Matrix();
 	
 	double& operator[](std::pair<int, int> i);
 	
-	Matrix operator*(Matrix& other) const;
+	Matrix operator*(Matrix& other);
 	
 	Matrix operator*(const double& other) const;
 	
-	Matrix operator+(Matrix& other) const;
+	Matrix operator+(Matrix other) const;
 	
-	Matrix operator-(Matrix& other) const;
+	Matrix operator-(Matrix other) const;
 	
 	Matrix operator-() const;
+	
+	void operator+=(Matrix other);
+	
+	void operator-=(Matrix other);
 	
 	Matrix transpose();
 	
@@ -52,6 +58,12 @@ public:
 	static double sumLD(Matrix l, Matrix d, int& i);
 	
 	static double sumUX(Matrix u, Matrix x, int i);
+	
+	static Matrix solveLinearSystemCGS(Matrix& a, Matrix& b, int maxIt = 10000, double tol = 1e-10);
+	
+	double norm();
+	
+	double dot(Matrix& matrix);
 };
 
 class LUDecomposition {
