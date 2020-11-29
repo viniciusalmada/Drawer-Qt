@@ -15,11 +15,15 @@ namespace HED {
 		Face* mFace;
 	
 	public:
-		Loop(Face* face);
+		explicit Loop(Face* face);
 		
 		virtual ~Loop();
 		
 		void setHe(HalfEdge* he);
+		
+		void setNext(Loop* next);
+		
+		void setPrev(Loop* prev);
 	};
 }
 

@@ -13,6 +13,10 @@ namespace HED {
 		Face();
 		
 		virtual ~Face();
+		
+		Loop* loop();
+		
+		void setLoop(Loop* loop);
 	};
 }
 #endif
