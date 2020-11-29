@@ -25,6 +25,8 @@ namespace HED {
 		std::set<Face*> nearVertices();
 		
 		HalfEdge* he();
+		
+		void setHe(HalfEdge* he);
 	};
 }
 

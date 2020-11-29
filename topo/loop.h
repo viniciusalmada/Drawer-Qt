@@ -18,6 +18,8 @@ namespace HED {
 		Loop(Face* face);
 		
 		virtual ~Loop();
+		
+		void setHe(HalfEdge* he);
 	};
 }
 
