@@ -138,69 +138,6 @@ void Matrix::forEach(const Matrix::MatrixElem& block) {
 	
 }
 
-Matrix Matrix::solveLinearSystem(Matrix& a, Matrix& b) {
-	LUDecomposition lu(a);
-	Matrix d(a.rows(), 1);
-	d.forEach([&](int& r, int&, double) {
-		double valD = b[{r, 0}] - sumLD(lu.l, d, r);
-		d[{r, 0}] = valD;
-	});
-	
-	Matrix x{a.rows(), 1};
-	x.forEach([&](int& r, int&, double) {
-		int i = x.rows() - r - 1;
-		double valX = d[{i, 0}] / lu.l[{i, i}] - sumUX(lu.u, x, i);
-		x[{i, 0}] = valX;
-	});
-	
-	return x;
-}
-
-double Matrix::sumLD(Matrix l, Matrix d, int& i) {
-	if (i < 1) return 0.0;
-	
-	double res = 0.0;
-	for (int n = 0; n < i; ++n) {
-		res += l[{i, n}] * d[{n, 0}];
-	}
-	return res;
-}
-
-double Matrix::sumUX(Matrix u, Matrix x, int i) {
-	int j = x.rows();
-	
-	if (i >= j - 1) return 0.0;
-	double res = 0.0;
-	for (int n = i + 1; n < j; n++)
-		res += u[{i, n}] * x[{n, 0}] / u[{i, i}];
-	
-	return res;
-}
-
-double Matrix::determinant() {
-	Matrix u = LUDecomposition(*this).u;
-	double res = 1.0;
-	u.forEach([&](int& i, int& j, double val) {
-		if (i == j)
-			res *= val;
-	});
-	return res;
-}
-
-Matrix Matrix::inverse() {
-	Matrix invMat = Matrix(rows(), columns());
-	for (int i = 0; i < rows(); i++) {
-		Matrix b = Matrix(rows(), 1);
-		b[{i, 0}] = 1.0;
-		Matrix x = solveLinearSystem(*this, b);
-		invMat.forEach([&](int& m, int& n, double val) {
-			if (n == i)
-				invMat[{m, n}] = x[{m, 0}];
-		});
-	}
-	return invMat;
-}
-
 Matrix Matrix::solveLinearSystemCGS(Matrix& a, Matrix& b, const int maxIt, const double tol) {
 	double residue;
 	double rho1;
@@ -281,44 +218,5 @@ double Matrix::dot(Matrix& matrix) {
 	forEach([&](int& r, int& c, double val) {
 		res += val * matrix[{r, c}];
 	});
-	return res;
-}
-
-LUDecomposition::LUDecomposition(Matrix& matrix) :
-		l(Matrix(matrix.rows(), matrix.columns())),
-		u(Matrix(matrix.rows(), matrix.columns())) {
-	
-	l.setOneAtZerosOnDiagonal();
-	
-	matrix.forEach([&](int& i, int& j, double value) {
-		if (i <= j) {
-			const double valU = value - sumU(l, u, i, j);
-			u[{i, j}] = valU;
-		} else {
-			const double valL = value / u[{j, j}] - sumL(l, u, i, j);
-			l[{i, j}] = valL;
-		}
-	});
-}
-
-double LUDecomposition::sumL(Matrix& l, Matrix& u, int& r, int& c) {
-	if (c < 1) return 0.0;
-	
-	double res = 0.0;
-	
-	for (int n = 0; n < c; n++)
-		res += l[{r, n}] * u[{n, c}] / u[{c, c}];
-	
-	return res;
-}
-
-double LUDecomposition::sumU(Matrix& l, Matrix& u, int& r, int& c) {
-	if (r < 1) return 0.0;
-	
-	double res = 0.0;
-	
-	for (int n = 0; n < c; n++)
-		res += l[{r, n}] * u[{n, c}];
-	
 	return res;
 }
