@@ -11,11 +11,11 @@ namespace HED {
 	class Face;
 	
 	class HalfEdge {
-		HalfEdge* mPrevious;
-		HalfEdge* mNext;
-		Edge* mEdge;
-		Vertex* mVtx;
-		Loop* mLoop;
+		HalfEdge* mPrevious{};
+		HalfEdge* mNext{};
+		Edge* mEdge{};
+		Vertex* mVtx{};
+		Loop* mLoop{};
 	
 	public:
 		
@@ -32,6 +32,12 @@ namespace HED {
 		void setVtx(Vertex* vtx);
 		
 		void setEdge(Edge* edge);
+		
+		Edge* edge();
+		
+		HalfEdge* mate();
+		
+		HalfEdge* next();
 	};
 }
 

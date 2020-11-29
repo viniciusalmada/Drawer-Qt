@@ -1,4 +1,5 @@
 #include "halfedge.h"
+#include "edge.h"
 #include "loop.h"
 
 void HED::HalfEdge::setLoop(Loop* loop) {
@@ -20,3 +21,17 @@ void HED::HalfEdge::setVtx(HED::Vertex* vtx) {
 void HED::HalfEdge::setEdge(HED::Edge* edge) {
 	this->mEdge = edge;
 }
+
+HED::Edge* HED::HalfEdge::edge() {
+	return this->mEdge;
+}
+
+HED::HalfEdge* HED::HalfEdge::mate() {
+	return this->edge()->he1() == this ? this->edge()->he2() : this->edge()->he1();
+}
+
+HED::HalfEdge* HED::HalfEdge::next() {
+	return this->mNext;
+}
+
+HED::HalfEdge::HalfEdge() = default;

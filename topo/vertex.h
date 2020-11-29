@@ -20,7 +20,7 @@ namespace HED {
 		
 		std::set<Face*> nearFaces();
 		
-		std::set<Face*> nearEdges();
+		std::set<Edge*> nearEdges();
 		
 		std::set<Face*> nearVertices();
 		

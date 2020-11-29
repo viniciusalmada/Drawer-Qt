@@ -4,7 +4,6 @@
 #include "vertex.h"
 
 void HED::EulerOperators::mvfs(Vertex* vtx, Face* face) {
-	Loop* outLoop = new Loop(face);
 	Loop* newLoop = new Loop(face);
 	HalfEdge* he = new HalfEdge();
 	
@@ -15,6 +14,19 @@ void HED::EulerOperators::mvfs(Vertex* vtx, Face* face) {
 	heSetVtx(he, vtx);
 	heSetEdge(he, nullptr);
 	vtxSetHe(vtx, he);
+}
+
+void HED::EulerOperators::mev(HED::Edge* edge, HED::Vertex* vtxBegin, HED::Vertex* vtxNext) {
+	HalfEdge* he1 = new HalfEdge{};
+	HalfEdge* he2 = new HalfEdge{};
+	
+	heSetVtx(he1, vtxBegin);
+	heSetVtx(he2, vtxNext);
+	heSetEdge(he1, edge);
+	heSetEdge(he2, edge);
+	vtxSetHe(vtxNext, he2);
+	
+	std::set<Edge*> nearEdges = vtxGetEdges(vtxBegin)
 }
 
 void HED::EulerOperators::loopSetHe(HED::Loop* loop, HED::HalfEdge* he) {
@@ -43,4 +55,8 @@ void HED::EulerOperators::heSetEdge(HED::HalfEdge* he, HED::Edge* edge) {
 
 void HED::EulerOperators::vtxSetHe(HED::Vertex* vtx, HED::HalfEdge* he) {
 	vtx->setHe(he);
+}
+
+std::set<HED::Edge*> HED::EulerOperators::vtxGetEdges(HED::Vertex* vtx) {
+	return vtx->nearEdges();
 }

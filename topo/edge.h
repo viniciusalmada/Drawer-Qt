@@ -11,6 +11,10 @@ namespace HED {
 		Edge();
 		
 		virtual ~Edge();
+		
+		HalfEdge* he1();
+		
+		HalfEdge* he2();
 	};
 }
 

@@ -1,6 +1,8 @@
 #ifndef DRAWER_HED_EULER_H
 #define DRAWER_HED_EULER_H
 
+#include <set>
+
 namespace HED {
 	
 	class Vertex;
@@ -25,7 +27,7 @@ namespace HED {
 		
 		static void mvfs(Vertex* vtx, Face* face);
 		
-		void mev(Edge* edge, Vertex* vtx);
+		static void mev(HED::Edge* edge, HED::Vertex* vtxBegin, HED::Vertex* vtxNext);
 		
 		void semv(Edge* edge1, Edge* edge2, Vertex* vertex);
 		
@@ -46,6 +48,8 @@ namespace HED {
 		static void heSetEdge(HalfEdge* he, Edge* edge);
 		
 		static void vtxSetHe(Vertex* vtx, HalfEdge* he);
+		
+		static std::set<HED::Edge*> vtxGetEdges(Vertex* vtx);
 	};
 }
 #endif
