@@ -18,5 +18,4 @@ std::set<HED::Edge*> HED::Vertex::nearEdges() {
 		edges.insert(he->edge());
 	} while ((he = he->mate()->next()) != heBegin);
 	return edges;
-	
 }

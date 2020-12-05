@@ -26,7 +26,7 @@ void HED::EulerOperators::mev(HED::Edge* edge, HED::Vertex* vtxBegin, HED::Verte
 	heSetEdge(he2, edge);
 	vtxSetHe(vtxNext, he2);
 	
-	std::set<Edge*> nearEdges = vtxGetEdges(vtxBegin)
+	std::set<Edge*> nearEdges = vtxGetEdges(vtxBegin);
 }
 
 void HED::EulerOperators::loopSetHe(HED::Loop* loop, HED::HalfEdge* he) {

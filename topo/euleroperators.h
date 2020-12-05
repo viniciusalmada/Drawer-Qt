@@ -14,20 +14,29 @@ namespace HED {
 	class Loop;
 	
 	class HalfEdge;
-	
-	enum class EOrientation {
-		POSITIVE, NEGATIVE
-	};
-	
-	class EulerOperators {
-		
-		EulerOperators();
-		
-		virtual ~EulerOperators();
-		
-		static void mvfs(Vertex* vtx, Face* face);
-		
-		static void mev(HED::Edge* edge, HED::Vertex* vtxBegin, HED::Vertex* vtxNext);
+
+enum class EOrientation {
+POSITIVE, NEGATIVE
+};
+
+class EulerOperators {
+
+EulerOperators();
+
+virtual ~EulerOperators();
+
+/**
+ * Create the world:
+ * - Given a face, create a loop on it
+ * - Create a half edge from vertex
+ * -
+ *
+ * @param vtx
+ * @param face
+ */
+static void mvfs(Vertex* vtx, Face* face);
+
+static void mev(HED::Edge* edge, HED::Vertex* vtxBegin, HED::Vertex* vtxNext);
 		
 		void semv(Edge* edge1, Edge* edge2, Vertex* vertex);
 		

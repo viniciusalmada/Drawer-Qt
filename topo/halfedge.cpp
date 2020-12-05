@@ -34,4 +34,6 @@ HED::HalfEdge* HED::HalfEdge::next() {
 	return this->mNext;
 }
 
+HED::HalfEdge::~HalfEdge() = default;
+
 HED::HalfEdge::HalfEdge() = default;
