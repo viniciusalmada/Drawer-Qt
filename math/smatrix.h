@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <map>
+#include <vector>
 
 typedef std::pair<int, int> Position;
 
@@ -22,6 +23,8 @@ class SMatrix {
 public:
 	
 	SMatrix(int r, int c, double tol = 1.0e-10);
+	
+	SMatrix(int rows, int cols, std::vector<double> data, double tol = 1.0e-10);
 	
 	explicit SMatrix(int dim, double tol = 1.0e-10);
 	

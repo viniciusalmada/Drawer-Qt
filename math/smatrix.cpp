@@ -6,6 +6,17 @@ SMatrix::SMatrix(int r, int c, double tol) : mNumRows(r), mNumColumns(c), tolera
 
 }
 
+SMatrix::SMatrix(int rows, int cols, std::vector<double> data, double tol) : mNumRows(rows), mNumColumns(cols),
+                                                                             tolerance(tol) {
+	for (int i = 0; i < data.size(); i++) {
+		if (std::abs(data[i]) <= tol)
+			continue;
+		int c = i % cols;
+		int r = (i - c) / cols;
+		mData[{r, c}] = data[i];
+	}
+}
+
 SMatrix::SMatrix(int dim, double tol) : mNumRows(dim), mNumColumns(dim), tolerance(tol) {
 
 }
@@ -61,7 +72,8 @@ SMatrix SMatrix::operator*(SMatrix& other) const {
 	res.forEach([&](Position pos) {
 		for (int n = 0; n < numColumns(); ++n) {
 			double rowVal, colVal;
-			if (!this->get(pos, rowVal) || !other.get(pos, colVal))
+			if (!this->get({pos.first, n}, rowVal) ||
+			    !other.get({n, pos.second}, colVal))
 				continue;
 			const double prod = rowVal * colVal;
 			res.accumulate(pos, prod);
