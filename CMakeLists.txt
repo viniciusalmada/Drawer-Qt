@@ -39,6 +39,6 @@ add_executable(DrawerQtPainter
         topo/edge.cpp topo/edge.h
         topo/face.cpp topo/face.h
         topo/loop.cpp topo/loop.h
-        topo/euleroperators.cpp topo/euleroperators.h)
+        topo/euleroperators.cpp topo/euleroperators.h math/smatrix.cpp math/smatrix.h)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
