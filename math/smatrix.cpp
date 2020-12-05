@@ -133,6 +133,8 @@ SMatrix SMatrix::operator-(const SMatrix& other) const {
 		double a = 0.0;
 		double b = 0.0;
 		if (this->get(pos, a) || other.get(pos, b)) {
+			a = this->get(pos);
+			b = other.get(pos);
 			res.set(pos, a - b);
 		}
 	});
@@ -152,6 +154,8 @@ void SMatrix::operator+=(const SMatrix& other) {
 		double a = 0.0;
 		double b = 0.0;
 		if (this->get(pos, a) || other.get(pos, b)) {
+			a = this->get(pos);
+			b = other.get(pos);
 			set(pos, a + b);
 		}
 	});
@@ -162,6 +166,8 @@ void SMatrix::operator-=(const SMatrix& other) {
 		double a = 0.0;
 		double b = 0.0;
 		if (this->get(pos, a) || other.get(pos, b)) {
+			a = this->get(pos);
+			b = other.get(pos);
 			set(pos, a - b);
 		}
 	});
@@ -206,7 +212,7 @@ SMatrix SMatrix::genMatrix(int r, int c) {
 	SMatrix res{r, c};
 	int i = 0;
 	res.forEach([&](Position pos) {
-		if (i++ % 100 == 0) {
+		if (i++ % 1 == 0) {
 			double value = rand() % 10;
 			res.set(pos, value);
 		}
