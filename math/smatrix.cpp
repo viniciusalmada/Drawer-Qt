@@ -67,7 +67,7 @@ void SMatrix::forEachElement(const LoopMapFunction& loop) const {
 	}
 }
 
-SMatrix SMatrix::operator*(SMatrix& other) const {
+SMatrix SMatrix::operator*(const SMatrix& other) const {
 	SMatrix res{mNumRows, other.mNumColumns};
 	res.forEach([&](Position pos) {
 		for (int n = 0; n < numColumns(); ++n) {
@@ -82,6 +82,18 @@ SMatrix SMatrix::operator*(SMatrix& other) const {
 	return res;
 }
 
+SMatrix SMatrix::times(const SMatrix& other) const {
+	SMatrix res{mNumRows, 1};
+	int i = 0;
+	this->forEachElement([&](Position pos, double value) {
+		double current = res.get({pos.first, 0});
+		double newValue = current + value * other.get({pos.second, 0});
+		res.set({pos.first, 0}, newValue);
+		printf("passing on item %d\n", i);
+	});
+	return res;
+}
+
 void SMatrix::accumulate(Position pos, double value) {
 	double current = 0.0;
 	get(pos, current);
@@ -89,7 +101,7 @@ void SMatrix::accumulate(Position pos, double value) {
 	this->set(pos, newValue);
 }
 
-SMatrix SMatrix::operator*(double& other) const {
+SMatrix SMatrix::operator*(const double& other) const {
 	if (std::abs(other) <= tolerance)
 		return SMatrix{mNumRows, mNumColumns};
 	
@@ -103,7 +115,7 @@ SMatrix SMatrix::operator*(double& other) const {
 	return res;
 }
 
-SMatrix SMatrix::operator+(SMatrix& other) const {
+SMatrix SMatrix::operator+(const SMatrix& other) const {
 	SMatrix res{mNumRows, mNumColumns};
 	res.forEach([&](Position pos) {
 		double a = 0.0;
@@ -115,7 +127,7 @@ SMatrix SMatrix::operator+(SMatrix& other) const {
 	return res;
 }
 
-SMatrix SMatrix::operator-(SMatrix& other) const {
+SMatrix SMatrix::operator-(const SMatrix& other) const {
 	SMatrix res{mNumRows, mNumColumns};
 	res.forEach([&](Position pos) {
 		double a = 0.0;
@@ -135,7 +147,7 @@ SMatrix SMatrix::operator-() const {
 	return res;
 }
 
-void SMatrix::operator+=(SMatrix& other) {
+void SMatrix::operator+=(const SMatrix& other) {
 	forEach([&](Position pos) {
 		double a = 0.0;
 		double b = 0.0;
@@ -145,7 +157,7 @@ void SMatrix::operator+=(SMatrix& other) {
 	});
 }
 
-void SMatrix::operator-=(SMatrix& other) {
+void SMatrix::operator-=(const SMatrix& other) {
 	forEach([&](Position pos) {
 		double a = 0.0;
 		double b = 0.0;
@@ -172,7 +184,7 @@ double SMatrix::norm() const {
 	return std::sqrt(res);
 }
 
-double SMatrix::dot(SMatrix& other) const {
+double SMatrix::dot(const SMatrix& other) const {
 	double res = 0.0;
 	this->forEach([&](Position pos) {
 		double a = 0.0;
@@ -188,4 +200,17 @@ double SMatrix::get(Position pos) const {
 	double value = 0.0;
 	get(pos, value);
 	return value;
+}
+
+SMatrix SMatrix::genMatrix(int r, int c) {
+	SMatrix res{r, c};
+	int i = 0;
+	res.forEach([&](Position pos) {
+		if (i++ % 100 == 0) {
+			double value = rand() % 10;
+			res.set(pos, value);
+		}
+		
+	});
+	return res;
 }

@@ -40,25 +40,29 @@ public:
 	
 	int numColumns() const;
 	
-	SMatrix operator*(SMatrix& other) const;
+	SMatrix operator*(const SMatrix& other) const;
 	
-	SMatrix operator*(double& other) const;
+	SMatrix times(const SMatrix& other) const;
 	
-	SMatrix operator+(SMatrix& other) const;
+	SMatrix operator*(const double& other) const;
 	
-	SMatrix operator-(SMatrix& other) const;
+	SMatrix operator+(const SMatrix& other) const;
+	
+	SMatrix operator-(const SMatrix& other) const;
 	
 	SMatrix operator-() const;
 	
-	void operator+=(SMatrix& other);
+	void operator+=(const SMatrix& other);
 	
-	void operator-=(SMatrix& other);
+	void operator-=(const SMatrix& other);
 	
 	SMatrix transpose() const;
 	
 	double norm() const;
 	
-	double dot(SMatrix& other) const;
+	double dot(const SMatrix& other) const;
+	
+	static SMatrix genMatrix(int r, int c);
 };
 
 #endif
