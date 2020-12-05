@@ -183,3 +183,9 @@ double SMatrix::dot(SMatrix& other) const {
 	});
 	return res;
 }
+
+double SMatrix::get(Position pos) const {
+	double value = 0.0;
+	get(pos, value);
+	return value;
+}

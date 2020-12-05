@@ -19,6 +19,8 @@ class SMatrix {
 	inline void forEach(const LoopMatrixFunction& loop) const;
 	
 	inline void forEachElement(const LoopMapFunction& loop) const;
+	
+	bool get(Position pos, double& value) const;
 
 public:
 	
@@ -30,7 +32,7 @@ public:
 	
 	virtual ~SMatrix();
 	
-	bool get(Position pos, double& value) const;
+	double get(Position pos) const;
 	
 	void set(Position pos, double value);
 	
