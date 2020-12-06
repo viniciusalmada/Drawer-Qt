@@ -3,7 +3,7 @@
 
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
-#include <utils/box.h>
+#include <geom/box.h>
 
 enum class CurveType {
 	LINE, QUAD_BEZIER, CUBIC_BEZIER

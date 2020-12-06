@@ -1,6 +1,6 @@
 #include <geom/point.h>
 #include <QRectF>
-#include <utils/box.h>
+#include <geom/box.h>
 #include "manager/model.h"
 
 Model::Model() = default;

@@ -7,7 +7,7 @@
 #include "manager/model.h"
 #include "manager/curvecollector.h"
 #include "utils/grid.h"
-#include "utils/box.h"
+#include "geom/box.h"
 
 enum class ActionType {
 	UNDEF, SELECTION, COLLECTION

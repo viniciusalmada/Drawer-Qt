@@ -1,6 +1,6 @@
 #include <QtGui/QPainter>
 #include <QtGui/QResizeEvent>
-#include <utils/geomutils.h>
+#include <geom/geomutils.h>
 #include "canvasqwidget.h"
 
 CanvasQWidget::CanvasQWidget(QWidget* parent) : QWidget(parent) {
