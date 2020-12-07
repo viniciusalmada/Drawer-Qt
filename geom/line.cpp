@@ -1,5 +1,6 @@
 #include <QtCore/QVector>
 #include <QtCore/QRectF>
+#include <array>
 #include "line.h"
 #include "point.h"
 
@@ -50,6 +51,10 @@ double Line::closestPoint(QPointF& p) {
 	QPointF closest = getPoint(t);
 	double dist = PointUtils::dist(closest, p);
 	p = closest;
+	
+	std::vector<QPointF> nmm{{1.0, 2.3}};
+	std::array<std::vector<QPointF>, 3> f{{nmm, nmm, nmm}};
+	
 	return dist;
 }
 

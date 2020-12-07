@@ -33,7 +33,9 @@ add_executable(DrawerQtPainter
         geom/line.cpp geom/line.h
         geom/box.h
         utils/grid.cpp utils/grid.h
-        manager/curvecollector.cpp manager/curvecollector.h geom/geomutils.h math/matrix.cpp math/matrix.h
+        manager/curvecollector.cpp manager/curvecollector.h
+        geom/geomutils.h geom/geomutils.cpp
+        math/matrix.cpp math/matrix.h
         math/smatrix.cpp math/smatrix.h
         mesh/delaunaymodel.cpp mesh/delaunaymodel.h
         topo/hed.h topo/hed.cpp)

@@ -9,6 +9,7 @@ namespace HED {
 	class Model {
 		
 		class HEDVertex {
+		public:
 			QPointF pt;
 			int he = -1;
 			
@@ -16,6 +17,7 @@ namespace HED {
 		};
 		
 		class HEDHalfedge {
+		public:
 			int vtx = -1;
 			int edge = -1;
 			int tri = -1;
@@ -25,6 +27,7 @@ namespace HED {
 		};
 		
 		class HEDTriangle {
+		public:
 			int he0 = -1;
 			int he1 = -1;
 			int he2 = -1;
@@ -33,6 +36,7 @@ namespace HED {
 		};
 		
 		class HEDEdge {
+		public:
 			int he0 = -1;
 			int he1 = -1;
 			
@@ -45,6 +49,8 @@ namespace HED {
 		std::vector<HEDTriangle> mTriangles;
 		
 		bool continueCollectEdges(std::vector<int>& edges, int& he, const int& firstEdge);
+		
+		void collectEdgesReverse(std::vector<int>& edges, int& he);
 	
 	public:
 		
@@ -52,7 +58,7 @@ namespace HED {
 		
 		~Model();
 		
-		int newVertex(QPointF& pt);
+		int newVertex(const QPointF& pt);
 		
 		int newHalfedge(int vertexId);
 		
@@ -70,7 +76,7 @@ namespace HED {
 		
 		int vertexOfTriangle(int triId, int pos);
 		
-		std::array<int, 3> verticesOfTriangles(int triId);
+		std::vector<int> verticesOfTriangles(int triId);
 		
 		int halfedgeFromVertex(int vtxId);
 		
@@ -90,23 +96,23 @@ namespace HED {
 		
 		QPointF pointOfVertex(int vtx);
 		
-		bool isEdgeLegal(int he, const std::function<bool(Model*, int)>& predicate);
+		bool isEdgeLegal(int edge, const std::function<bool(Model&, int)>& predicate);
 		
-		void makeFlip(int edgeId);
+		std::vector<int> makeFlip(int edgeId);
 		
 		bool isEdgeNearTwoFaces(int edgeId);
 		
-		int findEdgeThatContainsPoint(QPointF pt);
+		int findEdgeThatContainsPoint(const QPointF& pt);
 		
-		int findTriangleThatContainsPoint(QPointF pt);
+		int findTriangleThatContainsPoint(const QPointF& pt);
 		
-		void splitEdge(int edgeId, QPointF pt);
+		std::vector<int> splitEdge(int edgeId, const QPointF& pt);
 		
-		void splitTriangle(int tri, QPointF pt);
+		std::vector<int> splitTriangle(int tri, QPointF pt);
 		
 		void setHalfedgesOfEdge(int edgeId, int he0, int he1);
 		
-		void collectEdgesReverse(std::vector<int>& edges, int& he);
+		HED::Model::HEDEdge getEdge(int i);
 	};
 }
 

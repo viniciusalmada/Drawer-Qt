@@ -25,7 +25,7 @@ HED::Model::~Model() {
 	mTriangles.clear();
 }
 
-int HED::Model::newVertex(QPointF& pt) {
+int HED::Model::newVertex(const QPointF& pt) {
 	mVertices.emplace_back(pt);
 	return static_cast<int>(mVertices.size()) - 1;
 }
@@ -82,7 +82,7 @@ int HED::Model::vertexOfTriangle(int triId, int pos) {
 	return mHalfedges[he].vtx;
 }
 
-std::array<int, 3> HED::Model::verticesOfTriangles(int triId) {
+std::vector<int> HED::Model::verticesOfTriangles(int triId) {
 	int v0 = vertexOfTriangle(triId, 0);
 	int v1 = vertexOfTriangle(triId, 1);
 	int v2 = vertexOfTriangle(triId, 2);
@@ -176,11 +176,11 @@ QPointF HED::Model::pointOfVertex(int vtx) {
 	return mVertices[vtx].pt;
 }
 
-bool HED::Model::isEdgeLegal(int he, const std::function<bool(Model*, int)>& predicate) {
-	return predicate(this, he);
+bool HED::Model::isEdgeLegal(int edge, const std::function<bool(Model&, int)>& predicate) {
+	return predicate(*this, edge);
 }
 
-void HED::Model::makeFlip(int edgeId) {
+std::vector<int> HED::Model::makeFlip(int edgeId) {
 	HEDEdge edge = mEdges[edgeId];
 	int tri0 = triangleOfHalfedge(edge.he0);
 	int tri1 = triangleOfHalfedge(edge.he1);
@@ -209,6 +209,8 @@ void HED::Model::makeFlip(int edgeId) {
 	
 	updateHalfedgesOfTriangle(tri0, edge.he0, nextNextHed1, nextHed0);
 	updateHalfedgesOfTriangle(tri1, edge.he1, nextNextHed0, nextHed1);
+	
+	return {newVtxOfHed0, newVtxOfHed1};
 }
 
 bool HED::Model::isEdgeNearTwoFaces(int edgeId) {
@@ -219,7 +221,7 @@ bool HED::Model::isEdgeNearTwoFaces(int edgeId) {
 	return h0.tri != -1 && h1.tri != -1;
 }
 
-int HED::Model::findEdgeThatContainsPoint(QPointF pt) {
+int HED::Model::findEdgeThatContainsPoint(const QPointF& pt) {
 	for (int i = 0; i < mEdges.size(); i++) {
 		HEDEdge edge = mEdges[i];
 		QPointF pt0 = pointOfHalfedge(edge.he0);
@@ -231,7 +233,7 @@ int HED::Model::findEdgeThatContainsPoint(QPointF pt) {
 	return -1;
 }
 
-int HED::Model::findTriangleThatContainsPoint(QPointF pt) {
+int HED::Model::findTriangleThatContainsPoint(const QPointF& pt) {
 	for (int i = 0; i < mTriangles.size(); i++) {
 		HEDTriangle tri = mTriangles[i];
 		QPointF p0 = pointOfHalfedge(tri.he0);
@@ -244,7 +246,7 @@ int HED::Model::findTriangleThatContainsPoint(QPointF pt) {
 	return -1;
 }
 
-void HED::Model::splitEdge(int edgeId, QPointF pt) {
+std::vector<int> HED::Model::splitEdge(int edgeId, const QPointF& pt) {
 	int vtx = newVertex(pt);
 	HEDEdge edge = mEdges[edgeId];
 	
@@ -277,10 +279,12 @@ void HED::Model::splitEdge(int edgeId, QPointF pt) {
 	
 	updateHalfedgesOfTriangle(tri0, hed3, nextHed1, hed7);
 	updateHalfedgesOfTriangle(tri1, hed5, nextNextHed2, hed2);
+	
+	return {vtx, vtxNextNextHed1, vtxNextNextHed2};
 }
 
-void HED::Model::splitTriangle(int tri, QPointF pt) {
-	std::array<int, 3> verticesToCheck = verticesOfTriangles(tri);
+std::vector<int> HED::Model::splitTriangle(int tri, QPointF pt) {
+	std::vector<int> verticesToCheck = verticesOfTriangles(tri);
 	
 	int newV = newVertex(pt);
 	
@@ -304,6 +308,8 @@ void HED::Model::splitTriangle(int tri, QPointF pt) {
 	newTriangle(h1e2, h2Tri0, h2e0);
 	
 	updateHalfedgesOfTriangle(tri, h0Tri0, h2e1, h1e0);
+	
+	return verticesToCheck;
 }
 
 void HED::Model::setHalfedgesOfEdge(int edgeId, int he0, int he1) {
@@ -312,6 +318,10 @@ void HED::Model::setHalfedgesOfEdge(int edgeId, int he0, int he1) {
 	
 	mHalfedges[he0].edge = edgeId;
 	mHalfedges[he1].edge = edgeId;
+}
+
+HED::Model::HEDEdge HED::Model::getEdge(int i) {
+	return mEdges[i];
 }
 
 
