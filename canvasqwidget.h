@@ -6,7 +6,7 @@
 #include <QtWidgets/QLabel>
 #include "manager/model.h"
 #include "manager/curvecollector.h"
-#include "utils/grid.h"
+#include "manager/grid.h"
 #include "geom/box.h"
 
 enum class ActionType {

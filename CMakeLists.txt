@@ -33,7 +33,7 @@ add_executable(DrawerQtPainter
         geom/curve.h geom/curve.cpp
         geom/line.cpp geom/line.h
         geom/box.h
-        utils/grid.cpp utils/grid.h
+        manager/grid.cpp manager/grid.h
         manager/curvecollector.cpp manager/curvecollector.h
         geom/geomutils.h geom/geomutils.cpp
         math/matrix.cpp math/matrix.h
