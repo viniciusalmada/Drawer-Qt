@@ -59,6 +59,7 @@
    <addaction name="actionFit"/>
    <addaction name="actionZoomIn"/>
    <addaction name="actionZoomOut"/>
+   <addaction name="actionDelete"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSelect">
@@ -130,15 +131,15 @@
     <string>Ctrl+-</string>
    </property>
   </action>
-  <action name="actionZoomOut_2">
+  <action name="actionDelete">
    <property name="text">
-    <string>Zoom-</string>
+    <string>Delete</string>
    </property>
    <property name="toolTip">
-    <string>Zoom Out</string>
+    <string>Delete</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+-</string>
+    <string>Del</string>
    </property>
   </action>
  </widget>

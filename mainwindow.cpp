@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionFit, &QAction::triggered, this, &MainWindow::onActionFitCallback);
 	connect(ui->actionZoomIn, &QAction::triggered, this, &MainWindow::onActionZoomInCallback);
 	connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::onActionZoomOutCallback);
+	connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::onActionDeleteCallback);
 	
 	connect(mGridBox, &QCheckBox::stateChanged, this, &MainWindow::onActionGridBoxCallback);
 	connect(mSnapBox, &QCheckBox::stateChanged, this, &MainWindow::onActionSnapBoxCallback);
@@ -146,6 +147,10 @@ void MainWindow::onActionZoomInCallback() {
 
 void MainWindow::onActionZoomOutCallback() {
 	ui->widget->zoomOut();
+}
+
+void MainWindow::onActionDeleteCallback() {
+	ui->widget->delSelectedEntities();
 }
 
 

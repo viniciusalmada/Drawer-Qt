@@ -48,6 +48,8 @@ private:
 	void onActionZoomInCallback();
 	
 	void onActionZoomOutCallback();
+	
+	void onActionDeleteCallback();
 };
 
 #endif // MAINWINDOW_H

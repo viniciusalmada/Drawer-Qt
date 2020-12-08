@@ -244,7 +244,7 @@ bool CanvasQWidget::getGridSnapInfo(double& dx, double& dy) {
 }
 
 void CanvasQWidget::delSelectedEntities() {
-	if (mModel != nullptr && mModel->isEmpty()) {
+	if (mModel != nullptr && !mModel->isEmpty()) {
 		mModel->delSelectedCurves();
 		update();
 	}
