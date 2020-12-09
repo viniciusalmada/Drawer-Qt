@@ -15,51 +15,6 @@ void HED::EulerOp::mvfs(HED::Model& model, double x, double y) {
 	model.setHeOfVtx(vertex, he);
 }
 
-int HED::EulerOp::addHe(HED::Model& model, int edge, int vtx, int heWhere) {
-	/*int he;
-	if (model.getEdgeFromHe(heWhere) == -1)
-		he = heWhere;
-	else {
-		he = model.newHalfedge(vtx);
-		int prevHe = model.getPrevFromHe(heWhere);
-		model.setNextOfHe(prevHe, he);
-		model.setPrevOfHe(he, model.getPrevFromHe(heWhere));
-		model.setNextOfHe(he, heWhere);
-	}
-	model.setEdgeOfHe(he, edge);
-	model.setLoopOfHe(he, model.getLoopFromHe(heWhere));
-	if (model.getHe0FromEdge(edge) == heWhere)
-		model.setHe1OfEdge(edge, he);
-	else
-		model.setHe0OfEdge(edge, he);
-	
-	return he;*/
-	return 00.0;
-}
-
-void HED::EulerOp::lmev(HED::Model& model, int he1, int he2, double x, double y) {
-	/*int newEdge = model.newEdge();
-	int newVtx = model.newVertex(x, y);
-	int he = he1;
-	
-	while (he != he2) {
-		model.setVtxOfHe(he, newVtx);
-		int mate = model.mateOfHalfedge(he);
-		he = model.getNextFromHe(mate);
-	}
-	
-	addHe(model, newEdge, model.getVtxFromHe(he2), he1);
-	addHe(model, newEdge, newVtx, he2);
-	model.setHeOfVtx(newVtx, model.getPrevFromHe(he2));
-	
-	int vtxHe2 = model.getVtxFromHe(he2);
-	model.setHeOfVtx(vtxHe2, he2);*/
-}
-
-void HED::EulerOp::lmef(HED::Model& model, int he1, int he2, double f) {
-
-}
-
 void HED::EulerOp::mev(HED::Model& model, int originVtx, double x, double y) {
 	std::set<int> nearEdges = model.getNearEdgesFromVtx(originVtx);
 	
