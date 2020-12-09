@@ -1,11 +1,11 @@
 #ifndef DRAWER_DELAUNAY_MODEL_H
 #define DRAWER_DELAUNAY_MODEL_H
 
-#include "topo/hed.h"
+#include "topo/hedsimplified.h"
 
 class DelaunayModel {
 private:
-	HED::Model mModel{};
+	HEDSimpl::Model mModel{};
 	
 	explicit DelaunayModel(const std::vector<QPointF>& points);
 	
@@ -15,7 +15,7 @@ private:
 	
 	void verifyNearEdgesFromVertices(const std::vector<int>& vertices);
 	
-	static bool predicateLegalEdge(HED::Model& model, int edgeId);
+	static bool predicateLegalEdge(HEDSimpl::Model& model, int edgeId);
 };
 
 #endif

@@ -56,7 +56,7 @@ void DelaunayModel::verifyNearEdgesFromVertices(const std::vector<int>& vertices
 	}
 }
 
-bool DelaunayModel::predicateLegalEdge(HED::Model& model, int edgeId) {
+bool DelaunayModel::predicateLegalEdge(HEDSimpl::Model& model, int edgeId) {
 	if (!model.isEdgeNearTwoFaces(edgeId)) return true;
 	
 	auto edge = model.getEdge(edgeId);

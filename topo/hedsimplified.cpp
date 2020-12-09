@@ -1,55 +1,55 @@
 #include <geom/geomutils.h>
-#include "hed.h"
+#include "hedsimplified.h"
 
-HED::Model::HEDVertex::HEDVertex(QPointF pt) : pt(pt) {
+HEDSimpl::Model::HEDVertex::HEDVertex(QPointF pt) : pt(pt) {
 }
 
-HED::Model::HEDHalfedge::HEDHalfedge(int vertexId) : vtx(vertexId) {
-
-}
-
-HED::Model::HEDTriangle::HEDTriangle(int h0, int h1, int h2) : he0(h0), he1(h1), he2(h2) {
+HEDSimpl::Model::HEDHalfedge::HEDHalfedge(int vertexId) : vtx(vertexId) {
 
 }
 
-HED::Model::HEDEdge::HEDEdge(int h0, int h1) : he0(h0), he1(h1) {
+HEDSimpl::Model::HEDTriangle::HEDTriangle(int h0, int h1, int h2) : he0(h0), he1(h1), he2(h2) {
 
 }
 
-HED::Model::Model() = default;
+HEDSimpl::Model::HEDEdge::HEDEdge(int h0, int h1) : he0(h0), he1(h1) {
 
-HED::Model::~Model() {
+}
+
+HEDSimpl::Model::Model() = default;
+
+HEDSimpl::Model::~Model() {
 	mVertices.clear();
 	mHalfedges.clear();
 	mEdges.clear();
 	mTriangles.clear();
 }
 
-int HED::Model::newVertex(const QPointF& pt) {
+int HEDSimpl::Model::newVertex(const QPointF& pt) {
 	mVertices.emplace_back(pt);
 	return static_cast<int>(mVertices.size()) - 1;
 }
 
-int HED::Model::newHalfedge(int vertexId) {
+int HEDSimpl::Model::newHalfedge(int vertexId) {
 	mHalfedges.emplace_back(vertexId);
 	return static_cast<int>(mHalfedges.size()) - 1;
 }
 
-int HED::Model::newEdge(int he1, int he2) {
+int HEDSimpl::Model::newEdge(int he1, int he2) {
 	mEdges.emplace_back(he1, he2);
 	return static_cast<int>(mEdges.size()) - 1;
 }
 
-int HED::Model::newTriangle(int he1, int he2, int he3) {
+int HEDSimpl::Model::newTriangle(int he1, int he2, int he3) {
 	mTriangles.emplace_back(he1, he2, he3);
 	return static_cast<int>(mTriangles.size()) - 1;
 }
 
-void HED::Model::updateHalfedgeOfVertex(int vtxId, int heId) {
+void HEDSimpl::Model::updateHalfedgeOfVertex(int vtxId, int heId) {
 	mVertices[vtxId].he = heId;
 }
 
-void HED::Model::updateHalfedgesOfTriangle(int triId, int he0, int he1, int he2) {
+void HEDSimpl::Model::updateHalfedgesOfTriangle(int triId, int he0, int he1, int he2) {
 	mTriangles[triId].he0 = he0;
 	mTriangles[triId].he1 = he1;
 	mTriangles[triId].he2 = he2;
@@ -63,11 +63,11 @@ void HED::Model::updateHalfedgesOfTriangle(int triId, int he0, int he1, int he2)
 	mHalfedges[he2].next = he0;
 }
 
-void HED::Model::updateVertexOfHalfedge(int he, int vtx) {
+void HEDSimpl::Model::updateVertexOfHalfedge(int he, int vtx) {
 	mHalfedges[he].vtx = vtx;
 }
 
-int HED::Model::halfedgeFromTriangle(int triId, int pos) {
+int HEDSimpl::Model::halfedgeFromTriangle(int triId, int pos) {
 	if (pos == 0)
 		return mTriangles[triId].he0;
 	else if (pos == 1)
@@ -77,27 +77,27 @@ int HED::Model::halfedgeFromTriangle(int triId, int pos) {
 	return -1;
 }
 
-int HED::Model::vertexOfTriangle(int triId, int pos) {
+int HEDSimpl::Model::vertexOfTriangle(int triId, int pos) {
 	int he = halfedgeFromTriangle(triId, pos);
 	return mHalfedges[he].vtx;
 }
 
-std::vector<int> HED::Model::verticesOfTriangles(int triId) {
+std::vector<int> HEDSimpl::Model::verticesOfTriangles(int triId) {
 	int v0 = vertexOfTriangle(triId, 0);
 	int v1 = vertexOfTriangle(triId, 1);
 	int v2 = vertexOfTriangle(triId, 2);
 	return {v0, v1, v2};
 }
 
-int HED::Model::halfedgeFromVertex(int vtxId) {
+int HEDSimpl::Model::halfedgeFromVertex(int vtxId) {
 	return mVertices[vtxId].he;
 }
 
-int HED::Model::edgeFromHalfedge(int he) {
+int HEDSimpl::Model::edgeFromHalfedge(int he) {
 	return mHalfedges[he].edge;
 }
 
-std::vector<int> HED::Model::nearEdges(const std::vector<int>& vertices) {
+std::vector<int> HEDSimpl::Model::nearEdges(const std::vector<int>& vertices) {
 	std::vector<int> edges{};
 	for (auto vtxId : vertices) {
 		const int firstHe = halfedgeFromVertex(vtxId);
@@ -120,7 +120,7 @@ std::vector<int> HED::Model::nearEdges(const std::vector<int>& vertices) {
 	return edges;
 }
 
-bool HED::Model::continueCollectEdges(std::vector<int>& edges, int& he, const int& firstEdge) {
+bool HEDSimpl::Model::continueCollectEdges(std::vector<int>& edges, int& he, const int& firstEdge) {
 	while (he != -1) {
 		int edge = edgeFromHalfedge(he);
 		if (edge == firstEdge)
@@ -137,7 +137,7 @@ bool HED::Model::continueCollectEdges(std::vector<int>& edges, int& he, const in
 	return false;
 }
 
-void HED::Model::collectEdgesReverse(std::vector<int>& edges, int& he) {
+void HEDSimpl::Model::collectEdgesReverse(std::vector<int>& edges, int& he) {
 	while (he != -1) {
 		const int edge = edgeFromHalfedge(he);
 		edges.push_back(edge);
@@ -148,39 +148,39 @@ void HED::Model::collectEdgesReverse(std::vector<int>& edges, int& he) {
 	}
 }
 
-int HED::Model::mateOfHalfedge(int he) {
+int HEDSimpl::Model::mateOfHalfedge(int he) {
 	HEDEdge e = mEdges[mHalfedges[he].edge];
 	if (e.he0 == he)
 		return e.he1;
 	return e.he0;
 }
 
-int HED::Model::triangleOfHalfedge(int he) {
+int HEDSimpl::Model::triangleOfHalfedge(int he) {
 	return mHalfedges[he].tri;
 }
 
-int HED::Model::nextOfHalfedge(int he) {
+int HEDSimpl::Model::nextOfHalfedge(int he) {
 	return mHalfedges[he].next;
 }
 
-QPointF HED::Model::pointOfHalfedge(int he) {
+QPointF HEDSimpl::Model::pointOfHalfedge(int he) {
 	HEDVertex vtx = mVertices[vertexOfHalfedge(he)];
 	return vtx.pt;
 }
 
-int HED::Model::vertexOfHalfedge(int he) {
+int HEDSimpl::Model::vertexOfHalfedge(int he) {
 	return mHalfedges[he].vtx;
 }
 
-QPointF HED::Model::pointOfVertex(int vtx) {
+QPointF HEDSimpl::Model::pointOfVertex(int vtx) {
 	return mVertices[vtx].pt;
 }
 
-bool HED::Model::isEdgeLegal(int edge, const std::function<bool(Model&, int)>& predicate) {
+bool HEDSimpl::Model::isEdgeLegal(int edge, const std::function<bool(Model&, int)>& predicate) {
 	return predicate(*this, edge);
 }
 
-std::vector<int> HED::Model::makeFlip(int edgeId) {
+std::vector<int> HEDSimpl::Model::makeFlip(int edgeId) {
 	HEDEdge edge = mEdges[edgeId];
 	int tri0 = triangleOfHalfedge(edge.he0);
 	int tri1 = triangleOfHalfedge(edge.he1);
@@ -213,7 +213,7 @@ std::vector<int> HED::Model::makeFlip(int edgeId) {
 	return {newVtxOfHed0, newVtxOfHed1};
 }
 
-bool HED::Model::isEdgeNearTwoFaces(int edgeId) {
+bool HEDSimpl::Model::isEdgeNearTwoFaces(int edgeId) {
 	HEDEdge edge = mEdges[edgeId];
 	HEDHalfedge h0 = mHalfedges[edge.he0];
 	HEDHalfedge h1 = mHalfedges[edge.he1];
@@ -221,7 +221,7 @@ bool HED::Model::isEdgeNearTwoFaces(int edgeId) {
 	return h0.tri != -1 && h1.tri != -1;
 }
 
-int HED::Model::findEdgeThatContainsPoint(const QPointF& pt) {
+int HEDSimpl::Model::findEdgeThatContainsPoint(const QPointF& pt) {
 	for (int i = 0; i < mEdges.size(); i++) {
 		HEDEdge edge = mEdges[i];
 		QPointF pt0 = pointOfHalfedge(edge.he0);
@@ -233,7 +233,7 @@ int HED::Model::findEdgeThatContainsPoint(const QPointF& pt) {
 	return -1;
 }
 
-int HED::Model::findTriangleThatContainsPoint(const QPointF& pt) {
+int HEDSimpl::Model::findTriangleThatContainsPoint(const QPointF& pt) {
 	for (int i = 0; i < mTriangles.size(); i++) {
 		HEDTriangle tri = mTriangles[i];
 		QPointF p0 = pointOfHalfedge(tri.he0);
@@ -246,7 +246,7 @@ int HED::Model::findTriangleThatContainsPoint(const QPointF& pt) {
 	return -1;
 }
 
-std::vector<int> HED::Model::splitEdge(int edgeId, const QPointF& pt) {
+std::vector<int> HEDSimpl::Model::splitEdge(int edgeId, const QPointF& pt) {
 	int vtx = newVertex(pt);
 	HEDEdge edge = mEdges[edgeId];
 	
@@ -283,7 +283,7 @@ std::vector<int> HED::Model::splitEdge(int edgeId, const QPointF& pt) {
 	return {vtx, vtxNextNextHed1, vtxNextNextHed2};
 }
 
-std::vector<int> HED::Model::splitTriangle(int tri, QPointF pt) {
+std::vector<int> HEDSimpl::Model::splitTriangle(int tri, QPointF pt) {
 	std::vector<int> verticesToCheck = verticesOfTriangles(tri);
 	
 	int newV = newVertex(pt);
@@ -312,7 +312,7 @@ std::vector<int> HED::Model::splitTriangle(int tri, QPointF pt) {
 	return verticesToCheck;
 }
 
-void HED::Model::setHalfedgesOfEdge(int edgeId, int he0, int he1) {
+void HEDSimpl::Model::setHalfedgesOfEdge(int edgeId, int he0, int he1) {
 	mEdges[edgeId].he0 = he0;
 	mEdges[edgeId].he1 = he1;
 	
@@ -320,7 +320,7 @@ void HED::Model::setHalfedgesOfEdge(int edgeId, int he0, int he1) {
 	mHalfedges[he1].edge = edgeId;
 }
 
-HED::Model::HEDEdge HED::Model::getEdge(int i) {
+HEDSimpl::Model::HEDEdge HEDSimpl::Model::getEdge(int i) {
 	return mEdges[i];
 }
 

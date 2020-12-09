@@ -5,7 +5,7 @@
 #include <QtCore/QPointF>
 #include <functional>
 
-namespace HED {
+namespace HEDSimpl {
 	class Model {
 		
 		class HEDVertex {
@@ -112,7 +112,7 @@ namespace HED {
 		
 		void setHalfedgesOfEdge(int edgeId, int he0, int he1);
 		
-		HED::Model::HEDEdge getEdge(int i);
+		HEDSimpl::Model::HEDEdge getEdge(int i);
 	};
 }
 
