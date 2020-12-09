@@ -8,7 +8,7 @@ void HED::EulerOp::mvfs(HED::Model& model, double x, double y) {
 	int he = model.newHalfedge(vertex);
 	int loop = model.newLoop(face);
 	
-	model.mFaces[face].loopOut = loop;
+	model.mFaces[face].loopIn = loop;
 	model.mLoops[loop].he = he;
 	model.mHalfedges[he].next = he;
 	model.mHalfedges[he].loop = loop;
@@ -100,4 +100,13 @@ void HED::EulerOp::mev(HED::Model& model, int originVtx, double x, double y) {
 	
 	model.setLoopOfHe(newHe0, loop);
 	model.setLoopOfHe(newHe1, loop);
+}
+
+void HED::EulerOp::mef(HED::Model& model, int vtx0, int vtx1) {
+	int newHe0 = model.newHalfedge(vtx0);
+	int newHe1 = model.newHalfedge(vtx1);
+	
+	model.newEdge(newHe0, newHe1);
+	
+	
 }
