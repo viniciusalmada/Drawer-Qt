@@ -39,6 +39,8 @@ add_executable(DrawerQtPainter
         math/matrix.cpp math/matrix.h
         math/smatrix.cpp math/smatrix.h
         mesh/delaunaymodel.cpp mesh/delaunaymodel.h
-        topo/hedsimplified.h topo/hedsimplified.cpp)
+        topo/hedsimplified.h topo/hedsimplified.cpp
+        topo/hed.h topo/hed.cpp
+        topo/eulerop.h topo/eulerop.cpp)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
