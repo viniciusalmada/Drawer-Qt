@@ -43,6 +43,8 @@ namespace GeomUtils {
 	std::array<QPointF, 3> triangleBox(const std::vector<QPointF>& pts);
 	
 	bool polygonContains(const std::vector<QPointF>& pts, QPointF pt);
+	
+	double pseudoAngle(double x1, double y1, double x2, double y2);
 }
 
 #endif

@@ -154,6 +154,42 @@ bool GeomUtils::checkLinesCrossing(QPointF a, QPointF b, QPointF c, QPointF d) {
 	return abc != abd && cda != cdb;
 }
 
+double GeomUtils::pseudoAngle(double x1, double y1, double x2, double y2) {
+	const double x = x2 - x1;
+	const double y = y2 - y1;
+	const double ax = std::abs(x);
+	const double ay = std::abs(y);
+	if (x >= 0.0) {
+		if (y >= 0.0) {
+			if (ax >= ay) {
+				return 0.0 + ay / ax;
+			} else {
+				return 2.0 - ax / ay;
+			}
+		} else {
+			if (ay >= ax) {
+				return 6.0 + ax / ay;
+			} else {
+				return 8.0 - ay / ax;
+			}
+		}
+	} else {
+		if (y >= 0.0) {
+			if (ay >= ay) {
+				return 2.0 + ax / ay;
+			} else {
+				return 4.0 - ay / ax;
+			}
+		} else {
+			if (ax >= ay) {
+				return 4.0 + ay / ax;
+			} else {
+				return 6.0 - ax / y;
+			}
+		}
+	}
+}
+
 bool GeomUtils::Circle::contains(const QPointF& pt) const {
 	return PointUtils::dist(center, pt) <= radius;
 }
