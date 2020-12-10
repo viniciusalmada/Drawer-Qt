@@ -186,7 +186,7 @@ std::pair<double, double> HED::Model::getPtFromVtx(int vtx) {
 	return {v.x, v.y};
 }
 
-std::vector<std::pair<int, double>> HED::Model::getEdgesAngles(const std::set<int>& edges, int vtx) {
+std::vector<std::pair<int, double>> HED::Model::getEdgesAngles(const std::set<int>& edges, int vtx, double normBase) {
 	std::vector<std::pair<int, double>> angles{};
 	for (const auto& ed : edges) {
 		HEDEdge edge = mEdges[ed];
@@ -199,6 +199,18 @@ std::vector<std::pair<int, double>> HED::Model::getEdgesAngles(const std::set<in
 		double angle = GeomUtils::pseudoAngle(vtxOrigin.x, vtxOrigin.y, vtxOther.x, vtxOther.y);
 		angles.emplace_back(ed, angle);
 	}
+	
+	std::sort(angles.begin(), angles.end(), [](std::pair<int, double> l, std::pair<int, double> r) {
+		return l.second < r.second;
+	});
+	
+	for (auto& edgesAngle : angles) {
+		double angleNorm = edgesAngle.second - normBase;
+		if (angleNorm < 0.0)
+			angleNorm = 8.0 + angleNorm;
+		edgesAngle.second = angleNorm;
+	}
+	
 	return angles;
 }
 
@@ -224,4 +236,25 @@ int HED::Model::getHeFromEdgeFromVtx(int edge, int vtx) {
 		return h0;
 	else
 		return h1;
+}
+
+std::pair<int, int> HED::Model::getPrevAndNext(int vtx, double x, double y) {
+	double origX = getPtFromVtx(vtx).first;
+	double origY = getPtFromVtx(vtx).second;
+	double angleNewEdge = GeomUtils::pseudoAngle(origX, origY, x, y);
+	
+	std::set<int> nearEdges = getNearEdgesFromVtx(vtx);
+	
+	std::vector<std::pair<int, double>> edgesAngles = getEdgesAngles(nearEdges, vtx, angleNewEdge);
+	
+	
+	std::pair<int, double> prevEdge = *std::min_element(edgesAngles.begin(), edgesAngles.end(),
+	                                                    [](std::pair<int, double> l, std::pair<int, double> r) {
+		                                                    return l.second < r.second;
+	                                                    });
+	std::pair<int, double> nextEdge = *std::max_element(edgesAngles.begin(), edgesAngles.end(),
+	                                                    [](std::pair<int, double> l, std::pair<int, double> r) {
+		                                                    return l.second < r.second;
+	                                                    });
+	return {prevEdge.first, nextEdge.first};
 }

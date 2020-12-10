@@ -11,6 +11,10 @@ namespace HED {
 		
 		static void mev(HED::Model& model, int originVtx, double x, double y);
 		
+		static void mev0(HED::Model& model, int originVtx, double x, double y);
+		
+		static void mev1(HED::Model& model, int originVtx, double x, double y);
+		
 		static void mef(HED::Model& model, int vtx0, int vtx1);
 	};
 }

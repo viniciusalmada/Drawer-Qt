@@ -137,11 +137,13 @@ namespace HED {
 		
 		std::pair<double, double> getPtFromVtx(int vtx);
 		
-		std::vector<std::pair<int, double>> getEdgesAngles(const std::set<int>& edges, int vtx);
+		std::vector<std::pair<int, double>> getEdgesAngles(const std::set<int>& edges, int vtx, double normBase);
 		
 		int getHeFromEdgeOppositeVtx(int edge, int vtx);
 		
 		int getHeFromEdgeFromVtx(int edge, int vtx);
+		
+		std::pair<int, int> getPrevAndNext(int vtx, double x, double y);
 	};
 }
 
