@@ -70,8 +70,8 @@ protected:
 	ActionType mCurrentAction = ActionType::SELECTION;
 	Qt::MouseButton mMouseButton = Qt::NoButton;
 	
-	double mPickTolFactor = 0.01;
-	int mMouseMoveTol = 2;
+	const double mPickTolFactor = 0.01;
+	const int mMouseMoveTol = 2;
 	
 	bool mShiftKeyPressed = false;
 	bool mControlKeyPressed = false;

@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Drawer</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -55,6 +55,7 @@
    <addaction name="actionSelect"/>
    <addaction name="separator"/>
    <addaction name="actionLine"/>
+   <addaction name="actionCurve"/>
    <addaction name="separator"/>
    <addaction name="actionFit"/>
    <addaction name="actionZoomIn"/>
@@ -68,20 +69,6 @@
    </property>
    <property name="text">
     <string>Select</string>
-   </property>
-  </action>
-  <action name="actionGrid">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Grid</string>
-   </property>
-   <property name="toolTip">
-    <string>Grid</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionLine">
@@ -140,6 +127,20 @@
    </property>
    <property name="shortcut">
     <string>Del</string>
+   </property>
+  </action>
+  <action name="actionCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Curve</string>
+   </property>
+   <property name="toolTip">
+    <string>Draw curve with 4 points</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
  </widget>

@@ -11,7 +11,7 @@ public:
 	
 	~Model();
 	
-	std::vector<Curve*> curves() { return mCurves; }
+	const std::vector<Curve*>& curves() { return mCurves; }
 	
 	RectUtils::RectF boundingBox();
 	

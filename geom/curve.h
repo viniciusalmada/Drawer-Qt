@@ -16,23 +16,21 @@ public:
 	
 	virtual ~Curve();
 	
-	virtual CurveType type() = 0;
-	
 	virtual void addPoint(QPointF p) = 0;
 	
-	virtual QPointF getPoint(double t) = 0;
+	virtual QPointF getPoint(double t) const = 0;
 	
-	virtual QVector<QPointF> getPoints() = 0;
+	virtual QVector<QPointF> getPoints() const = 0;
 	
-	virtual QVector<QLineF> getPointsToDraw() = 0;
+	virtual QVector<QLineF> getPointsToDraw() const = 0;
 	
-	virtual QVector<QLineF> getPointsToDraw(QPointF p) = 0;
+	virtual QVector<QLineF> getPointsToDraw(QPointF p) const = 0;
 	
 	virtual bool isComplete() = 0;
 	
-	virtual double closestPoint(QPointF& p) = 0;
+	virtual double closestPoint(QPointF& p) const = 0;
 	
-	virtual RectUtils::RectF boundingBox() = 0;
+	virtual RectUtils::RectF boundingBox() const = 0;
 	
 	virtual QPointF getPtStart() = 0;
 	

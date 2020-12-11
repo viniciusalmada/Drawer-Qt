@@ -20,7 +20,7 @@ void CubicBezier::addPoint(QPointF p) {
 	mNumPts++;
 }
 
-QPointF CubicBezier::getPoint(double t) {
+QPointF CubicBezier::getPoint(double t) const {
 	if (t <= 0.0)
 		return mPt0;
 	else if (t >= 1.0)
@@ -30,7 +30,7 @@ QPointF CubicBezier::getPoint(double t) {
 	}
 }
 
-QVector<QPointF> CubicBezier::getPoints() {
+QVector<QPointF> CubicBezier::getPoints() const {
 	if (mNumPts == 1)
 		return QVector<QPointF>{mPt0};
 	if (mNumPts == 2)
@@ -41,36 +41,39 @@ QVector<QPointF> CubicBezier::getPoints() {
 	return QVector<QPointF>{mPt0, mPt1, mPt1c, mPt0c};
 }
 
-QVector<QLineF> CubicBezier::getPointsToDraw() {
+QVector<QLineF> CubicBezier::getPointsToDraw() const {
 	return calculateMultipleLines(mPt0, mPt1, mPt0c, mPt1c);
 }
 
-QVector<QLineF> CubicBezier::getPointsToDraw(QPointF p) {
+QVector<QLineF> CubicBezier::getPointsToDraw(QPointF p) const {
 	if (mNumPts == 1) {
 		return {QLineF{mPt0, p}};
 	} else if (mNumPts == 2) {
 		return calculateMultipleLines(mPt0, mPt1, p, p);
 	} else if (mNumPts == 3) {
-		return calculateMultipleLines(mPt0, mPt1, mPt1c, p);
+		return calculateMultipleLines(mPt0, mPt1, p, mPt1c);
 	}
 	return getPointsToDraw();
 }
 
-double CubicBezier::closestPoint(QPointF& p) {
+double CubicBezier::closestPoint(QPointF& p) const {
 	QVector<QPointF> pts = calculateMultiplePts(mPt0, mPt1, mPt0c, mPt1c);
 	double dist = DBL_MAX;
+	QPointF tempPt = p;
 	for (const QPointF& pt : pts) {
 		double d = PointUtils::dist(pt, p);
 		if (d < dist) {
 			dist = d;
-			p = pt;
+			tempPt = pt;
 		}
 	}
+	
+	p = tempPt;
 	
 	return dist;
 }
 
-RectUtils::RectF CubicBezier::boundingBox() {
+RectUtils::RectF CubicBezier::boundingBox() const {
 	QVector<QPointF> pts = calculateMultiplePts(mPt0, mPt1, mPt0c, mPt1c);
 	auto compX = [](const QPointF& l, const QPointF& r) { return l.x() < r.x(); };
 	auto compY = [](const QPointF& l, const QPointF& r) { return l.y() < r.y(); };
@@ -83,11 +86,11 @@ RectUtils::RectF CubicBezier::boundingBox() {
 
 QPointF CubicBezier::calculatePt(double t, QPointF p0, QPointF p1, QPointF p0c, QPointF p1c) {
 	double b0 = (1.0 - t) * (1.0 - t) * (1.0 - t);
+	double b0c = 3.0 * (1.0 - t) * (1.0 - t) * t;
+	double b1c = 3 * (1.0 - t) * t * t;
 	double b1 = t * t * t;
-	double b0c = 3.0 * t * ((1.0 - t) * (1.0 - t));
-	double b1c = 3 * t * t * (1.0 - t);
 	
-	return p0 * b0 + p1 * b1 + p0c * b0c + p1c * b1c;
+	return p0 * b0 + p0c * b0c + p1c * b1c + p1 * b1;
 }
 
 QVector<QLineF>

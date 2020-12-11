@@ -18,7 +18,7 @@ void Line::addPoint(QPointF p) {
 	mNumPts++;
 }
 
-QPointF Line::getPoint(double t) {
+QPointF Line::getPoint(double t) const {
 	if (t <= 0.0)
 		return mPt0;
 	else if (t >= 1.0)
@@ -27,26 +27,26 @@ QPointF Line::getPoint(double t) {
 		return mPt0 + (mPt1 - mPt0) * t;
 }
 
-QVector<QPointF> Line::getPoints() {
+QVector<QPointF> Line::getPoints() const {
 	if (mNumPts == 1)
 		return QVector<QPointF>{mPt0};
 	
 	return QVector<QPointF>{mPt0, mPt1};
 }
 
-QVector<QLineF> Line::getPointsToDraw() {
+QVector<QLineF> Line::getPointsToDraw() const {
 	QVector<QPointF> pts = getPoints();
 	return {QLineF{pts[0], pts[1]}};
 }
 
-QVector<QLineF> Line::getPointsToDraw(QPointF p) {
+QVector<QLineF> Line::getPointsToDraw(QPointF p) const {
 	if (mNumPts == 1)
 		return {QLineF{mPt0, p}};
 	
 	return getPointsToDraw();
 }
 
-double Line::closestPoint(QPointF& p) {
+double Line::closestPoint(QPointF& p) const {
 	double dot = QPointF::dotProduct(mPt1 - mPt0, p - mPt0);
 	double t = dot / pow(PointUtils::norm(mPt1 - mPt0), 2);
 	QPointF closest = getPoint(t);
@@ -59,7 +59,7 @@ double Line::closestPoint(QPointF& p) {
 	return dist;
 }
 
-RectUtils::RectF Line::boundingBox() {
+RectUtils::RectF Line::boundingBox() const {
 	double xMin = (mPt0.x() < mPt1.x()) ? mPt0.x() : mPt1.x();
 	double xMax = (mPt0.x() > mPt1.x()) ? mPt0.x() : mPt1.x();
 	double yMin = (mPt0.y() < mPt1.y()) ? mPt0.y() : mPt1.y();

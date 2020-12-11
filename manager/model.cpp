@@ -1,4 +1,3 @@
-#include <geom/point.h>
 #include <QRectF>
 #include <geom/box.h>
 #include "manager/model.h"
@@ -19,7 +18,7 @@ RectUtils::RectF Model::boundingBox() {
 	
 	
 	RectUtils::RectF box = mCurves[0]->boundingBox();
-	for (Curve* c : mCurves) {
+	for (const Curve* c : mCurves) {
 		box.update(c->boundingBox());
 	}
 	return box;
@@ -30,24 +29,24 @@ void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 		return;
 	
 	QPointF pC{};
-	Curve* target = nullptr;
+	int target = -1;
 	double dist = tol;
-	for (Curve* curve : mCurves) {
+	for (int i = 0; i < mCurves.size(); i++) {
 		pC = pt;
-		double d = curve->closestPoint(pC);
+		double d = mCurves[i]->closestPoint(pC);
 		if (d < dist) {
 			dist = d;
-			target = curve;
+			target = i;
 		}
 	}
 	
-	if (target != nullptr)
-		target->toggleSelection();
+	if (target != -1)
+		mCurves[target]->toggleSelection();
 	
 	if (!shiftKey) {
-		for (Curve* curve : mCurves) {
-			if (curve != target)
-				curve->unselect();
+		for (int i = 0; i < mCurves.size(); i++) {
+			if (i != target)
+				mCurves[target]->unselect();
 		}
 	}
 }
@@ -94,18 +93,18 @@ bool Model::snapToCurve(QPointF& pt, double tol) {
 	QPointF pClosest{};
 	double distMin = tol;
 	double dist;
-	Curve* targetCurve = nullptr;
-	for (Curve* curve: mCurves) {
+	int targetCurve = -1;
+	for (int i = 0; i < mCurves.size(); i++) {
 		pCurr = pt;
-		dist = curve->closestPoint(pCurr);
+		dist = mCurves[i]->closestPoint(pCurr);
 		if (dist < distMin) {
 			pClosest = pCurr;
 			distMin = dist;
-			targetCurve = curve;
+			targetCurve = i;
 		}
 	}
 	
-	if (targetCurve == nullptr)
+	if (targetCurve == -1)
 		return false;
 	
 	pt = pClosest;

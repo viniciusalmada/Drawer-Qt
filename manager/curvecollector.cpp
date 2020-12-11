@@ -31,6 +31,8 @@ void CurveCollector::startCollection() {
 }
 
 void CurveCollector::finishCollection() {
+	mPrevPt = QPointF{};
+	mTempPt = QPointF{};
 	mCurve = nullptr;
 }
 
@@ -79,6 +81,8 @@ RectUtils::RectF CurveCollector::boundingBox() {
 
 void CurveCollector::reset() {
 	delete mCurve;
+	mPrevPt = QPointF{};
+	mTempPt = QPointF{};
 	mCurve = nullptr;
 }
 

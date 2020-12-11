@@ -252,8 +252,8 @@ void CanvasQWidget::delSelectedEntities() {
 }
 
 void CanvasQWidget::makeDisplayModel(QPainter& painter) {
-	std::vector<Curve*> curves = mModel->curves();
-	for (Curve* c : curves) {
+	const std::vector<Curve*>& curves = mModel->curves();
+	for (const Curve* c : curves) {
 		QVector<QLineF> lines = c->getPointsToDraw();
 		if (c->isSelected())
 			mPen.setBrush(mSelectionColor);
