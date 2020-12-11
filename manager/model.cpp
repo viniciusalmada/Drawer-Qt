@@ -97,6 +97,10 @@ void Model::delCurve(int curveId) {
 	mCurves.erase(mCurves.begin() + curveId);
 }
 
+void Model::delRegion(int id) {
+	mRegions.erase(mRegions.begin() + id);
+}
+
 void Model::delSelectedCurves() {
 	bool curveRemoved;
 	do {
@@ -109,6 +113,20 @@ void Model::delSelectedCurves() {
 			}
 		}
 	} while (curveRemoved);
+}
+
+void Model::delSelectedRegions() {
+	bool removed;
+	do {
+		removed = false;
+		for (int i = 0; i < mRegions.size(); ++i) {
+			if (mRegions[i].isSelected()) {
+				delRegion(i);
+				removed = true;
+				break;
+			}
+		}
+	} while (removed);
 }
 
 bool Model::snapToCurve(QPointF& pt, double tol) {
@@ -137,7 +155,7 @@ bool Model::snapToCurve(QPointF& pt, double tol) {
 }
 
 bool Model::isEmpty() {
-	return mCurves.empty();
+	return mCurves.empty() && mRegions.empty();
 }
 
 void Model::createRegion() {

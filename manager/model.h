@@ -26,7 +26,11 @@ public:
 	
 	void delCurve(int curveId);
 	
+	void delRegion(int id);
+	
 	void delSelectedCurves();
+	
+	void delSelectedRegions();
 	
 	bool snapToCurve(QPointF& pt, double tol);
 	
