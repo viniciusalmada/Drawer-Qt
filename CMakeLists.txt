@@ -32,6 +32,7 @@ add_executable(DrawerQtPainter
         geom/point.h
         geom/curve.h geom/curve.cpp
         geom/line.cpp geom/line.h
+        geom/cubicbezier.h geom/cubicbezier.cpp
         geom/box.h
         manager/grid.cpp manager/grid.h
         manager/curvecollector.cpp manager/curvecollector.h
