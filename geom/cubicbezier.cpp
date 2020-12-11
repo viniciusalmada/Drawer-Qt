@@ -38,7 +38,7 @@ QVector<QPointF> CubicBezier::getPoints() const {
 	if (mNumPts == 3)
 		return QVector<QPointF>{mPt0, mPt1, mPt1c};
 	
-	return QVector<QPointF>{mPt0, mPt1, mPt1c, mPt0c};
+	return QVector<QPointF>{mPt0, mPt0c, mPt1c, mPt1};
 }
 
 QVector<QLineF> CubicBezier::getPointsToDraw() const {
