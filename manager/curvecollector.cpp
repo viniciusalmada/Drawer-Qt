@@ -3,6 +3,7 @@
 #include "curvecollector.h"
 #include <QVector>
 #include <geom/point.h>
+#include <geom/cubicbezier.h>
 
 CurveCollector::CurveCollector() = default;
 
@@ -20,6 +21,9 @@ void CurveCollector::startCollection() {
 	switch (mCurveType) {
 		case CurveType::LINE:
 			mCurve = new Line();
+			break;
+		case CurveType::CUBIC_BEZIER:
+			mCurve = new CubicBezier();
 			break;
 		default:
 			break;
@@ -58,7 +62,7 @@ bool CurveCollector::addTempPoint(QPointF pt) {
 	return true;
 }
 
-QVector<QPointF> CurveCollector::getDrawPoints() {
+QVector<QLineF> CurveCollector::getDrawPoints() {
 	return mCurve->getPointsToDraw(mTempPt);
 }
 

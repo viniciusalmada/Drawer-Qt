@@ -34,15 +34,16 @@ QVector<QPointF> Line::getPoints() {
 	return QVector<QPointF>{mPt0, mPt1};
 }
 
-QVector<QPointF> Line::getPointsToDraw() {
-	return getPoints();
+QVector<QLineF> Line::getPointsToDraw() {
+	QVector<QPointF> pts = getPoints();
+	return {QLineF{pts[0], pts[1]}};
 }
 
-QVector<QPointF> Line::getPointsToDraw(QPointF p) {
-	if (mNumPts == 1) {
-		return {mPt0, p};
-	}
-	return getPoints();
+QVector<QLineF> Line::getPointsToDraw(QPointF p) {
+	if (mNumPts == 1)
+		return {QLineF{mPt0, p}};
+	
+	return getPointsToDraw();
 }
 
 double Line::closestPoint(QPointF& p) {

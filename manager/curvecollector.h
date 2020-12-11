@@ -34,7 +34,7 @@ public:
 	
 	bool addTempPoint(QPointF pt);
 	
-	QVector<QPointF> getDrawPoints();
+	QVector<QLineF> getDrawPoints();
 	
 	QVector<QPointF> getPoints();
 	

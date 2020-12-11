@@ -41,18 +41,17 @@ QVector<QPointF> CubicBezier::getPoints() {
 	return QVector<QPointF>{mPt0, mPt1, mPt1c, mPt0c};
 }
 
-QVector<QPointF> CubicBezier::getPointsToDraw() {
-	QVector<QPointF> pts = calculateMultiplePts(mPt0, mPt1, mPt0c, mPt1c);
-	return pts;
+QVector<QLineF> CubicBezier::getPointsToDraw() {
+	return calculateMultipleLines(mPt0, mPt1, mPt0c, mPt1c);
 }
 
-QVector<QPointF> CubicBezier::getPointsToDraw(QPointF p) {
+QVector<QLineF> CubicBezier::getPointsToDraw(QPointF p) {
 	if (mNumPts == 1) {
-		return {mPt0, p};
+		return {QLineF{mPt0, p}};
 	} else if (mNumPts == 2) {
-		return calculateMultiplePts(mPt0, mPt1, p, p);
+		return calculateMultipleLines(mPt0, mPt1, p, p);
 	} else if (mNumPts == 3) {
-		return calculateMultiplePts(mPt0, mPt1, mPt1c, p);
+		return calculateMultipleLines(mPt0, mPt1, mPt1c, p);
 	}
 	return getPointsToDraw();
 }
@@ -91,12 +90,26 @@ QPointF CubicBezier::calculatePt(double t, QPointF p0, QPointF p1, QPointF p0c, 
 	return p0 * b0 + p1 * b1 + p0c * b0c + p1c * b1c;
 }
 
+QVector<QLineF>
+CubicBezier::calculateMultipleLines(const QPointF& p0, const QPointF& p1, const QPointF& p0c, const QPointF& p1c) {
+	QVector<QLineF> lines{DISCRETE_PTS_TO_DRAW - 1};
+	for (int i = 0; i < DISCRETE_PTS_TO_DRAW - 1; i++) {
+		double t0 = (double) i / (double) DISCRETE_PTS_TO_DRAW;
+		double t1 = (double) (i + 1) / (double) DISCRETE_PTS_TO_DRAW;
+		QPointF pt0 = calculatePt(t0, p0, p1, p0c, p1c);
+		QPointF pt1 = calculatePt(t1, p0, p1, p0c, p1c);
+		lines[i] = QLineF{pt0, pt1};
+	}
+	return lines;
+}
+
 QVector<QPointF>
 CubicBezier::calculateMultiplePts(const QPointF& p0, const QPointF& p1, const QPointF& p0c, const QPointF& p1c) {
 	QVector<QPointF> pts{DISCRETE_PTS_TO_DRAW};
 	for (int i = 0; i < DISCRETE_PTS_TO_DRAW; i++) {
 		double t = (double) i / (double) DISCRETE_PTS_TO_DRAW;
-		pts[i] = calculatePt(t, p0, p1, p0c, p1c);
+		QPointF pt0 = calculatePt(t, p0, p1, p0c, p1c);
+		pts[i] = pt0;
 	}
 	return pts;
 }

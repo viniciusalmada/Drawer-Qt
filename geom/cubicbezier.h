@@ -16,9 +16,9 @@ public:
 	
 	QVector<QPointF> getPoints() override;
 	
-	QVector<QPointF> getPointsToDraw() override;
+	QVector<QLineF> getPointsToDraw() override;
 	
-	QVector<QPointF> getPointsToDraw(QPointF p) override;
+	QVector<QLineF> getPointsToDraw(QPointF p) override;
 	
 	double closestPoint(QPointF& p) override;
 	
@@ -39,6 +39,9 @@ private:
 	static const int DISCRETE_PTS_TO_DRAW;
 	
 	static QPointF calculatePt(double t, QPointF p0, QPointF p1, QPointF p0c, QPointF p1c);
+	
+	static QVector<QLineF>
+	calculateMultipleLines(const QPointF& p0, const QPointF& p1, const QPointF& p0c, const QPointF& p1c);
 	
 	static QVector<QPointF>
 	calculateMultiplePts(const QPointF& p0, const QPointF& p1, const QPointF& p0c, const QPointF& p1c);

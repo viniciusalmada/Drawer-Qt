@@ -4,6 +4,7 @@
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
 #include <geom/box.h>
+#include <QLineF>
 
 enum class CurveType {
 	LINE, QUAD_BEZIER, CUBIC_BEZIER
@@ -23,9 +24,9 @@ public:
 	
 	virtual QVector<QPointF> getPoints() = 0;
 	
-	virtual QVector<QPointF> getPointsToDraw() = 0;
+	virtual QVector<QLineF> getPointsToDraw() = 0;
 	
-	virtual QVector<QPointF> getPointsToDraw(QPointF p) = 0;
+	virtual QVector<QLineF> getPointsToDraw(QPointF p) = 0;
 	
 	virtual bool isComplete() = 0;
 	

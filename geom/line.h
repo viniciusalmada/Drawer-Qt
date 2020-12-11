@@ -18,9 +18,9 @@ public:
 	
 	QVector<QPointF> getPoints() override;
 	
-	QVector<QPointF> getPointsToDraw() override;
+	QVector<QLineF> getPointsToDraw() override;
 	
-	QVector<QPointF> getPointsToDraw(QPointF p) override;
+	QVector<QLineF> getPointsToDraw(QPointF p) override;
 	
 	double closestPoint(QPointF& p) override;
 	
