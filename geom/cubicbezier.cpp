@@ -95,8 +95,8 @@ QPointF CubicBezier::calculatePt(double t, QPointF p0, QPointF p1, QPointF p0c, 
 
 QVector<QLineF>
 CubicBezier::calculateMultipleLines(const QPointF& p0, const QPointF& p1, const QPointF& p0c, const QPointF& p1c) {
-	QVector<QLineF> lines{DISCRETE_PTS_TO_DRAW - 1};
-	for (int i = 0; i < DISCRETE_PTS_TO_DRAW - 1; i++) {
+	QVector<QLineF> lines{DISCRETE_PTS_TO_DRAW};
+	for (int i = 0; i < DISCRETE_PTS_TO_DRAW; i++) {
 		double t0 = (double) i / (double) DISCRETE_PTS_TO_DRAW;
 		double t1 = (double) (i + 1) / (double) DISCRETE_PTS_TO_DRAW;
 		QPointF pt0 = calculatePt(t0, p0, p1, p0c, p1c);
