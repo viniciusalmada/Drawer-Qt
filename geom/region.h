@@ -13,6 +13,10 @@ public:
 	QPainterPath pathToFill() const;
 	
 	bool isSelected() const { return selected; }
+	
+	void toggleSelection() { selected = !selected; }
+	
+	void unselect() { selected = false; }
 
 private:
 	std::vector<std::pair<Curve*, bool>> mCurves;

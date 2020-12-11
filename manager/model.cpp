@@ -49,6 +49,16 @@ void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 				mCurves[i]->unselect();
 		}
 	}
+	
+	for (auto& reg: mRegions) {
+		QPainterPath path = reg.pathToFill();
+		if (path.contains(pt)) {
+			reg.toggleSelection();
+		} else if (!shiftKey) {
+			reg.unselect();
+		}
+	}
+	
 }
 
 void Model::selectFence(const RectUtils::RectF& box, bool shiftKey) {
@@ -65,6 +75,15 @@ void Model::selectFence(const RectUtils::RectF& box, bool shiftKey) {
 		else {
 			if (!shiftKey)
 				curve->unselect();
+		}
+	}
+	
+	for (auto& reg: mRegions) {
+		QPainterPath path = reg.pathToFill();
+		if (box.contains(path)) {
+			reg.toggleSelection();
+		} else if (!shiftKey) {
+			reg.unselect();
 		}
 	}
 }
