@@ -16,6 +16,8 @@ public:
 	
 	virtual ~Curve();
 	
+	virtual CurveType type() = 0;
+	
 	virtual void addPoint(QPointF p) = 0;
 	
 	virtual QPointF getPoint(double t) const = 0;

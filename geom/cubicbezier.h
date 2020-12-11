@@ -8,6 +8,8 @@ class CubicBezier : public Curve {
 public:
 	CubicBezier();
 	
+	CurveType type() override { return CurveType::CUBIC_BEZIER; }
+	
 	void addPoint(QPointF p) override;
 	
 	QPointF getPoint(double t) const override;

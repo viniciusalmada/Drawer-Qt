@@ -10,6 +10,8 @@ public:
 	
 	Line(QPointF p0, QPointF p1);
 	
+	CurveType type() override { return CurveType::LINE; }
+	
 	void addPoint(QPointF p) override;
 	
 	QPointF getPoint(double t) const override;
