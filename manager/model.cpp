@@ -79,11 +79,17 @@ void Model::delCurve(int curveId) {
 }
 
 void Model::delSelectedCurves() {
-	for (int i = 0; i < mCurves.size(); ++i) {
-		if (mCurves[i]->isSelected()) {
-			delCurve(i);
+	bool curveRemoved;
+	do {
+		curveRemoved = false;
+		for (int i = 0; i < mCurves.size(); ++i) {
+			if (mCurves[i]->isSelected()) {
+				delCurve(i);
+				curveRemoved = true;
+				break;
+			}
 		}
-	}
+	} while (curveRemoved);
 }
 
 bool Model::snapToCurve(QPointF& pt, double tol) {
