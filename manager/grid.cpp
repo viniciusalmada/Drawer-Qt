@@ -3,13 +3,6 @@
 
 Grid::Grid() = default;
 
-void Grid::reset() {
-	mIsSnapOn = false;
-	mGridX = 1.0;
-	mGridY = 1.0;
-	
-}
-
 void Grid::setSnapData(bool isSnapOn, double dx, double dy) {
 	mGridX = dx;
 	mGridY = dy;

@@ -10,8 +10,6 @@ class Grid {
 public:
 	Grid();
 	
-	void reset();
-	
 	void setSnapData(bool isSnapOn, double dx, double dy);
 	
 	bool getSnapInfo() const;

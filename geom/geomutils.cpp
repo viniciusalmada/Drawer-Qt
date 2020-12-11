@@ -55,7 +55,7 @@ QPointF GeomUtils::perpendToLine(QPointF a, QPointF b) {
 bool GeomUtils::isConvexPolygon(std::vector<QPointF> pts) {
 	if (pts.size() < 3) return false;
 	
-	for (int i = 0; i < pts.size(); ++i) {
+	for (int i = 0; i < (int) pts.size(); ++i) {
 		QPointF p0;
 		QPointF p1;
 		QPointF p2;

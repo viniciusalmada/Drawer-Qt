@@ -7,10 +7,6 @@
 
 namespace PointUtils {
 	
-	static double dot(const QPointF& p1, const QPointF& p2) {
-		return p1.x() * p2.x() + p1.y() * p2.y();
-	}
-	
 	static double dist(QPointF p1, QPointF p2) {
 		return sqrt((p1.x() - p2.x()) * (p1.x() - p2.x()) +
 		            (p1.y() - p2.y()) * (p1.y() - p2.y()));
