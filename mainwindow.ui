@@ -57,6 +57,8 @@
    <addaction name="actionLine"/>
    <addaction name="actionCurve"/>
    <addaction name="separator"/>
+   <addaction name="actionRegion"/>
+   <addaction name="separator"/>
    <addaction name="actionFit"/>
    <addaction name="actionZoomIn"/>
    <addaction name="actionZoomOut"/>
@@ -141,6 +143,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionRegion">
+   <property name="text">
+    <string>Region</string>
    </property>
   </action>
  </widget>

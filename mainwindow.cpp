@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionLine, &QAction::triggered, this, &MainWindow::onActionLineCallback);
 	connect(ui->actionCurve, &QAction::triggered, this, &MainWindow::onActionCurveCallback);
 	connect(ui->actionFit, &QAction::triggered, this, &MainWindow::onActionFitCallback);
+	connect(ui->actionRegion, &QAction::triggered, this, &MainWindow::onActionRegionCallback);
 	connect(ui->actionZoomIn, &QAction::triggered, this, &MainWindow::onActionZoomInCallback);
 	connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::onActionZoomOutCallback);
 	connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::onActionDeleteCallback);
@@ -146,6 +147,10 @@ void MainWindow::onActionCurveCallback() {
 	ui->actionCurve->setChecked(true);
 	ui->widget->setMouseAction(ActionType::COLLECTION);
 	ui->widget->setCurveType(CurveType::CUBIC_BEZIER);
+}
+
+void MainWindow::onActionRegionCallback() {
+	ui->widget->createRegion();
 }
 
 void MainWindow::onActionFitCallback() {
