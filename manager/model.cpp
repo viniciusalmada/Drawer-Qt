@@ -46,7 +46,7 @@ void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 	if (!shiftKey) {
 		for (int i = 0; i < mCurves.size(); i++) {
 			if (i != target)
-				mCurves[target]->unselect();
+				mCurves[i]->unselect();
 		}
 	}
 }
