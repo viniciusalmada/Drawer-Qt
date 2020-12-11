@@ -16,7 +16,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 include_directories(include)
 
@@ -41,6 +41,6 @@ add_executable(DrawerQtPainter
         math/matrix.cpp math/matrix.h
         math/smatrix.cpp math/smatrix.h
         mesh/delaunaymodel.cpp mesh/delaunaymodel.h
-        topo/hedsimplified.h topo/hedsimplified.cpp)
+        topo/hedsimplified.h topo/hedsimplified.cpp geom/region.cpp geom/region.h)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
