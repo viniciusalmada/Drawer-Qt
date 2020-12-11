@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <QtCore/QRectF>
+#include <geom/region.h>
 #include "geom/curve.h"
 
 class Model {
@@ -12,6 +13,8 @@ public:
 	~Model();
 	
 	const std::vector<Curve*>& curves() { return mCurves; }
+	
+	const std::vector<Region>& regions() { return mRegions; }
 	
 	RectUtils::RectF boundingBox();
 	
@@ -28,9 +31,12 @@ public:
 	bool snapToCurve(QPointF& pt, double tol);
 	
 	bool isEmpty();
+	
+	void createRegion();
 
 protected:
 	std::vector<Curve*> mCurves;
+	std::vector<Region> mRegions;
 	
 	void delAllCurves();
 };

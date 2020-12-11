@@ -268,6 +268,18 @@ void CanvasQWidget::makeDisplayModel(QPainter& painter) {
 		painter.drawPoint(lines.first().p1());
 		painter.drawPoint(lines.last().p2());
 	}
+	
+	const std::vector<Region>& regions = mModel->regions();
+	for (const Region& reg : regions) {
+		if (reg.isSelected())
+			mPen.setBrush(mSelectionColor);
+		else
+			mPen.setBrush(mRegionColor);
+		
+		painter.setPen(mPen);
+		QPainterPath path = reg.pathToFill();
+		painter.fillPath(path, mPen.brush());
+	}
 }
 
 void CanvasQWidget::drawSelectionFence(QPainter& painter) {
@@ -382,4 +394,11 @@ void CanvasQWidget::showCoordinates(const QPointF& pt) {
 	QString str;
 	str.sprintf("(%1.3f,\t%1.3f)", pt.x(), pt.y());
 	mLabelCoordinates->setText(str);
+}
+
+void CanvasQWidget::createRegion() {
+	if (mModel != nullptr && !mModel->isEmpty()) {
+		mModel->createRegion();
+		update();
+	}
 }

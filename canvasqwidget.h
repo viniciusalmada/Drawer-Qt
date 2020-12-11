@@ -41,6 +41,8 @@ public:
 	
 	void fitWorldToViewport();
 	
+	void createRegion();
+	
 	void zoomIn();
 	
 	void zoomOut();
@@ -64,6 +66,7 @@ protected:
 	QBrush mVertexColor = Qt::darkCyan;
 	QBrush mSelectionColor = Qt::red;
 	QBrush mGridColor = Qt::black;
+	QBrush mRegionColor{QColor{255, 191, 191}};
 	
 	bool mViewGrid = false;
 	

@@ -121,4 +121,51 @@ bool Model::isEmpty() {
 	return mCurves.empty();
 }
 
+void Model::createRegion() {
+	std::vector<Curve*> curvesSelected;
+	std::copy_if(mCurves.begin(), mCurves.end(), std::back_inserter(curvesSelected), [](Curve* c) {
+		return c->isSelected();
+	});
+	if (curvesSelected.empty() || curvesSelected.size() == 1)
+		return;
+	
+	std::vector<std::pair<Curve*, bool>> curvesSelectedSorted;
+	curvesSelectedSorted.reserve(curvesSelected.size());
+	
+	Curve* pivot = curvesSelected[0];
+	curvesSelectedSorted.emplace_back(pivot, true);
+	QPointF refPoint = pivot->getPtEnd();
+	while (curvesSelectedSorted.size() < curvesSelected.size()) {
+		QPointF refCopy = refPoint;
+		for (Curve* inner : curvesSelected) {
+			
+			bool toContinue = false;
+			for (auto pair : curvesSelectedSorted) {
+				if (pair.first == inner) {
+					toContinue = true;
+					break;
+				}
+			}
+			
+			if (toContinue) continue;
+			
+			QPointF innerStart = inner->getPtStart();
+			QPointF innerEnd = inner->getPtEnd();
+			if (innerStart == refPoint) {
+				curvesSelectedSorted.emplace_back(inner, true);
+				refPoint = innerEnd;
+				break;
+			} else if (innerEnd == refPoint) {
+				curvesSelectedSorted.emplace_back(inner, false);
+				refPoint = innerStart;
+				break;
+			}
+		}
+		if (refCopy == refPoint)
+			return;
+	}
+	
+	mRegions.emplace_back(curvesSelectedSorted);
+}
+
 
