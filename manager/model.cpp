@@ -51,11 +51,11 @@ void Model::selectPick(QPointF pt, double tol, bool shiftKey) {
 	}
 }
 
-void Model::selectFence(RectUtils::RectF box, bool shiftKey) {
+void Model::selectFence(const RectUtils::RectF& box, bool shiftKey) {
 	if (mCurves.empty()) return;
 	
 	bool inFence;
-	RectUtils::RectF tempBox{box};
+	RectUtils::RectF tempBox;
 	for (Curve* curve : mCurves) {
 		tempBox = curve->boundingBox();
 		inFence = box.contains(tempBox);
