@@ -90,7 +90,50 @@ void HED::EulerOp::mef(HED::Model& model, int vtx0, int vtx1) {
 	model.newEdge(newHe0, newHe1);
 	
 	int face = model.newFace();
-	int loop = model.newLoop(face);
+	int newLoop = model.newLoop(face);
 	
+	double x0 = model.getPtFromVtx(vtx0).first;
+	double y0 = model.getPtFromVtx(vtx0).second;
+	double x1 = model.getPtFromVtx(vtx1).first;
+	double y1 = model.getPtFromVtx(vtx1).second;
 	
+	std::pair<int, int> prevAndNextEdge0 = model.getPrevAndNext(vtx0, x0, y0);
+	std::pair<int, int> prevAndNextEdge1 = model.getPrevAndNext(vtx1, x1, y1);
+	
+	if (prevAndNextEdge0.second == -1 && prevAndNextEdge1.second == -1) {
+		int heFromVtx0 = model.getHeFromEdgeFromVtx(prevAndNextEdge0.first, vtx0);
+		int heFromVtx1 = model.getHeFromEdgeFromVtx(prevAndNextEdge1.first, vtx1);
+		
+		model.setNextOfHe(newHe0, heFromVtx1);
+		model.setNextOfHe(newHe1, heFromVtx0);
+		
+		int heMateFromVtx0 = model.mateOfHalfedge(heFromVtx0);
+		int heMateFromVtx1 = model.mateOfHalfedge(heFromVtx1);
+		
+		model.setNextOfHe(heMateFromVtx0, newHe0);
+		model.setNextOfHe(heMateFromVtx1, newHe1);
+		
+		// verify newLoop from new0
+		std::pair<double, double> pt0 = model.getPtFromHe(newHe0);
+		int next = model.getNextFromHe(newHe0);
+		std::pair<double, double> pt1 = model.getPtFromHe(next);
+		next = model.getNextFromHe(next);
+		std::pair<double, double> pt2 = model.getPtFromHe(next);
+		if (GeomUtils::orientation({pt0.first, pt0.second}, {pt1.first, pt1.second}, {pt2.first, pt2.second}) ==
+		    GeomUtils::Orientation::LEFT) {
+			model.setLoopOfHalfedges(newHe0, newLoop);
+			
+			int oldLoop =
+					model.getLoopFromHe(heFromVtx1) != newLoop ?
+					model.getLoopFromHe(heFromVtx1) : model.getLoopFromHe(heFromVtx0);
+			model.setLoopOfHalfedges(newHe1, oldLoop);
+		} else {
+			model.setLoopOfHe(newHe1, newLoop);
+			
+			int oldLoop =
+					model.getLoopFromHe(heFromVtx1) != newLoop ?
+					model.getLoopFromHe(heFromVtx1) : model.getLoopFromHe(heFromVtx0);
+			model.setLoopOfHalfedges(newHe0, oldLoop);
+		}
+	}
 }

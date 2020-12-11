@@ -117,6 +117,8 @@ namespace HED {
 		
 		void setLoopOfHe(int he, int loop);
 		
+		void setLoopOfHalfedges(int heFirst, int loop);
+		
 		int getHe0FromEdge(int edge);
 		
 		int getHe1FromEdge(int edge);
@@ -136,6 +138,8 @@ namespace HED {
 		int getHeFromVtx(int vtx);
 		
 		std::pair<double, double> getPtFromVtx(int vtx);
+		
+		std::pair<double, double> getPtFromHe(int he);
 		
 		std::vector<std::pair<int, double>> getEdgesAngles(const std::set<int>& edges, int vtx, double normBase);
 		

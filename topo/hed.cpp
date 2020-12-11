@@ -115,11 +115,17 @@ int HED::Model::getLoopFromHe(int he) {
 }
 
 void HED::Model::setLoopOfHe(const int he, const int loop) {
-	int curr = he;
+	mLoops[loop].he = he;
+	mHalfedges[he].loop = loop;
+}
+
+void HED::Model::setLoopOfHalfedges(const int heFirst, const int loop) {
+	mLoops[loop].he = heFirst;
+	int curr = heFirst;
 	do {
 		mHalfedges[curr].loop = loop;
-		curr = getNextFromHe(he);
-	} while (curr != he);
+		curr = getNextFromHe(heFirst);
+	} while (curr != heFirst);
 }
 
 int HED::Model::getHe0FromEdge(int edge) {
@@ -190,6 +196,13 @@ std::pair<double, double> HED::Model::getPtFromVtx(int vtx) {
 	return {v.x, v.y};
 }
 
+std::pair<double, double> HED::Model::getPtFromHe(int he) {
+	if (mHalfedges.find(he) == mHalfedges.end())
+		return {NAN, NAN};
+	HEDHalfedge h = mHalfedges[he];
+	return getPtFromVtx(h.vtx);
+}
+
 std::vector<std::pair<int, double>> HED::Model::getEdgesAngles(const std::set<int>& edges, int vtx, double normBase) {
 	std::vector<std::pair<int, double>> angles{};
 	for (const auto& ed : edges) {
@@ -248,6 +261,10 @@ std::pair<int, int> HED::Model::getPrevAndNext(int vtx, double x, double y) {
 	double angleNewEdge = GeomUtils::pseudoAngle(origX, origY, x, y);
 	
 	std::set<int> nearEdges = getNearEdgesFromVtx(vtx);
+	if (nearEdges.empty())
+		return {-1, -1};
+	else if (nearEdges.size() == 1)
+		return {*nearEdges.begin(), -1};
 	
 	std::vector<std::pair<int, double>> edgesAngles = getEdgesAngles(nearEdges, vtx, angleNewEdge);
 	
