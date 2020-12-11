@@ -108,11 +108,16 @@ CubicBezier::calculateMultipleLines(const QPointF& p0, const QPointF& p1, const 
 
 QVector<QPointF>
 CubicBezier::calculateMultiplePts(const QPointF& p0, const QPointF& p1, const QPointF& p0c, const QPointF& p1c) {
-	QVector<QPointF> pts{DISCRETE_PTS_TO_DRAW};
-	for (int i = 0; i < DISCRETE_PTS_TO_DRAW; i++) {
-		double t = (double) i / (double) DISCRETE_PTS_TO_DRAW;
+	QPointF first = calculatePt(0.0, p0, p1, p0c, p1c);
+	QPointF last = calculatePt(1.0, p0, p1, p0c, p1c);
+	QVector<QPointF> pts;
+	pts.push_back(first);
+	double t = 0.0;
+	while (t < 1.0) {
+		t += (double) 1.0 / (double) DISCRETE_PTS_TO_DRAW;
 		QPointF pt0 = calculatePt(t, p0, p1, p0c, p1c);
-		pts[i] = pt0;
+		pts.push_back(pt0);
 	}
+	pts.push_back(last);
 	return pts;
 }
