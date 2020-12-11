@@ -2,6 +2,7 @@
 #define BOX_H
 
 #include <cmath>
+#include <QPainterPath>
 
 namespace RectUtils {
 	
@@ -45,6 +46,15 @@ namespace RectUtils {
 			       box.right <= right &&
 			       box.bot >= bot &&
 			       box.top <= top;
+		}
+		
+		bool contains(const QPainterPath& path) const {
+			QPainterPath boxPath{{left, top}};
+			boxPath.lineTo(right, top);
+			boxPath.lineTo(right, bot);
+			boxPath.lineTo(left, bot);
+			boxPath.closeSubpath();
+			return boxPath.contains(path);
 		}
 		
 		qreal getLeft() const {
