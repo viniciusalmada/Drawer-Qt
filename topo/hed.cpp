@@ -114,8 +114,12 @@ int HED::Model::getLoopFromHe(int he) {
 	return mHalfedges[he].loop;
 }
 
-void HED::Model::setLoopOfHe(int he, int loop) {
-	mHalfedges[he].loop = loop;
+void HED::Model::setLoopOfHe(const int he, const int loop) {
+	int curr = he;
+	do {
+		mHalfedges[curr].loop = loop;
+		curr = getNextFromHe(he);
+	} while (curr != he);
 }
 
 int HED::Model::getHe0FromEdge(int edge) {
