@@ -1,260 +1,155 @@
 #include "circlearc.h"
+#include "point.h"
 
-#include <math.h>
+#include <cmath>
+#include <cfloat>
 
-# define m_PI           3.14159265358979323846  /* pi */
+const int CircleArc::STEPS = 50;
 
 //-------------------------------------------------------------------------
-CircleArc::CircleArc()
-{
-	m_nPts = 0;
-	m_nSteps = 50;
-	m_radius = 0;
-}
+CircleArc::CircleArc() = default;
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
-CircleArc::CircleArc(double _x1, double _y1, double _x2, double _y2)
-{
-	m_x1 = _x1;
-	m_y1 = _y1;
-	m_x2 = _x2;
-	m_y2 = _y2;
-	m_nPts = 2;
-}
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
-void
-CircleArc::addPoint(double _x, double _y)
-{
-	if (m_nPts == 0)
-	{
-		m_x1 = _x;
-		m_y1 = _y;
-		m_nPts++;
-	}
-	else if (m_nPts == 1)
-	{
-		m_x2 = _x;
-		m_y2 = _y;
-		m_nPts++;
-	}
-	else if (m_nPts == 2)
-	{
-		m_x3 = _x;
-		m_y3 = _y;
-		m_nPts++;
-	}
-}
-//-------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-Point
-CircleArc::getPoint(double _t)
-{
-
-	Point center, pt;
-
-	center = Point(m_x1, m_y1);
-
-	pt = center + Point(m_radius*cos(m_relative_angle *_t + m_phase), m_radius*sin(m_relative_angle *_t + m_phase));
-
-	return pt;
-}
-//-------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-bool
-CircleArc::isPossible()
-{
-	if (m_nPts < 3)
-	{
-		return false;
-	}
-	return true;
-}
-//-------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-vector<Point>
-CircleArc::getPoints()
-{
-	if (m_nPts == 1)
-	{
-		vector<Point> tempPts(1);
-		tempPts[0] = Point(m_x1, m_y1);
-		return tempPts;
-	}
-	vector<Point> tempPts(3);
-	tempPts[0] = Point(m_x1, m_y1);
-	tempPts[1] = Point(m_x2, m_y2);
-	tempPts[2] = Point(m_x3, m_y3);
-
-	return tempPts;
-}
-//-------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-vector<Point>
-CircleArc::getPointsToDraw()
-{
-	vector<Point> tempPts;
-	Point center, begin, end, pts;
-	double x, y, dot, cross;
-
-	center = Point(m_x1, m_y1);
-	begin = Point(m_x2, m_y2);
-	end = Point(m_x3, m_y3);
-	dot = dotprod(normalize(begin - center), normalize(end - center));
-	cross = crossprod((begin - center), (end - center));
-	m_relative_angle = acos(dot);
-	if (cross <= 0)
-	{
-		m_relative_angle = acos(-dot);
-		m_relative_angle = m_PI + m_relative_angle;
-	}
-	for (int i = 0; i <= m_nSteps; i++)
-	{
-		double t = m_phase + i * (m_relative_angle) / m_nSteps;
-		x = m_radius*cos(t);
-		y = m_radius*sin(t);
-		pts = center + Point(x, y);
-		tempPts.push_back(pts);
-
-	}
-
-
-	return tempPts;
-}
-//-------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-vector<Point>
-CircleArc::getPointsToDraw(Point _pt)
-{
-	vector<Point> tempPts;
-	Point center, begin, pts;
-	double x, y, relative_angle, dot, cross;
-
-	center = Point(m_x1, m_y1);
-
-	if (m_nPts == 1)
-	{
-		tempPts.push_back(center);
-		tempPts.push_back(_pt);
-	}
-
-	else if (m_nPts == 2)
-	{
-		tempPts.clear();
-		begin = Point(m_x2, m_y2);
-		m_radius = euclidiandistance(center, begin);
-		//find phase angle
-		dot = dotprod(normalize(begin - center), Point(1, 0));
-		cross = crossprod(Point(1, 0), (begin - center));
-		m_phase = acos(dot);
-		if (cross <= 0)
-		{
-			m_phase = acos(-dot);
-			m_phase = m_PI + m_phase;
+void CircleArc::addPoint(QPointF pt) {
+	if (mNumPts == 0) {
+		mPtCenter = pt;
+	} else if (mNumPts == 1) {
+		mPtBegin = pt;
+		mRadius = PointUtils::dist(mPtCenter, pt);
+		double dot = QPointF::dotProduct(PointUtils::normalize(mPtBegin - mPtCenter), {1, 0});
+		double cross = PointUtils::crossProd({1, 0}, {mPtBegin - mPtCenter});
+		mPhase = acos(dot);
+		if (cross <= 0.0) {
+			mPhase = acos(-dot);
+			mPhase += M_PI;
 		}
-		//find relative angle
-		dot = dotprod(normalize(begin - center), normalize(_pt - center));
-		cross = crossprod((begin - center), (_pt - center));
-		relative_angle = acos(dot);
-		if (cross <= 0)
-		{
-			relative_angle = acos(-dot);
-			relative_angle = m_PI + (relative_angle);
-		}
-		for (int i = 0; i <= m_nSteps; i++)
-		{
-			double t = m_phase + i*(relative_angle) / m_nSteps;
-			x = m_radius*cos(t);
-			y = m_radius*sin(t);
-			pts = center + Point(x, y);
-			tempPts.push_back(pts);
-
-		}
-
-	}
-
-	return tempPts;
-}
-//-------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
-double
-CircleArc::closestPoint(double* _x, double* _y)
-{
-	Point center, begin, end,pt;
-	double dist, relative_angle_pt,dot,cross, dist_begin, dist_end;
-
-	pt = Point(*_x, *_y);
-	center = Point(m_x1, m_y1);
-	begin = Point(m_x2, m_y2);
-	end = Point(m_x3, m_y3);
-
-	dot = dotprod(normalize(begin - center), normalize(pt - center));
-	cross = crossprod((begin - center), (pt - center));
-	relative_angle_pt = acos(dot);
-	if (cross < 0)
-	{
-		relative_angle_pt = acos(-dot);
-		relative_angle_pt = m_PI + relative_angle_pt;
-	}
-
-	if ((relative_angle_pt >= 0) && (relative_angle_pt <= (m_relative_angle)) )
-	{
-		dist = euclidiandistance(pt, center);
-		dist = abs(m_radius - dist);
-		*_x = m_x1 + m_radius*cos(m_phase + relative_angle_pt);
-		*_y = m_y1 + m_radius*sin(m_phase + relative_angle_pt);
-	}
-	else
-	{
-		dist_begin = euclidiandistance(pt, begin);
-		dist_end = euclidiandistance(pt, end);
-		if (dist_begin <= dist_end)
-		{
-			dist = dist_begin;
-			*_x = m_x2;
-			*_y = m_y2;
-		}
-		else
-		{
-			dist = dist_end;
-			*_x = m_x3;
-			*_y = m_y3;
+	} else if (mNumPts == 2) {
+		mPtEnd = pt;
+		double dot = QPointF::dotProduct(PointUtils::normalize(mPtBegin - mPtCenter),
+		                                 PointUtils::normalize(pt - mPtCenter));
+		double cross = PointUtils::crossProd(mPtBegin - mPtCenter, pt - mPtCenter);
+		mRelativeAngle = acos(dot);
+		if (cross <= 0.0) {
+			mRelativeAngle = acos(-dot);
+			mRelativeAngle += M_PI;
 		}
 	}
+	mNumPts++;
+}
+//-------------------------------------------------------------------------
 
+//-------------------------------------------------------------------------
+QPointF CircleArc::getPoint(double t) const {
+	return calculatePt(t, mPtCenter, mRadius, mRelativeAngle, mPhase);
+}
+
+QPointF CircleArc::calculatePt(double t, QPointF center, double rad, double relAngle, double phase) {
+	double x = rad * cos(relAngle * t + phase);
+	double y = rad * sin(relAngle * t + phase);
+	return center + QPointF{x, y};
+}
+//-------------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------------
+QVector<QPointF> CircleArc::getPoints() const {
+	return {mPtCenter, mPtBegin, mPtEnd};
+}
+//-------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------
+QVector<QLineF> CircleArc::getPointsToDraw() const {
+	return calculateLines(mPtCenter, mPtBegin, mPtEnd, mRadius, mPhase);
+}
+
+QVector<QLineF> CircleArc::calculateLines(QPointF center, QPointF begin, QPointF end, double radius, double phase) {
+	QVector<QLineF> lines{};
+	double dot = QPointF::dotProduct(PointUtils::normalize(begin - center), PointUtils::normalize(end - center));
+	double cross = PointUtils::crossProd(begin - center, end - center);
+	double relAngle = acos(dot);
+	
+	if (cross <= 0.0) {
+		relAngle = acos(-dot);
+		relAngle = M_PI + relAngle;
+	}
+	
+	for (int i = 0; i < STEPS; i++) {
+		double t0 = phase + i * (relAngle) / STEPS;
+		double t1 = phase + (i + 1) * (relAngle) / STEPS;
+		QPointF pt0{radius * cos(t0), radius * sin(t0)};
+		QPointF pt1{radius * cos(t1), radius * sin(t1)};
+		lines.push_back({pt0 + center, pt1 + center});
+	}
+	
+	return lines;
+}
+
+QVector<QPointF> CircleArc::calculatePoints(QPointF center, QPointF begin, QPointF end, double radius, double phase) {
+	QVector<QPointF> pts;
+	double dot = QPointF::dotProduct(PointUtils::normalize(begin - center), PointUtils::normalize(end - center));
+	double cross = PointUtils::crossProd(begin - center, end - center);
+	double relAngle = acos(dot);
+	
+	if (cross <= 0.0) {
+		relAngle = acos(-dot);
+		relAngle = M_PI + relAngle;
+	}
+	
+	pts.push_back(begin);
+	for (int i = 0; i < STEPS; i++) {
+		double t = phase + (i + 1) * (relAngle) / STEPS;
+		QPointF pt{radius * cos(t), radius * sin(t)};
+		pts.push_back(pt + center);
+	}
+	pts.push_back(end);
+	
+	return pts;
+}
+//-------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------
+QVector<QLineF> CircleArc::getPointsToDraw(QPointF pt) const {
+	if (mNumPts == 1) {
+		return {QLineF{mPtCenter, pt}};
+	} else if (mNumPts == 2) {
+		return calculateLines(mPtCenter, mPtBegin, pt, mRadius, mPhase);
+	}
+	return {};
+}
+
+double CircleArc::closestPoint(QPointF& p) const {
+	QVector<QPointF> pts = calculatePoints(mPtCenter, mPtBegin, mPtEnd, mRadius, mPhase);
+	double dist = DBL_MAX;
+	QPointF tempPt = p;
+	for (const QPointF& pt : pts) {
+		double d = PointUtils::dist(pt, p);
+		if (d < dist) {
+			dist = d;
+			tempPt = pt;
+		}
+	}
+	
+	p = tempPt;
+	
 	return dist;
 }
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
-void
-CircleArc::getBoundBox(double* _xmin, double* _xmax,
-double* _ymin, double* _ymax)
-{
-	*_xmin = (m_x2 < m_x3) ? m_x2 : m_x3;
-	*_xmax = (m_x2 > m_x3) ? m_x2 : m_x3;
-	*_ymin = (m_y2 < m_y3) ? m_y2 : m_y3;
-	*_ymax = (m_y2 > m_y3) ? m_y2 : m_y3;
+RectUtils::RectF CircleArc::boundingBox() const {
+	QVector<QPointF> pts = calculatePoints(mPtCenter, mPtBegin, mPtEnd, mRadius, mPhase);;
+	auto compX = [](const QPointF& l, const QPointF& r) { return l.x() < r.x(); };
+	auto compY = [](const QPointF& l, const QPointF& r) { return l.y() < r.y(); };
+	double xMin = std::min_element(pts.begin(), pts.end(), compX)->x();
+	double yMin = std::min_element(pts.begin(), pts.end(), compY)->y();
+	double xMax = std::max_element(pts.begin(), pts.end(), compX)->x();
+	double yMax = std::max_element(pts.begin(), pts.end(), compY)->y();
+	return {xMin, yMin, xMax - xMin, yMax - yMin};
 }
 //-------------------------------------------------------------------------
 
-//-------------------------------------------------------------------------
-void
-CircleArc::setPoints(double _x1, double _y1, double _x2, double _y2, double _x3, double _y3)
-{
-	m_x1 = _x1;
-	m_x2 = _x2;
-	m_y1 = _y1;
-	m_y2 = _y2;
-	m_x3 = _x3;
-	m_y3 = _y3;
-}
 //-------------------------------------------------------------------------

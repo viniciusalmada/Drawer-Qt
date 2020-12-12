@@ -3,43 +3,54 @@
 
 #include "curve.h"
 
-class CircleArc : public Curve
-{
- public:
-   CircleArc();
-   CircleArc(double _x1, double _y1, double _x2, double _y2);
+class CircleArc : public Curve {
+public:
+	CircleArc();
+	
+	// virtual methods implemented
+	CurveType type() override { return CurveType::ARC; }
+	
+	void addPoint(QPointF p) override;
+	
+	QPointF getPoint(double t) const override;
+	
+	QVector<QPointF> getPoints() const override;
+	
+	QVector<QLineF> getPointsToDraw() const override;
+	
+	QVector<QLineF> getPointsToDraw(QPointF p) const override;
+	
+	double closestPoint(QPointF& p) const override;
+	
+	bool isComplete() override { return mNumPts == 3; };
+	
+	RectUtils::RectF boundingBox() const override;
+	
+	QPointF getPtStart() override { return mPtBegin; }
+	
+	QPointF getPtEnd() override { return mPtEnd; }
+	
+	double getPhase() const { return mPhase; }
+	
+	double getRadius() const { return mRadius; }
+	
+	double getRelativeAngle() const { return mRelativeAngle; }
 
-  // virtual methods implemented
-  int getType() { return (int)Curve::CIRCLE; };
-  bool isUnlimited() { return false; };
-  void addPoint( double _x, double _y );
-  Point getPoint( double _t );
-  bool isPossible();
-  vector<Point> getPoints();
-  vector<Point> getPointsToDraw();
-  vector<Point> getPointsToDraw( Point _pt );
-  double closestPoint( double* _x, double* _y );
-  void getBoundBox( double* _xmin, double* _xmax,
-                    double* _ymin, double* _ymax );
-  double getXinit() { return m_x2; };
-  double getYinit() { return m_y2; };
-  double getXend() { return m_x3; };
-  double getYend() { return m_y3; };
-
-  // specific line methods
-  void setPoints(double _x1, double _y1, double _x2, double _y2, double _x3, double _y3);
-
- private:
-  double m_x1;  //center circle
-  double m_y1;
-  double m_x2;  // begin point
-  double m_y2;
-  double m_x3;  // end point
-  double m_y3;
-  int m_nSteps;
-  double m_radius; 
-  double m_relative_angle;
-  double m_phase;
+private:
+	QPointF mPtCenter;
+	QPointF mPtBegin;
+	QPointF mPtEnd;
+	
+	static const int STEPS;
+	double mRadius{};
+	double mRelativeAngle{};
+	double mPhase{};
+	
+	static QPointF calculatePt(double t, QPointF center, double rad, double relAngle, double phase);
+	
+	static QVector<QLineF> calculateLines(QPointF center, QPointF begin, QPointF end, double radius, double phase);
+	
+	static QVector<QPointF> calculatePoints(QPointF center, QPointF begin, QPointF end, double radius, double phase);
 };
 
 #endif // CIRCLEARC_H

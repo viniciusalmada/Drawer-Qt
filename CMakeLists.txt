@@ -43,6 +43,7 @@ add_executable(DrawerQtPainter
         math/smatrix.cpp math/smatrix.h
         mesh/delaunaymodel.cpp mesh/delaunaymodel.h
         topo/hedsimplified.h topo/hedsimplified.cpp geom/region.cpp geom/region.h
-        subdivisiondialog.cpp subdivisiondialog.h subdivisiondialog.ui)
+        subdivisiondialog.cpp subdivisiondialog.h subdivisiondialog.ui
+        geom/circlearc.h geom/circlearc.cpp)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)

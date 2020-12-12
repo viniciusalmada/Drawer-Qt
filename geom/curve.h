@@ -7,7 +7,7 @@
 #include <QLineF>
 
 enum class CurveType {
-	LINE, QUAD_BEZIER, CUBIC_BEZIER
+	LINE, QUAD_BEZIER, CUBIC_BEZIER, ARC
 };
 
 class Curve {
