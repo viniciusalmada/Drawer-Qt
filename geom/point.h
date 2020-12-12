@@ -27,6 +27,16 @@ namespace PointUtils {
 	static double norm(const QPointF& pt) {
 		return sqrt(pt.x() * pt.x() + pt.y() * pt.y());
 	}
+	
+	static QPointF normalize(const QPointF& pt) {
+		double n = norm(pt);
+		return {pt.x() / n, pt.y() / n};
+	}
+	
+	static double crossProd(const QPointF& pt1, const QPointF& pt2) {
+		QPointF pt1Inv{-pt1.y(), pt1.x()};
+		return QPointF::dotProduct(pt1Inv, pt2);
+	}
 };
 
 
