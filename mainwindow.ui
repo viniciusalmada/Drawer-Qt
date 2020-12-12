@@ -56,8 +56,10 @@
    <addaction name="separator"/>
    <addaction name="actionLine"/>
    <addaction name="actionCurve"/>
+   <addaction name="actionArc"/>
    <addaction name="separator"/>
    <addaction name="actionRegion"/>
+   <addaction name="actionDelaunay"/>
    <addaction name="separator"/>
    <addaction name="actionFit"/>
    <addaction name="actionZoomIn"/>
@@ -148,6 +150,25 @@
   <action name="actionRegion">
    <property name="text">
     <string>Region</string>
+   </property>
+  </action>
+  <action name="actionDelaunay">
+   <property name="text">
+    <string>Delaunay</string>
+   </property>
+  </action>
+  <action name="actionArc">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Arc</string>
+   </property>
+   <property name="toolTip">
+    <string>Draw arc</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
  </widget>

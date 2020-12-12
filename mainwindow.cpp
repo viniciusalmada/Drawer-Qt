@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionSelect, &QAction::triggered, this, &MainWindow::onActionSelectCallback);
 	connect(ui->actionLine, &QAction::triggered, this, &MainWindow::onActionLineCallback);
 	connect(ui->actionCurve, &QAction::triggered, this, &MainWindow::onActionCurveCallback);
+	connect(ui->actionArc, &QAction::triggered, this, &MainWindow::onActionArcCallback);
 	connect(ui->actionFit, &QAction::triggered, this, &MainWindow::onActionFitCallback);
 	connect(ui->actionRegion, &QAction::triggered, this, &MainWindow::onActionRegionCallback);
 	connect(ui->actionZoomIn, &QAction::triggered, this, &MainWindow::onActionZoomInCallback);
@@ -76,6 +77,7 @@ void MainWindow::onActionSelectCallback() {
 	ui->actionSelect->setChecked(true);
 	ui->actionLine->setChecked(false);
 	ui->actionCurve->setChecked(false);
+	ui->actionArc->setChecked(false);
 	ui->widget->setMouseAction(ActionType::SELECTION);
 }
 
@@ -137,6 +139,7 @@ void MainWindow::onActionLineCallback() {
 	ui->actionSelect->setChecked(false);
 	ui->actionLine->setChecked(true);
 	ui->actionCurve->setChecked(false);
+	ui->actionArc->setChecked(false);
 	ui->widget->setMouseAction(ActionType::COLLECTION);
 	ui->widget->setCurveType(CurveType::LINE);
 }
@@ -145,8 +148,18 @@ void MainWindow::onActionCurveCallback() {
 	ui->actionSelect->setChecked(false);
 	ui->actionLine->setChecked(false);
 	ui->actionCurve->setChecked(true);
+	ui->actionArc->setChecked(false);
 	ui->widget->setMouseAction(ActionType::COLLECTION);
 	ui->widget->setCurveType(CurveType::CUBIC_BEZIER);
+}
+
+void MainWindow::onActionArcCallback() {
+	ui->actionSelect->setChecked(false);
+	ui->actionLine->setChecked(false);
+	ui->actionCurve->setChecked(false);
+	ui->actionArc->setChecked(true);
+	ui->widget->setMouseAction(ActionType::COLLECTION);
+	ui->widget->setCurveType(CurveType::ARC);
 }
 
 void MainWindow::onActionRegionCallback() {

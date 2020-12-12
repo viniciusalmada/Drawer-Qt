@@ -45,6 +45,8 @@ private:
 	
 	void onActionCurveCallback();
 	
+	void onActionArcCallback();
+	
 	void onActionRegionCallback();
 	
 	void onActionFitCallback();

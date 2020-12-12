@@ -4,6 +4,7 @@
 #include <QVector>
 #include <geom/point.h>
 #include <geom/cubicbezier.h>
+#include <geom/circlearc.h>
 
 CurveCollector::CurveCollector() = default;
 
@@ -24,6 +25,9 @@ void CurveCollector::startCollection() {
 			break;
 		case CurveType::CUBIC_BEZIER:
 			mCurve = new CubicBezier();
+			break;
+		case CurveType::ARC:
+			mCurve = new CircleArc();
 			break;
 		default:
 			break;
