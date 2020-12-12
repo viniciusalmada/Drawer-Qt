@@ -7,7 +7,7 @@ SMatrix::SMatrix(int r, int c, double tol) : mNumRows(r), mNumColumns(c), tolera
 }
 
 SMatrix::SMatrix(int rows, int cols, std::vector<double> data, double tol) : mNumRows(rows), mNumColumns(cols),
-                                                                             tolerance(tol) {
+tolerance(tol) {
 	for (int i = 0; i < data.size(); i++) {
 		if (std::abs(data[i]) <= tol)
 			continue;
@@ -41,11 +41,11 @@ void SMatrix::set(Position pos, double value) {
 		}
 		return;
 	}
-	
+
 	if (pos.first < mNumRows && pos.second < mNumColumns)
 		mData[pos] = value;
 	else
-		throw std::runtime_error{"Position passed is out of bounds"};
+		throw std::runtime_error{ "Position passed is out of bounds" };
 }
 
 void SMatrix::forEach(const LoopMatrixFunction& loop) const {
@@ -53,7 +53,7 @@ void SMatrix::forEach(const LoopMatrixFunction& loop) const {
 	int c = 0;
 	while (r < mNumRows) {
 		while (c < mNumColumns) {
-			loop({r, c});
+			loop({ r, c });
 			c++;
 		}
 		c = 0;
@@ -68,12 +68,12 @@ void SMatrix::forEachElement(const LoopMapFunction& loop) const {
 }
 
 SMatrix SMatrix::operator*(const SMatrix& other) const {
-	SMatrix res{mNumRows, other.mNumColumns};
+	SMatrix res{ mNumRows, other.mNumColumns };
 	res.forEach([&](Position pos) {
 		for (int n = 0; n < numColumns(); ++n) {
 			double rowVal, colVal;
-			if (!this->get({pos.first, n}, rowVal) ||
-			    !other.get({n, pos.second}, colVal))
+			if (!this->get({ pos.first, n }, rowVal) ||
+				!other.get({ n, pos.second }, colVal))
 				continue;
 			const double prod = rowVal * colVal;
 			res.accumulate(pos, prod);
@@ -83,13 +83,13 @@ SMatrix SMatrix::operator*(const SMatrix& other) const {
 }
 
 SMatrix SMatrix::times(const SMatrix& other) const {
-	SMatrix res{mNumRows, 1};
+	SMatrix res{ mNumRows, 1 };
 	int i = 0;
 	this->forEachElement([&](Position pos, double value) {
-		double current = res.get({pos.first, 0});
-		double newValue = current + value * other.get({pos.second, 0});
-		res.set({pos.first, 0}, newValue);
-		printf("passing on item %d\n", i);
+		double current = res.get({ pos.first, 0 });
+		double newValue = current + value * other.get({ pos.second, 0 });
+		res.set({ pos.first, 0 }, newValue);
+		//printf("passing on item %d\n", i);
 	});
 	return res;
 }
@@ -103,10 +103,10 @@ void SMatrix::accumulate(Position pos, double value) {
 
 SMatrix SMatrix::operator*(const double& other) const {
 	if (std::abs(other) <= tolerance)
-		return SMatrix{mNumRows, mNumColumns};
-	
-	
-	SMatrix res{*this};
+		return SMatrix{ mNumRows, mNumColumns };
+
+
+	SMatrix res{ *this };
 	res.forEach([&](Position pos) {
 		double current = 0.0;
 		res.get(pos, current);
@@ -116,11 +116,13 @@ SMatrix SMatrix::operator*(const double& other) const {
 }
 
 SMatrix SMatrix::operator+(const SMatrix& other) const {
-	SMatrix res{mNumRows, mNumColumns};
+	SMatrix res{ mNumRows, mNumColumns };
 	res.forEach([&](Position pos) {
 		double a = 0.0;
 		double b = 0.0;
 		if (this->get(pos, a) || other.get(pos, b)) {
+			a = this->get(pos);
+			b = other.get(pos);
 			res.set(pos, a + b);
 		}
 	});
@@ -128,7 +130,7 @@ SMatrix SMatrix::operator+(const SMatrix& other) const {
 }
 
 SMatrix SMatrix::operator-(const SMatrix& other) const {
-	SMatrix res{mNumRows, mNumColumns};
+	SMatrix res{ mNumRows, mNumColumns };
 	res.forEach([&](Position pos) {
 		double a = 0.0;
 		double b = 0.0;
@@ -142,7 +144,7 @@ SMatrix SMatrix::operator-(const SMatrix& other) const {
 }
 
 SMatrix SMatrix::operator-() const {
-	SMatrix res{*this};
+	SMatrix res{ *this };
 	this->forEachElement([&](Position pos, double value) {
 		res.mData[pos] = -value;
 	});
@@ -174,9 +176,9 @@ void SMatrix::operator-=(const SMatrix& other) {
 }
 
 SMatrix SMatrix::transpose() const {
-	SMatrix res{mNumColumns, mNumRows};
+	SMatrix res{ mNumColumns, mNumRows };
 	this->forEachElement([&](Position pos, double value) {
-		Position inv{pos.second, pos.first};
+		Position inv{ pos.second, pos.first };
 		res.mData[inv] = value;
 	});
 	return res;
@@ -209,14 +211,61 @@ double SMatrix::get(Position pos) const {
 }
 
 SMatrix SMatrix::genMatrix(int r, int c) {
-	SMatrix res{r, c};
+	SMatrix res{ r, c };
 	int i = 0;
 	res.forEach([&](Position pos) {
 		if (i++ % 1 == 0) {
 			double value = rand() % 10;
 			res.set(pos, value);
 		}
-		
+
 	});
 	return res;
+}
+SMatrix SMatrix::solveLinearSystemCG(SMatrix& a, SMatrix& b, const int maxIt, const double tol) {
+	double resid;
+
+	SMatrix p(b.mNumRows, 0);
+	SMatrix z = p;
+	SMatrix q = z;
+	double alpha, beta, rho, rho_1;
+	double normb = b.norm();
+
+	SMatrix x = b;
+	SMatrix r = b - a.times(x);
+
+	if (normb == 0.0)
+		normb = 1;
+
+	if ((resid = r.norm() / normb) <= tol) {
+		throw std::runtime_error{ "Initial residue is less than tolerance" };
+	}
+
+	for (int i = 1; i <= maxIt; i++) {
+		z = r;
+		rho = r.dot(z);
+		if (i == 1)
+			p = z;
+		else {
+			beta = rho / rho_1;
+			p = z + p*beta;
+		}
+
+		q = a.times(p);
+		alpha = rho / q.dot(p);
+
+		x += p*alpha;
+		r -= q*alpha;
+
+		resid = r.norm() / normb;
+
+		if ((resid) <= tol) {
+			return x;
+		}
+
+		rho_1 = rho;
+	}
+
+	throw std::runtime_error{ "Could not converge to solution" };
+
 }
