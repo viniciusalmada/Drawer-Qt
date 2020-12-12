@@ -6,13 +6,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if (UNIX)
     set(CMAKE_PREFIX_PATH /opt/qt/5.12.10/gcc_64)
     set(CMAKE_C_COMPILER clang)
+    set(CMAKE_CXX_COMPILER clang++)
 elseif (WIN32)
     set(CMAKE_PREFIX_PATH C:\\Qt\\Qt5.4.0\\5.4\\mscv2013_opengl)
 endif ()
 
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,6 +42,7 @@ add_executable(DrawerQtPainter
         math/matrix.cpp math/matrix.h
         math/smatrix.cpp math/smatrix.h
         mesh/delaunaymodel.cpp mesh/delaunaymodel.h
-        topo/hedsimplified.h topo/hedsimplified.cpp geom/region.cpp geom/region.h)
+        topo/hedsimplified.h topo/hedsimplified.cpp geom/region.cpp geom/region.h
+        subdivisiondialog.cpp subdivisiondialog.h subdivisiondialog.ui)
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)
