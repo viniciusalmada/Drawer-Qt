@@ -23,7 +23,9 @@ namespace HEDSimpl {
 			int tri = -1;
 			int next = -1;
 			
-			explicit HEDHalfedge(int vertexId);
+			explicit HEDHalfedge(int vertexId = -1);
+			
+			~HEDHalfedge();
 		};
 		
 		class HEDTriangle {

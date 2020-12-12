@@ -4,10 +4,11 @@
 #include "topo/hedsimplified.h"
 
 class DelaunayModel {
+public:
+	explicit DelaunayModel(const std::vector<QPointF>& points);
+
 private:
 	HEDSimpl::Model mModel{};
-	
-	explicit DelaunayModel(const std::vector<QPointF>& points);
 	
 	void addTriangle(const QPointF& pt);
 	

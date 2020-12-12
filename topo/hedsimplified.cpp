@@ -1,4 +1,5 @@
 #include <geom/geomutils.h>
+#include <cstdio>
 #include "hedsimplified.h"
 
 HEDSimpl::Model::HEDVertex::HEDVertex(QPointF pt) : pt(pt) {
@@ -6,6 +7,10 @@ HEDSimpl::Model::HEDVertex::HEDVertex(QPointF pt) : pt(pt) {
 
 HEDSimpl::Model::HEDHalfedge::HEDHalfedge(int vertexId) : vtx(vertexId) {
 
+}
+
+HEDSimpl::Model::HEDHalfedge::~HEDHalfedge() {
+	printf("called\n");
 }
 
 HEDSimpl::Model::HEDTriangle::HEDTriangle(int h0, int h1, int h2) : he0(h0), he1(h1), he2(h2) {
@@ -16,32 +21,39 @@ HEDSimpl::Model::HEDEdge::HEDEdge(int h0, int h1) : he0(h0), he1(h1) {
 
 }
 
-HEDSimpl::Model::Model() = default;
+HEDSimpl::Model::Model() {
+};
 
-HEDSimpl::Model::~Model() {
-	mVertices.clear();
-	mHalfedges.clear();
-	mEdges.clear();
-	mTriangles.clear();
-}
+HEDSimpl::Model::~Model() = default;
 
 int HEDSimpl::Model::newVertex(const QPointF& pt) {
-	mVertices.emplace_back(pt);
+	mVertices.push_back(HEDVertex(pt));
 	return static_cast<int>(mVertices.size()) - 1;
 }
 
 int HEDSimpl::Model::newHalfedge(int vertexId) {
-	mHalfedges.emplace_back(vertexId);
+	HEDHalfedge hed{vertexId};
+	mHalfedges.push_back(hed);
+	mVertices[vertexId].he = static_cast<int>(mHalfedges.size()) - 1;
 	return static_cast<int>(mHalfedges.size()) - 1;
 }
 
 int HEDSimpl::Model::newEdge(int he1, int he2) {
-	mEdges.emplace_back(he1, he2);
+	mEdges.push_back(HEDEdge(he1, he2));
+	mHalfedges[he1].edge = (int) mEdges.size() - 1;
+	mHalfedges[he2].edge = (int) mEdges.size() - 1;
 	return static_cast<int>(mEdges.size()) - 1;
 }
 
 int HEDSimpl::Model::newTriangle(int he1, int he2, int he3) {
-	mTriangles.emplace_back(he1, he2, he3);
+	mTriangles.push_back(HEDTriangle(he1, he2, he3));
+	mHalfedges[he1].tri = (int) mTriangles.size() - 1;
+	mHalfedges[he2].tri = (int) mTriangles.size() - 1;
+	mHalfedges[he3].tri = (int) mTriangles.size() - 1;
+	
+	mHalfedges[he1].next = he2;
+	mHalfedges[he2].next = he3;
+	mHalfedges[he3].next = he1;
 	return static_cast<int>(mTriangles.size()) - 1;
 }
 

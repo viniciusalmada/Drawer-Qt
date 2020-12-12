@@ -1,7 +1,11 @@
 #include "delaunaymodel.h"
 #include <geom/geomutils.h>
+#include <cstdio>
 
 DelaunayModel::DelaunayModel(const std::vector<QPointF>& points) {
+	for (QPointF _p : points) {
+		printf("%1.5f, %1.5f\n", _p.x(), _p.y());
+	}
 	std::array<QPointF, 3> triangleBox = GeomUtils::triangleBox(points);
 	
 	int v0 = mModel.newVertex(triangleBox[0]);
