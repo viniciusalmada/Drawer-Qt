@@ -1,5 +1,6 @@
 #include "region.h"
 #include "cubicbezier.h"
+#include "circlearc.h"
 
 Region::Region(std::vector<std::pair<Curve*, bool>>& curves) : mCurves(curves) {
 
@@ -21,6 +22,13 @@ QPainterPath Region::pathToFill() const {
 				QPointF& c2 = pts[2];
 				QPointF& end = pts[3];
 				path.cubicTo(c1, c2, end);
+			} else if (c->type() == CurveType::ARC) {
+				path.lineTo(c->getPtStart());
+				QVector<QLineF> lines = c->getPointsToDraw();
+				for (const QLineF& l : lines) {
+					path.lineTo(l.p1());
+					path.lineTo(l.p2());
+				}
 			}
 		} else {
 			if (c->type() == CurveType::LINE) {
@@ -33,6 +41,14 @@ QPainterPath Region::pathToFill() const {
 				QPointF& c2 = pts[1];
 				QPointF& end = pts[0];
 				path.cubicTo(c1, c2, end);
+			} else if (c->type() == CurveType::ARC) {
+				path.lineTo(c->getPtEnd());
+				QVector<QLineF> lines = c->getPointsToDraw();
+				std::reverse(lines.begin(), lines.end());
+				for (const QLineF& l : lines) {
+					path.lineTo(l.p2());
+					path.lineTo(l.p1());
+				}
 			}
 		}
 	}
