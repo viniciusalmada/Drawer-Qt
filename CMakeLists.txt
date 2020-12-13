@@ -5,8 +5,8 @@ project(DrawerQtPainter LANGUAGES CXX)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if (UNIX)
     set(CMAKE_PREFIX_PATH /opt/qt/5.12.10/gcc_64)
-    set(CMAKE_C_COMPILER clang)
-    set(CMAKE_CXX_COMPILER clang++)
+    #    set(CMAKE_C_COMPILER clang)
+    #    set(CMAKE_CXX_COMPILER clang++)
 elseif (WIN32)
     set(CMAKE_PREFIX_PATH C:\\Qt\\Qt5.4.0\\5.4\\mscv2013_opengl)
 endif ()
@@ -44,6 +44,7 @@ add_executable(DrawerQtPainter
         mesh/delaunaymodel.cpp mesh/delaunaymodel.h
         topo/hedsimplified.h topo/hedsimplified.cpp geom/region.cpp geom/region.h
         subdivisiondialog.cpp subdivisiondialog.h subdivisiondialog.ui
-        geom/circlearc.h geom/circlearc.cpp)
+        geom/circlearc.h geom/circlearc.cpp
+        )
 
 target_link_libraries(DrawerQtPainter PRIVATE Qt5::Widgets)

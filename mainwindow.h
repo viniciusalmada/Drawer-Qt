@@ -49,6 +49,10 @@ private:
 	
 	void onActionRegionCallback();
 	
+	void onActionDelaunayCallback();
+	
+	void onActionPartitionCallback();
+	
 	void onActionFitCallback();
 	
 	void onActionZoomInCallback();

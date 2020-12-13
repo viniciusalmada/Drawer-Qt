@@ -205,4 +205,36 @@ void Model::createRegion() {
 	mRegions.emplace_back(curvesSelectedSorted);
 }
 
+void Model::genDelaunay(int sub) {
+	int regionSelected = -1;
+	for (int i = 0; i < mRegions.size(); ++i) {
+		if (!mRegions[i].isSelected())
+			continue;
+		
+		regionSelected = i;
+		break;
+	}
+	
+	if (regionSelected == -1)
+		return;
+	
+	mRegions[regionSelected].genDelaunayMesh(sub, 0);
+}
+
+void Model::startPartitionDomain() {
+	int i = -1;
+	for (int j = 0; j < mRegions.size(); ++j) {
+		if (mRegions[j].isSelected()) {
+			i = j;
+			break;
+		}
+	}
+	
+	if (i == -1)
+		return;
+	
+	mRegions[i].partitionDomain();
+//	std::vector<std::pair<QPointF, bool>> boundaryPoints = mRegions[i].getBoundary();
+}
+
 

@@ -28,7 +28,8 @@ void CircleArc::addPoint(QPointF pt) {
 			mPhase += M_PI;
 		}
 	} else if (mNumPts == 2) {
-		mPtEnd = pt;
+		mPtEnd = PointUtils::normalize(pt - mPtCenter) * mRadius;
+		mPtEnd += mPtCenter;
 		double dot = QPointF::dotProduct(PointUtils::normalize(mPtBegin - mPtCenter),
 		                                 PointUtils::normalize(pt - mPtCenter));
 		double cross = PointUtils::crossProd(mPtBegin - mPtCenter, pt - mPtCenter);

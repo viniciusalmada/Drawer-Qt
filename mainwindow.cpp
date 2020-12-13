@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "subdivisiondialog.h"
 
 MainWindow::MainWindow(QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -42,6 +43,7 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionArc, &QAction::triggered, this, &MainWindow::onActionArcCallback);
 	connect(ui->actionFit, &QAction::triggered, this, &MainWindow::onActionFitCallback);
 	connect(ui->actionRegion, &QAction::triggered, this, &MainWindow::onActionRegionCallback);
+	connect(ui->actionDelaunay, &QAction::triggered, this, &MainWindow::onActionDelaunayCallback);
 	connect(ui->actionZoomIn, &QAction::triggered, this, &MainWindow::onActionZoomInCallback);
 	connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::onActionZoomOutCallback);
 	connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::onActionDeleteCallback);
@@ -164,6 +166,18 @@ void MainWindow::onActionArcCallback() {
 
 void MainWindow::onActionRegionCallback() {
 	ui->widget->createRegion();
+}
+
+void MainWindow::onActionDelaunayCallback() {
+	SubdivisionDialog sd{this};
+	if (sd.exec() == QDialog::Accepted) {
+		int sub = sd.getSub();
+		ui->widget->genDelaunay(sub);
+	}
+}
+
+void MainWindow::onActionPartitionCallback() {
+	mModel->startPartitionDomain();
 }
 
 void MainWindow::onActionFitCallback() {

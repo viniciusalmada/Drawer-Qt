@@ -43,6 +43,8 @@ public:
 	
 	void createRegion();
 	
+	void genDelaunay(int sub);
+	
 	void zoomIn();
 	
 	void zoomOut();
@@ -73,7 +75,7 @@ protected:
 	ActionType mCurrentAction = ActionType::SELECTION;
 	Qt::MouseButton mMouseButton = Qt::NoButton;
 	
-	const double mPickTolFactor = 0.01;
+	const double mPickTolFactor = 0.02;
 	const int mMouseMoveTol = 2;
 	
 	bool mShiftKeyPressed = false;

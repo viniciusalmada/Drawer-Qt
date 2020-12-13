@@ -6,44 +6,52 @@
 #include <functional>
 
 namespace HEDSimpl {
+	
+	class HEDVertex {
+	public:
+		QPointF pt;
+		int he = -1;
+		
+		explicit HEDVertex(QPointF pt);
+		
+		~HEDVertex() = default;
+	};
+	
+	class HEDHalfedge {
+	public:
+		int vtx = -1;
+		int edge = -1;
+		int tri = -1;
+		int next = -1;
+		
+		explicit HEDHalfedge(int vertexId = -1);
+		
+		~HEDHalfedge() = default;
+	};
+	
+	class HEDTriangle {
+	public:
+		int he0 = -1;
+		int he1 = -1;
+		int he2 = -1;
+		
+		explicit HEDTriangle(int h0, int h1, int h2);
+		
+		~HEDTriangle() = default;
+	};
+	
+	class HEDEdge {
+	public:
+		int he0 = -1;
+		int he1 = -1;
+		
+		explicit HEDEdge(int h0, int h1);
+		
+		~HEDEdge() = default;
+	};
+	
 	class Model {
-		
-		class HEDVertex {
-		public:
-			QPointF pt;
-			int he = -1;
-			
-			explicit HEDVertex(QPointF pt);
-		};
-		
-		class HEDHalfedge {
-		public:
-			int vtx = -1;
-			int edge = -1;
-			int tri = -1;
-			int next = -1;
-			
-			explicit HEDHalfedge(int vertexId = -1);
-			
-			~HEDHalfedge();
-		};
-		
-		class HEDTriangle {
-		public:
-			int he0 = -1;
-			int he1 = -1;
-			int he2 = -1;
-			
-			explicit HEDTriangle(int h0, int h1, int h2);
-		};
-		
-		class HEDEdge {
-		public:
-			int he0 = -1;
-			int he1 = -1;
-			
-			explicit HEDEdge(int h0, int h1);
-		};
+	public:
 		
 		std::vector<HEDVertex> mVertices;
 		std::vector<HEDHalfedge> mHalfedges;
@@ -57,8 +65,6 @@ namespace HEDSimpl {
 	public:
 		
 		explicit Model();
-		
-		~Model();
 		
 		int newVertex(const QPointF& pt);
 		
@@ -74,11 +80,11 @@ namespace HEDSimpl {
 		
 		void updateVertexOfHalfedge(int he, int vtx);
 		
-		int halfedgeFromTriangle(int triId, int pos);
+		int halfedgeFromTriangle(int triId, int pos) const;
 		
-		int vertexOfTriangle(int triId, int pos);
+		int vertexOfTriangle(int triId, int pos) const;
 		
-		std::vector<int> verticesOfTriangles(int triId);
+		std::vector<int> verticesOfTriangles(int triId) const;
 		
 		int halfedgeFromVertex(int vtxId);
 		
@@ -114,7 +120,9 @@ namespace HEDSimpl {
 		
 		void setHalfedgesOfEdge(int edgeId, int he0, int he1);
 		
-		HEDSimpl::Model::HEDEdge getEdge(int i);
+		HEDSimpl::HEDEdge getEdge(int i);
+		
+		std::vector<QPointF> getVerticesTriangle(int tri) const;
 	};
 }
 

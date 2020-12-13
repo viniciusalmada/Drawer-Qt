@@ -4,6 +4,7 @@
 #include <vector>
 #include <QtCore/QRectF>
 #include <geom/region.h>
+#include <mesh/delaunaymodel.h>
 #include "geom/curve.h"
 
 class Model {
@@ -37,6 +38,10 @@ public:
 	bool isEmpty();
 	
 	void createRegion();
+	
+	void genDelaunay(int sub);
+	
+	void startPartitionDomain();
 
 protected:
 	std::vector<Curve*> mCurves;

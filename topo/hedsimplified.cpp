@@ -2,29 +2,27 @@
 #include <cstdio>
 #include "hedsimplified.h"
 
-HEDSimpl::Model::HEDVertex::HEDVertex(QPointF pt) : pt(pt) {
+HEDSimpl::HEDVertex::HEDVertex(QPointF pt) : pt(pt) {
 }
 
-HEDSimpl::Model::HEDHalfedge::HEDHalfedge(int vertexId) : vtx(vertexId) {
-
-}
-
-HEDSimpl::Model::HEDHalfedge::~HEDHalfedge() {
-	printf("called\n");
-}
-
-HEDSimpl::Model::HEDTriangle::HEDTriangle(int h0, int h1, int h2) : he0(h0), he1(h1), he2(h2) {
+HEDSimpl::HEDHalfedge::HEDHalfedge(int vertexId) : vtx(vertexId) {
 
 }
 
-HEDSimpl::Model::HEDEdge::HEDEdge(int h0, int h1) : he0(h0), he1(h1) {
+HEDSimpl::HEDTriangle::HEDTriangle(int h0, int h1, int h2) : he0(h0), he1(h1), he2(h2) {
 
 }
 
-HEDSimpl::Model::Model() {
+HEDSimpl::HEDEdge::HEDEdge(int h0, int h1) : he0(h0), he1(h1) {
+
+}
+
+HEDSimpl::Model::Model() : mVertices(), mHalfedges(), mEdges(), mTriangles() {
+	/*mVertices.reserve(10000);
+	mHalfedges.reserve(10000);
+	mEdges.reserve(10000);
+	mTriangles.reserve(10000);*/
 };
-
-HEDSimpl::Model::~Model() = default;
 
 int HEDSimpl::Model::newVertex(const QPointF& pt) {
 	mVertices.push_back(HEDVertex(pt));
@@ -79,7 +77,7 @@ void HEDSimpl::Model::updateVertexOfHalfedge(int he, int vtx) {
 	mHalfedges[he].vtx = vtx;
 }
 
-int HEDSimpl::Model::halfedgeFromTriangle(int triId, int pos) {
+int HEDSimpl::Model::halfedgeFromTriangle(int triId, int pos) const {
 	if (pos == 0)
 		return mTriangles[triId].he0;
 	else if (pos == 1)
@@ -89,12 +87,12 @@ int HEDSimpl::Model::halfedgeFromTriangle(int triId, int pos) {
 	return -1;
 }
 
-int HEDSimpl::Model::vertexOfTriangle(int triId, int pos) {
+int HEDSimpl::Model::vertexOfTriangle(int triId, int pos) const {
 	int he = halfedgeFromTriangle(triId, pos);
 	return mHalfedges[he].vtx;
 }
 
-std::vector<int> HEDSimpl::Model::verticesOfTriangles(int triId) {
+std::vector<int> HEDSimpl::Model::verticesOfTriangles(int triId) const {
 	int v0 = vertexOfTriangle(triId, 0);
 	int v1 = vertexOfTriangle(triId, 1);
 	int v2 = vertexOfTriangle(triId, 2);
@@ -252,7 +250,7 @@ int HEDSimpl::Model::findTriangleThatContainsPoint(const QPointF& pt) {
 		QPointF p1 = pointOfHalfedge(tri.he1);
 		QPointF p2 = pointOfHalfedge(tri.he2);
 		
-		if (GeomUtils::polygonContains({p0, p1, p2}, pt))
+		if (GeomUtils::polygonContains(p0, p1, p2, pt))
 			return i;
 	}
 	return -1;
@@ -332,8 +330,13 @@ void HEDSimpl::Model::setHalfedgesOfEdge(int edgeId, int he0, int he1) {
 	mHalfedges[he1].edge = edgeId;
 }
 
-HEDSimpl::Model::HEDEdge HEDSimpl::Model::getEdge(int i) {
+HEDSimpl::HEDEdge HEDSimpl::Model::getEdge(int i) {
 	return mEdges[i];
+}
+
+std::vector<QPointF> HEDSimpl::Model::getVerticesTriangle(int tri) const {
+	auto pts = verticesOfTriangles(tri);
+	return {mVertices[pts[0]].pt, mVertices[pts[1]].pt, mVertices[pts[2]].pt};
 }
 
 

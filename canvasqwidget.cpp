@@ -280,6 +280,15 @@ void CanvasQWidget::makeDisplayModel(QPainter& painter) {
 		painter.setPen(mPen);
 		QPainterPath path = reg.pathToFill();
 		painter.fillPath(path, mPen.brush());
+		
+		if (reg.getMesh() == nullptr)
+			continue;
+		
+		mPen.setBrush(mGridColor);
+		painter.setPen(mPen);
+		for (const QPolygonF& pol : *reg.getMesh()) {
+			painter.drawPolygon(pol);
+		}
 	}
 }
 
@@ -401,5 +410,11 @@ void CanvasQWidget::createRegion() {
 	if (mModel != nullptr && !mModel->isEmpty()) {
 		mModel->createRegion();
 		update();
+	}
+}
+
+void CanvasQWidget::genDelaunay(int sub) {
+	if (mModel != nullptr && !mModel->isEmpty()) {
+		mModel->genDelaunay(sub);
 	}
 }

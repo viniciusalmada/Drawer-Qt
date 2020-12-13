@@ -1,3 +1,4 @@
+#include <QPainterPath>
 #include "geomutils.h"
 #include "point.h"
 
@@ -81,14 +82,23 @@ bool GeomUtils::isConvexPolygon(std::vector<QPointF> pts) {
 
 GeomUtils::Orientation GeomUtils::orientation(QPointF a, QPointF b, QPointF c) {
 	double det = (a.x() * b.y() + b.x() * c.y() + c.x() * a.y()) -
-	             (a.x() * c.y() + b.x() * a.y() + c.x() * b.y());
+			(a.x() * c.y() + b.x() * a.y() + c.x() * b.y());
 	if (det > 0.0) return Orientation::LEFT;
 	if (det < 0.0) return Orientation::RIGHT;
 	return Orientation::COLLINEAR;
 }
 
 bool GeomUtils::edgeContains(const QPointF& pt0, const QPointF& pt1, const QPointF& pt) {
-	return orientation(pt0, pt, pt1) == Orientation::COLLINEAR;
+	if (orientation(pt0, pt, pt1) == Orientation::COLLINEAR)
+		return false;
+	
+	double dist0 = PointUtils::dist(pt0, pt);
+	double dist1 = PointUtils::dist(pt1, pt);
+	double dist = PointUtils::dist(pt0, pt1);
+	
+	if (std::abs(dist0 + dist1) - abs(dist) < 0.0001)
+		return true;
+	return false;
 }
 
 std::array<QPointF, 3> GeomUtils::triangleBox(const std::vector<QPointF>& pts) {
@@ -100,20 +110,23 @@ std::array<QPointF, 3> GeomUtils::triangleBox(const std::vector<QPointF>& pts) {
 	for (const auto& pt : pts) {
 		maxX = pt.x() > maxX ? pt.x() : maxX;
 		minX = pt.x() < minX ? pt.x() : minX;
-		maxY = pt.x() > maxY ? pt.y() : maxY;
-		minY = pt.x() < minY ? pt.y() : minY;
+		maxY = pt.y() > maxY ? pt.y() : maxY;
+		minY = pt.y() < minY ? pt.y() : minY;
 	}
 	
-	double m;
-	if (maxX - minX > maxY - minY)
-		m = (maxY - minX) / 2.0;
-	else
-		m = (maxY - minY) / 2.0;
-	
-	double centerX = minX + m;
-	double centerY = minY + m;
-	
-	QPointF center{centerX, centerY};
+	double m, centerX, centerY;
+	QPointF center;
+	if (maxX - minX > maxX - minY) {
+		m = ((maxX - minX) / 2.0) * 2.0;
+		centerX = minX + m;
+		centerY = minY + (maxY - minY) / 2.0;
+		center = QPointF(centerX, centerY);
+	} else {
+		m = ((maxY - minY) / 2.0) * 2.0;
+		centerX = minX + (maxX - minX) / 2.0;
+		centerY = minY + m;
+		center = QPointF(centerX, centerY);
+	}
 	
 	QPointF p0 = QPointF{-3.0 * m, -3.0 * m} + center;
 	QPointF p1 = QPointF{3.0 * m, 0.0} + center;
@@ -122,27 +135,12 @@ std::array<QPointF, 3> GeomUtils::triangleBox(const std::vector<QPointF>& pts) {
 	return {p0, p1, p2};
 }
 
-bool GeomUtils::polygonContains(const std::vector<QPointF>& pts, QPointF pt) {
-	QPointF ptInf(std::abs(pt.x()) * 100, pt.y());
-	int counter = 0;
-	for (int i = 0; i < pts.size(); ++i) {
-		QPointF p0;
-		QPointF p1;
-		if (i == 0) {
-			p0 = pts.back();
-			p1 = pts[i];
-		} else if (i == pts.size() - 1) {
-			p0 = pts[i];
-			p1 = pts.front();
-		} else {
-			p0 = pts[i];
-			p1 = pts[i + 1];
-		}
-		bool check = checkLinesCrossing(p0, p1, pt, ptInf);
-		if (check) counter++;
-	}
+bool GeomUtils::polygonContains(QPointF p0, QPointF p1, QPointF p2, QPointF pt) {
+	bool ab = orientation(p0, p1, pt) == Orientation::LEFT;
+	bool bc = orientation(p1, p2, pt) == Orientation::LEFT;
+	bool ca = orientation(p2, p0, pt) == Orientation::LEFT;
 	
-	return counter % 2 != 0;
+	return ab && bc && ca;
 }
 
 bool GeomUtils::checkLinesCrossing(QPointF a, QPointF b, QPointF c, QPointF d) {

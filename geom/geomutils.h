@@ -13,13 +13,14 @@ namespace GeomUtils {
 	};
 	
 	class Circle {
-		QPointF center;
-		double radius{};
 	
 	public:
 		Circle(QPointF c, double r);
 		
 		bool contains(const QPointF& pt) const;
+		
+		double radius{};
+		QPointF center;
 	};
 	
 	double ceil2(double num, double interval);
@@ -42,7 +43,7 @@ namespace GeomUtils {
 	
 	std::array<QPointF, 3> triangleBox(const std::vector<QPointF>& pts);
 	
-	bool polygonContains(const std::vector<QPointF>& pts, QPointF pt);
+	bool polygonContains(QPointF p0, QPointF p1, QPointF p2, QPointF pt);
 	
 	double pseudoAngle(double x1, double y1, double x2, double y2);
 }

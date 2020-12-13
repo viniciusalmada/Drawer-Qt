@@ -2,19 +2,21 @@
 #define MESH_GEN_H
 
 
-class meshGen
-{
+#include <QPointF>
+#include <vector>
+#include "mesh/delaunaymodel.h"
+
+class meshGen {
 
 public:
-    meshGen();
-    void Initialize(vector<QPointF> pol , vector<bool> vBool);
-    ~meshGen();
+	meshGen();
+	
+	static void Initialize(std::vector<std::pair<QPointF, bool>> boundaryPts,
+	                       DelaunayModel meshTriangles,
+	                       QVector<QPointF> totalPoints);
+	
+	~meshGen();
 };
-
-
-
-
-
 
 
 #endif

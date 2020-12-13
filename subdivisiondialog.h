@@ -18,6 +18,8 @@ public:
 	explicit SubdivisionDialog(QWidget* parent = nullptr);
 	
 	~SubdivisionDialog() override;
+	
+	int getSub();
 
 private:
 	Ui::SubdivisionDialog* ui;

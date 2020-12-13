@@ -15,3 +15,8 @@ SubdivisionDialog::SubdivisionDialog(QWidget* parent) :
 SubdivisionDialog::~SubdivisionDialog() {
 	delete ui;
 }
+
+int SubdivisionDialog::getSub() {
+	QString text = ui->subEdit->text();
+	return text.toInt();
+}

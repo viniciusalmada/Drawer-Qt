@@ -60,6 +60,7 @@
    <addaction name="separator"/>
    <addaction name="actionRegion"/>
    <addaction name="actionDelaunay"/>
+   <addaction name="actionPartition"/>
    <addaction name="separator"/>
    <addaction name="actionFit"/>
    <addaction name="actionZoomIn"/>
@@ -169,6 +170,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionPartition">
+   <property name="text">
+    <string>Partition</string>
    </property>
   </action>
  </widget>
